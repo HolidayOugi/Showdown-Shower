@@ -101,7 +101,7 @@ def parse_log(log_text):
 
     return winner, forfeit, list(team1), list(team2), max_turn, switch1, switch2
 
-df= pd.read_csv("./data.csv", index_col=[0])
+df= pd.read_csv("./input/data.csv", index_col=[0])
 pd.set_option('display.max_columns', None)
 #df['uploadtime'] = pd.to_datetime(df['uploadtime'], unit='s')
 #cleaned = df['players'].str.strip("[]")
@@ -112,4 +112,4 @@ df['Winner'], df['Forfeit'], df['Team 1'], df['Team 2'], df['Turns'], df['# Swit
 df = df.drop('log', axis=1)
 df['format'] = df['format'].apply(normalize_format)
 print(df)
-df.to_csv('battles_PARSED.csv', index=False)
+df.to_csv('./input/battles_PARSED.csv', index=False)
