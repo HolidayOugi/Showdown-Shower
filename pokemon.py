@@ -43,6 +43,7 @@ def parse_log(log):
                 species = nickname_map.get(nickname, nickname)
                 moves_used[species].add(move)
 
+
     return winner, tier, team1, team2, moves_used
 
 
@@ -53,24 +54,18 @@ def pokemon_dataframe(df_logs):
         log = row['log']
         winner, tier, team1, team2, moves_used = parse_log(log)
 
+        all_pokemon = team1.union(team2)
+
         if not tier:
             continue  # skip logs with no format info
 
-        for mon in team1:
+        for mon in all_pokemon:
             rows.append({
                 'pokemon': mon,
                 'format': tier,
-                'won': int(winner == row['player1']),
-                'lost': int(winner == row['player2']),
-                'moves': list(moves_used.get(mon, []))
-            })
-
-        for mon in team2:
-            rows.append({
-                'pokemon': mon,
-                'format': tier,
-                'won': int(winner == row['player2']),
-                'lost': int(winner == row['player1']),
+                'played': 1,
+                'won': int(winner == row['player1'] and mon in team1) or int(winner == row['player2'] and mon in team2),
+                'lost': int(winner == row['player2'] and mon in team1) or int(winner == row['player1'] and mon in team2),
                 'moves': list(moves_used.get(mon, []))
             })
 
@@ -81,6 +76,7 @@ def pokemon_dataframe(df_logs):
         lambda x: x.split(']')[0] + ']' + ' ' + x.split(']')[1].strip().upper() if ']' in x else x.upper())
 
     df_new = df_help.groupby(['pokemon', 'format']).agg({
+        'played': 'sum',
         'won': 'sum',
         'lost': 'sum',
         'moves': lambda x: list(set(m for sublist in x for m in sublist))
@@ -89,9 +85,11 @@ def pokemon_dataframe(df_logs):
     df_new = df_new.sort_values(by=['pokemon', 'format']).reset_index(drop=True)
     df_new['moves'] = df_new['moves'].apply(lambda x: sorted(x) if isinstance(x, list) else x)
     df_new['win_rate'] = (df_new['won']/(df_new['won']+df_new['lost']))*100
-    df_format = df['format'].value_counts().rename_axis('format').reset_index(name='counts')
+    df_battles = pd.read_csv('battles_PARSED.csv', index_col=[0])
+    df_format = df_battles['format'].value_counts().rename_axis('format').reset_index(name='counts')
+    print(df_format)
     df_new = pd.merge(df_new, df_format, on='format')
-    df_new['usage'] = ((df_new['won']+df_new['lost'])/df_new['counts'])*100
+    df_new['usage'] = (df_new['played']/df_new['counts'])*100
     df_new = df_new.drop(columns='counts')
 
     return df_new

@@ -1,5 +1,29 @@
 import pandas as pd
 from datetime import datetime
+import re
+
+def normalize_format(fmt):
+    fmt = fmt.strip().lower().replace('\r', '')  # rimuovi spazi, newline
+    match = re.search(r'gen\s*([1-5])', fmt)
+    if not match:
+        match = re.search(r'gen([1-5])', fmt)
+    if match:
+        gen = match.group(1)
+    else:
+        return None  # formato non valido
+
+    if 'ou' in fmt:
+        return f"[Gen {gen}] OU"
+    elif 'uu' in fmt and 'uubl' not in fmt:
+        return f"[Gen {gen}] UU"
+    elif 'nu' in fmt:
+        return f"[Gen {gen}] NU"
+    elif 'uubl' in fmt:
+        return f"[Gen {gen}] UUBL"
+    elif 'uber' in fmt:
+        return f"[Gen {gen}] UBERS"
+    else:
+        return f"[Gen {gen}] Other"
 
 def parse_log(log_text):
     lines = log_text.splitlines()
@@ -86,5 +110,6 @@ pd.set_option('display.max_columns', None)
 #df = df.drop(columns=['players', 'Unnamed: 0', 'formatid']).join(split_players)
 df['Winner'], df['Forfeit'], df['Team 1'], df['Team 2'], df['Turns'], df['# Switches 1'], df['# Switches 2']= zip(*df['log'].map(parse_log))
 df = df.drop('log', axis=1)
+df['format'] = df['format'].apply(normalize_format)
 print(df)
 df.to_csv('battles_PARSED.csv', index=False)
