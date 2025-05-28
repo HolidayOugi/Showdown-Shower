@@ -1,0 +1,755 @@
+Id,move,type,attack,power,pp
+#1, Pound, Normal, Physical, 35, 40
+#2, Karate Chop, Fighting, Physical, 25, 50
+#3, Double Slap, Normal, Physical, 10, 15
+#4, Comet Punch, Normal, Physical, 15, 18
+#5, Mega Punch, Normal, Physical, 20, 80
+#6, Pay Day, Normal, Physical, 20, 40
+#7, Fire Punch, Fire, Physical, 15, 75
+#8, Ice Punch, Ice, Physical, 15, 75
+#9, Thunder Punch, Electric, Physical, 15, 75
+#10, Scratch, Normal, Physical, 35, 40
+#11, Vise Grip, Normal, Physical, 30, 55
+#12, Guillotine, Normal, Physical, 5, —
+#13, Razor Wind, Normal, Special, 10, 80
+#14, Swords Dance, Normal, Status, 20, — — 
+#15, Cut, Normal, Physical, 30, 50
+#16, Gust, Flying, Special, 35, 40
+#17, Wing Attack, Flying, Physical, 35, 60
+#18, Whirlwind, Normal, Status, 20, — — 
+#19, Fly, Flying, Physical, 15, 90
+#20, Bind, Normal, Physical, 20, 15
+#21, Slam, Normal, Physical, 20, 80
+#22, Vine Whip, Grass, Physical, 25, 45
+#23, Stomp, Normal, Physical, 20, 65
+#24, Double Kick, Fighting, Physical, 30, 30
+#25, Mega Kick, Normal, Physical, 5, 120
+#26, Jump Kick, Fighting, Physical, 10, 100
+#27, Rolling Kick, Fighting, Physical, 15, 60
+#28, Sand Attack, Ground, Status, 15, —
+#29, Headbutt, Normal, Physical, 15, 70
+#30, Horn Attack, Normal, Physical, 25, 65
+#31, Fury Attack, Normal, Physical, 20, 15
+#32, Horn Drill, Normal, Physical, 5, —
+#33, Tackle, Normal, Physical, 35, 40
+#34, Body Slam, Normal, Physical, 15, 85
+#35, Wrap, Normal, Physical, 20, 15
+#36, Take Down, Normal, Physical, 20, 90
+#37, Thrash, Normal, Physical, 10, 120
+#38, Double-Edge, Normal, Physical, 15, 120
+#39, Tail Whip, Normal, Status, 30, —
+#40, Poison Sting, Poison, Physical, 35, 15
+#41, Twineedle, Bug, Physical, 20, 25
+#42, Pin Missile, Bug, Physical, 20, 25
+#43, Leer, Normal, Status, 30, —
+#44, Bite, Dark, Physical, 25, 60
+#45, Growl, Normal, Status, 40, —
+#46, Roar, Normal, Status, 20, — — 
+#47, Sing, Normal, Status, 15, —
+#48, Supersonic, Normal, Status, 20, —
+#49, Sonic Boom, Normal, Special, 20, —
+#50, Disable, Normal, Status, 20, —
+#51, Acid, Poison, Special, 30, 40
+#52, Ember, Fire, Special, 25, 40
+#53, Flamethrower, Fire, Special, 15, 90
+#54, Mist, Ice, Status, 30, — — 
+#55, Water Gun, Water, Special, 25, 40
+#56, Hydro Pump, Water, Special, 5, 110
+#57, Surf, Water, Special, 15, 90
+#58, Ice Beam, Ice, Special, 10, 90
+#59, Blizzard, Ice, Special, 5, 110
+#60, Psybeam, Psychic, Special, 20, 65
+#61, Bubble Beam, Water, Special, 20, 65
+#62, Aurora Beam, Ice, Special, 20, 65
+#63, Hyper Beam, Normal, Special, 5, 150
+#64, Peck, Flying, Physical, 35, 35
+#65, Drill Peck, Flying, Physical, 20, 80
+#66, Submission, Fighting, Physical, 20, 80
+#67, Low Kick, Fighting, Physical, 20, —
+#68, Counter, Fighting, Physical, 20, —
+#69, Seismic Toss, Fighting, Physical, 20, —
+#70, Strength, Normal, Physical, 15, 80
+#71, Absorb, Grass, Special, 25, 20
+#72, Mega Drain, Grass, Special, 15, 40
+#73, Leech Seed, Grass, Status, 10, —
+#74, Growth, Normal, Status, 20, — — 
+#75, Razor Leaf, Grass, Physical, 25, 55
+#76, Solar Beam, Grass, Special, 10, 120
+#77, Poison Powder, Poison, Status, 35, —
+#78, Stun Spore, Grass, Status, 30, —
+#79, Sleep Powder, Grass, Status, 15, —
+#80, Petal Dance, Grass, Special, 10, 120
+#81, String Shot, Bug, Status, 40, —
+#82, Dragon Rage, Dragon, Special, 10, —
+#83, Fire Spin, Fire, Special, 15, 35
+#84, Thunder Shock, Electric, Special, 30, 40
+#85, Thunderbolt, Electric, Special, 15, 90
+#86, Thunder Wave, Electric, Status, 20, —
+#87, Thunder, Electric, Special, 10, 110
+#88, Rock Throw, Rock, Physical, 15, 50
+#89, Earthquake, Ground, Physical, 10, 100
+#90, Fissure, Ground, Physical, 5, —
+#91, Dig, Ground, Physical, 10, 80
+#92, Toxic, Poison, Status, 10, —
+#93, Confusion, Psychic, Special, 25, 50
+#94, Psychic, Psychic, Special, 10, 90
+#95, Hypnosis, Psychic, Status, 20, —
+#96, Meditate, Psychic, Status, 40, — — 
+#97, Agility, Psychic, Status, 30, — — 
+#98, Quick Attack, Normal, Physical, 30, 40
+#99, Rage, Normal, Physical, 20, 20
+#100, Teleport, Psychic, Status, 20, — — 
+#101, Night Shade, Ghost, Special, 15, —
+#102, Mimic, Normal, Status, 10, — — 
+#103, Screech, Normal, Status, 40, —
+#104, Double Team, Normal, Status, 15, — — 
+#105, Recover, Normal, Status, 10, — — 
+#106, Harden, Normal, Status, 30, — — 
+#107, Minimize, Normal, Status, 10, — — 
+#108, Smokescreen, Normal, Status, 20, —
+#109, Confuse Ray, Ghost, Status, 10, —
+#110, Withdraw, Water, Status, 40, — — 
+#111, Defense Curl, Normal, Status, 40, — — 
+#112, Barrier, Psychic, Status, 20, — — 
+#113, Light Screen, Psychic, Status, 30, — — 
+#114, Haze, Ice, Status, 30, — — 
+#115, Reflect, Psychic, Status, 20, — — 
+#116, Focus Energy, Normal, Status, 30, — — 
+#117, Bide, Normal, Physical, 10, — — 
+#118, Metronome, Normal, Status, 10, — — 
+#119, Mirror Move, Flying, Status, 20, — — 
+#120, Self-Destruct, Normal, Physical, 5, 200
+#121, Egg Bomb, Normal, Physical, 10, 100
+#122, Lick, Ghost, Physical, 30, 30
+#123, Smog, Poison, Special, 20, 30
+#124, Sludge, Poison, Special, 20, 65
+#125, Bone Club, Ground, Physical, 20, 65
+#126, Fire Blast, Fire, Special, 5, 110
+#127, Waterfall, Water, Physical, 15, 80
+#128, Clamp, Water, Physical, 15, 35
+#129, Swift, Normal, Special, 20, 60
+#130, Skull Bash, Normal, Physical, 10, 130
+#131, Spike Cannon, Normal, Physical, 15, 20
+#132, Constrict, Normal, Physical, 35, 10
+#133, Amnesia, Psychic, Status, 20, — — 
+#134, Kinesis, Psychic, Status, 15, —
+#135, Soft-Boiled, Normal, Status, 10, — — 
+#136, High Jump Kick, Fighting, Physical, 10, 130
+#137, Glare, Normal, Status, 30, —
+#138, Dream Eater, Psychic, Special, 15, 100
+#139, Poison Gas, Poison, Status, 40, —
+#140, Barrage, Normal, Physical, 20, 15
+#141, Leech Life, Bug, Physical, 10, 80
+#142, Loely Kiss, Normal, Status, 10, —
+#143, Sky Attack, Flying, Physical, 5, 140
+#144, Transform, Normal, Status, 10, — — 
+#145, Bubble, Water, Special, 30, 40
+#146, Dizzy Punch, Normal, Physical, 10, 70
+#147, Spore, Grass, Status, 15, —
+#148, Flash, Normal, Status, 20, —
+#149, Psywave, Psychic, Special, 15, —
+#150, Splash, Normal, Status, 40, — — 
+#151, Acid Armor, Poison, Status, 20, — — 
+#152, Crabhammer, Water, Physical, 10, 100
+#153, Explosion, Normal, Physical, 5, 250
+#154, Fury Swipes, Normal, Physical, 15, 18
+#155, Bonemerang, Ground, Physical, 10, 50
+#156, Rest, Psychic, Status, 10, — — 
+#157, Rock Slide, Rock, Physical, 10, 75
+#158, Hyper Fang, Normal, Physical, 15, 80
+#159, Sharpen, Normal, Status, 30, — — 
+#160, Conersion, Normal, Status, 30, — — 
+#161, Tri Attack, Normal, Special, 10, 80
+#162, Super Fang, Normal, Physical, 10, —
+#163, Slash, Normal, Physical, 20, 70
+#164, Substitute, Normal, Status, 10, — — 
+#165, Struggle, Normal, Physical, 1 50, — 
+#166, Sketch, Normal, Status, 1 — — ,
+#167, Triple Kick, Fighting, Physical, 10, 10
+#168, Thief, Dark, Physical, 25, 60
+#169, Spider Web, Bug, Status, 10, — — 
+#170, Mind Reader, Normal, Status, 5, — — 
+#171, Nightmare, Ghost, Status, 15, —
+#172, Flame Wheel, Fire, Physical, 25, 60
+#173, Snore, Normal, Special, 15, 50
+#174, Curse, Ghost, Status, 10, — — 
+#175, Flail, Normal, Physical, 15, —
+#176, Conersion 2, Normal, Status, 30, — — 
+#177, Aeroblast, Flying, Special, 5, 100
+#178, Cotton Spore, Grass, Status, 40, —
+#179, Reversal, Fighting, Physical, 15, —
+#180, Spite, Ghost, Status, 10, —
+#181, Powder Snow, Ice, Special, 25, 40
+#182, Protect, Normal, Status, 10, — — 
+#183, Mach Punch, Fighting, Physical, 30, 40
+#184, Scary Face, Normal, Status, 10, —
+#185, Feint Attack, Dark, Physical, 20, 60
+#186, Sweet Kiss, Normal, Status, 10, —
+#187, Belly Drum, Normal, Status, 10, — — 
+#188, Sludge Bomb, Poison, Special, 10, 90
+#189, Mud-Slap, Ground, Special, 10, 20
+#190, Octazooka, Water, Special, 10, 65
+#191, Spikes, Ground, Status, 20, — — 
+#192, Zap Cannon, Electric, Special, 5, 120
+#193, Foresight, Normal, Status, 40, — — 
+#194, Destiny Bond, Ghost, Status, 5, — — 
+#195, Perish Song, Normal, Status, 5, — — 
+#196, Icy Wind, Ice, Special, 15, 55
+#197, Detect, Fighting, Status, 5, — — 
+#198, Bone Rush, Ground, Physical, 10, 25
+#199, Lock-On, Normal, Status, 5, — — 
+#200, Outrage, Dragon, Physical, 10, 120
+#201, Sandstorm, Rock, Status, 10, — —
+#202, Giga Drain, Grass, Special, 10, 75
+#203, Endure, Normal, Status, 10, — — 
+#204, Charm, Normal, Status, 20, —
+#205, Rollout, Rock, Physical, 20, 30
+#206, False Swipe, Normal, Physical, 40, 40
+#207, Swagger, Normal, Status, 15, —
+#208, Milk Drink, Normal, Status, 10, — — 
+#209, Spark, Electric, Physical, 20, 65
+#210, Fury Cutter, Bug, Physical, 20, 40
+#211, Steel Wing, Steel, Physical, 25, 70
+#212, Mean Look, Normal, Status, 5, — — 
+#213, Attract, Normal, Status, 15, —
+#214, Sleep Talk, Normal, Status, 10, — — 
+#215, Heal Bell, Normal, Status, 5, — — 
+#216, Return, Normal, Physical, 20, —
+#217, Present, Normal, Physical, 15, —
+#218, Frustration, Normal, Physical, 20, —
+#219, Safeguard, Normal, Status, 25, — — 
+#220, Pain Split, Normal, Status, 20, — — 
+#221, Sacred Fire, Fire, Physical, 5, 100
+#222, Magnitude, Ground, Physical, 30, —
+#223, Dynamic Punch, Fighting, Physical, 5, 100
+#224, Megahorn, Bug, Physical, 10, 120
+#225, Dragon Breath, Dragon, Special, 20, 60
+#226, Baton Pass, Normal, Status, 40, — — 
+#227, Encore, Normal, Status, 5, —
+#228, Pursuit, Dark, Physical, 20, 40
+#229, Rapid Spin, Normal, Physical, 40, 50
+#230, Sweet Scent, Normal, Status, 20, —
+#231, Iron Tail, Steel, Physical, 15, 100
+#232, Metal Claw, Steel, Physical, 35, 50
+#233, Vital Throw, Fighting, Physical, 10, 70
+#234, Morning Sun, Normal, Status, 5, — — 
+#235, Synthesis, Grass, Status, 5, — — 
+#236, Moonlight, Normal, Status, 5, — — 
+#237, Hidden Power, Normal, Special, 15, 60
+#238, Cross Chop, Fighting, Physical, 5, 100
+#239, Twister, Dragon, Special, 20, 40
+#240, Rain Dance, Water, Status, 5, — — 
+#241, Sunny Day, Fire, Status, 5, — — 
+#242, Crunch, Dark, Physical, 15, 80
+#243, Mirror Coat, Psychic, Special, 20, —
+#244, Psych Up, Normal, Status, 10, — — 
+#245, Extreme Speed, Normal, Physical, 5, 80
+#246, Ancient Power, Rock, Special, 5, 60
+#247, Shadow Ball, Ghost, Special, 15, 80
+#248, Future Sight, Psychic, Special, 10, 120
+#249, Rock Smash, Fighting, Physical, 15, 40
+#250, Whirlpool, Water, Special, 15, 35
+#251, Beat Up, Dark, Physical, 10, —
+#252, Fake Out, Normal, Physical, 10, 40
+#253, Uproar, Normal, Special, 10, 90
+#254, Stockpile, Normal, Status, 20, — — 
+#255, Spit Up, Normal, Special, 10, —
+#256, Swallow, Normal, Status, 10, — — 
+#257, Heat Wave, Fire, Special, 10, 95
+#258, Hail, Ice, Status, 10, — — 
+#259, Torment, Dark, Status, 15, —
+#260, Flatter, Dark, Status, 15, —
+#261, Will-O-Wisp, Fire, Status, 15, —
+#262, Memento, Dark, Status, 10, —
+#263, Facade, Normal, Physical, 20, 70
+#264, Focus Punch, Fighting, Physical, 20, 150
+#265, Smelling Salts, Normal, Physical, 10, 70
+#266, Follow Me, Normal, Status, 20, — — 
+#267, Nature Power, Normal, Status, 20, — — 
+#268, Charge, Electric, Status, 20, — — 
+#269, Taunt, Dark, Status, 20, —
+#270, Helping Hand, Normal, Status, 20, — — 
+#271, Trick, Psychic, Status, 10, —
+#272, Role Play, Psychic, Status, 10, — — 
+#273, Wish, Normal, Status, 10, — — 
+#274, Assist, Normal, Status, 20, — — 
+#275, Ingrain, Grass, Status, 20, — — 
+#276, Superpower, Fighting, Physical, 5, 120
+#277, Magic Coat, Psychic, Status, 15, — — 
+#278, Recycle, Normal, Status, 10, — — 
+#279, Revenge, Fighting, Physical, 10, 60
+#280, Brick Break, Fighting, Physical, 15, 75
+#281, Yawn, Normal, Status, 10, — — 
+#282, Knock Off, Dark, Physical, 20, 65
+#283, Endeaor, Normal, Physical, 5, —
+#284, Eruption, Fire, Special, 5, 150
+#285, Skill Swap, Psychic, Status, 10, — — 
+#286, Imprison, Psychic, Status, 10, — — 
+#287, Refresh, Normal, Status, 20, — — 
+#288, Grudge, Ghost, Status, 5, — — 
+#289, Snatch, Dark, Status, 10, — — 
+#290, Secret Power, Normal, Physical, 20, 70
+#291, Dive Water, Physical, 10, 80,
+#292, Arm Thrust, Fighting, Physical, 20, 15
+#293, Camouflage, Normal, Status, 20, — — 
+#294, Tail Glow, Bug, Status, 20, — — 
+#295, Luster Purge, Psychic, Special, 5, 70
+#296, Mist Ball, Psychic, Special, 5, 70
+#297, Feather Dance, Flying, Status, 15, —
+#298, Teeter Dance, Normal, Status, 20, —
+#299, Blaze Kick, Fire, Physical, 10, 85
+#300, Mud Sport, Ground, Status, 15, — — 
+#301, Ice Ball, Ice, Physical, 20, 30
+#302, Needle Arm, Grass, Physical, 15, 60
+#303, Slack Off, Normal, Status, 10, — — 
+#304, Hyper oice, Normal, Special, 10, 90
+#305, Poison Fang, Poison, Physical, 15, 50
+#306, Crush Claw, Normal, Physical, 10, 75
+#307, Blast Burn, Fire, Special, 5, 150
+#308, Hydro Cannon, Water, Special, 5, 150
+#309, Meteor Mash, Steel, Physical, 10, 90
+#310, Astonish, Ghost, Physical, 15, 30
+#311, Weather Ball, Normal, Special, 10, 50
+#312, Aromatherapy, Grass, Status, 5, — — 
+#313, Fake Tears, Dark, Status, 20, —
+#314, Air Cutter, Flying, Special, 25, 60
+#315, Overheat, Fire, Special, 5, 130
+#316, Odor Sleuth, Normal, Status, 40, — — 
+#317, Rock Tomb, Rock, Physical, 15, 60
+#318, Silver Wind, Bug, Special, 5, 60
+#319, Metal Sound, Steel, Status, 40, —
+#320, Grass Whistle, Grass, Status, 15, —
+#321, Tickle, Normal, Status, 20, —
+#322, Cosmic Power, Psychic, Status, 20, — — 
+#323, Water Spout, Water, Special, 5, 150
+#324, Signal Beam, Bug, Special, 15, 75
+#325, Shadow Punch, Ghost, Physical, 20, 60
+#326, Extrasensory, Psychic, Special, 20, 80
+#327, Sky Uppercut, Fighting, Physical, 15, 85
+#328, Sand Tomb, Ground, Physical, 15, 35
+#329, Sheer Cold, Ice, Special, 5, —
+#330, Muddy Water, Water, Special, 10, 90
+#331, Bullet Seed, Grass, Physical, 30, 25
+#332, Aerial Ace, Flying, Physical, 20, 60
+#333, Icicle Spear, Ice, Physical, 30, 25
+#334, Iron Defense, Steel, Status, 15, — — 
+#335, Block, Normal, Status, 5, — — 
+#336, Howl, Normal, Status, 40, — — 
+#337, Dragon Claw, Dragon, Physical, 15, 80
+#338, Frenzy Plant, Grass, Special, 5, 150
+#339, Bulk Up, Fighting, Status, 20, — — 
+#340, Bounce, Flying, Physical, 5, 85
+#341, Mud Shot, Ground, Special, 15, 55
+#342, Poison Tail, Poison, Physical, 25, 50
+#343, Coet, Normal, Physical, 25, 60
+#344, Volt Tackle, Electric, Physical, 15, 120
+#345, Magical Leaf, Grass, Special, 20, 60
+#346, Water Sport, Water, Status, 15, — — 
+#347, Calm Mind, Psychic, Status, 20, — — 
+#348, Leaf Blade, Grass, Physical, 15, 90
+#349, Dragon Dance, Dragon, Status, 20, — — 
+#350, Rock Blast, Rock, Physical, 10, 25
+#351, Shock Wave, Electric, Special, 20, 60
+#352, Water Pulse, Water, Special, 20, 60
+#353, Doom Desire, Steel, Special, 5, 140
+#354, Psycho Boost, Psychic, Special, 5, 140
+#355, Roost, Flying, Status, 10, — — 
+#356, Graty, Psychic, Status, 5, — — 
+#357, Miracle Eye, Psychic, Status, 40, — — 
+#358, Wake-Up Slap, Fighting, Physical, 10, 70
+#359, Hammer Arm, Fighting, Physical, 10, 100
+#360, Gyro Ball, Steel, Physical, 5, —
+#361, Healing Wish, Psychic, Status, 10, — — 
+#362, Brine, Water, Special, 10, 65
+#363, Natural Gift, Normal, Physical, 15, —
+#364, Feint, Normal, Physical, 10, 30
+#365, Pluck, Flying, Physical, 20, 60
+#366, Tailwind, Flying, Status, 15, — — 
+#367, Acupressure, Normal, Status, 30, — — 
+#368, Metal Burst, Steel, Physical, 10, —
+#369, U-turn, Bug, Physical, 20, 70
+#370, Close Combat, Fighting, Physical, 5, 120
+#371, Payback, Dark, Physical, 10, 50
+#372, Assurance, Dark, Physical, 10, 60
+#373, Embargo, Dark, Status, 15, —
+#374, Fling, Dark, Physical, 10, —
+#375, Psycho Shift, Psychic, Status, 10, —
+#376, Trump Card, Normal, Special, 5, — — 
+#377, Heal Block, Psychic, Status, 15, —
+#378, Wring Out, Normal, Special, 5, —
+#379, Power Trick, Psychic, Status, 10, — — 
+#380, Gastro Acid, Poison, Status, 10, —
+#381, Lucky Chant, Normal, Status, 30, — — 
+#382, Me First, Normal, Status, 20, — — 
+#383, Copycat, Normal, Status, 20, — — 
+#384, Power Swap, Psychic, Status, 10, — — 
+#385, Guard Swap, Psychic, Status, 10, — — 
+#386, Punishment, Dark, Physical, 5, —
+#387, Last Resort, Normal, Physical, 5, 140
+#388, Worry Seed, Grass, Status, 10, —
+#389, Sucker Punch, Dark, Physical, 5, 70
+#390, Toxic Spikes, Poison, Status, 20, — — 
+#391, Heart Swap, Psychic, Status, 10, — — 
+#392, Aqua Ring, Water, Status, 20, — — 
+#393, Magnet Rise, Electric, Status, 10, — — 
+#394, Flare Blitz, Fire, Physical, 15, 120
+#395, Force Palm, Fighting, Physical, 10, 60
+#396, Aura Sphere, Fighting, Special, 20, 80
+#397, Rock Polish, Rock, Status, 20, — — 
+#398, Poison Jab, Poison, Physical, 20, 80
+#399, Dark Pulse, Dark, Special, 15, 80
+#400, Night Slash, Dark, Physical, 15, 70
+#401, Aqua Tail, Water, Physical, 10, 90
+#402, Seed Bomb, Grass, Physical, 15, 80
+#403, Air Slash, Flying, Special, 15, 75
+#404, X-Scissor, Bug, Physical, 15, 80
+#405, Bug Buzz, Bug, Special, 10, 90
+#406, Dragon Pulse, Dragon, Special, 10, 85
+#407, Dragon Rush, Dragon, Physical, 10, 100
+#408, Power Gem, Rock, Special, 20, 80
+#409, Drain Punch, Fighting, Physical, 10, 75
+#410, Vacuum Wave, Fighting, Special, 30, 40
+#411, Focus Blast, Fighting, Special, 5, 120
+#412, Energy Ball, Grass, Special, 10, 90
+#413, Brave Bird, Flying, Physical, 15, 120
+#414, Earth Power, Ground, Special, 10, 90
+#415, Switcheroo, Dark, Status, 10, —
+#416, Giga Impact, Normal, Physical, 5, 150
+#417, Nasty Plot, Dark, Status, 20, — — 
+#418, Bullet Punch, Steel, Physical, 30, 40
+#419, Avalanche, Ice, Physical, 10, 60
+#420, Ice Shard, Ice, Physical, 30, 40
+#421, Shadow Claw, Ghost, Physical, 15, 70
+#422, Thunder Fang, Electric, Physical, 15, 65
+#423, Ice Fang, Ice, Physical, 15, 65
+#424, Fire Fang, Fire, Physical, 15, 65
+#425, Shadow Sneak, Ghost, Physical, 30, 40
+#426, Mud Bomb, Ground, Special, 10, 65
+#427, Psycho Cut, Psychic, Physical, 20, 70
+#428, Zen Headbutt, Psychic, Physical, 15, 80
+#429, Mirror Shot, Steel, Special, 10, 65
+#430, Flash Cannon, Steel, Special, 10, 80
+#431, Rock Climb, Normal, Physical, 20, 90
+#432, Defog, Flying, Status, 15, — — 
+#433, Trick Room, Psychic, Status, 5, — — 
+#434, Draco Meteor, Dragon, Special, 5, 130
+#435, Discharge, Electric, Special, 15, 80
+#436, Laa Plume, Fire, Special, 15, 80
+#437, Leaf Storm, Grass, Special, 5, 130
+#438, Power Whip, Grass, Physical, 10, 120
+#439, Rock Wrecker, Rock, Physical, 5, 150
+#440, Cross Poison, Poison, Physical, 20, 70
+#441, Gunk Shot, Poison, Physical, 5, 120
+#442, Iron Head, Steel, Physical, 15, 80
+#443, Magnet Bomb, Steel, Physical, 20, 60
+#444, Stone Edge, Rock, Physical, 5, 100
+#445, Captiate, Normal, Status, 20, —
+#446, Stealth Rock, Rock, Status, 20, — — 
+#447, Grass Knot, Grass, Special, 20, —
+#448, Chatter, Flying, Special, 20, 65
+#449, Judgment, Normal, Special, 10, 100
+#450, Bug Bite, Bug, Physical, 20, 60
+#451, Charge Beam, Electric, Special, 10, 50
+#452, Wood Hammer, Grass, Physical, 15, 120
+#453, Aqua Jet, Water, Physical, 20, 40
+#454, Attack Order, Bug, Physical, 15, 90
+#455, Defend Order, Bug, Status, 10, — — 
+#456, Heal Order, Bug, Status, 10, — — 
+#457, Head Smash, Rock, Physical, 5, 150
+#458, Double Hit, Normal, Physical, 10, 35
+#459, Roar of Time, Dragon, Special, 5, 150
+#460, Spacial Rend, Dragon, Special, 5, 100
+#461, Lunar Dance, Psychic, Status, 10, — — 
+#462, Crush Grip, Normal, Physical, 5, —
+#463, Magma Storm, Fire, Special, 5, 100
+#464, Dark Void, Dark, Status, 10, —
+#465, Seed Flare, Grass, Special, 5, 120
+#466, Ominous Wind, Ghost, Special, 5, 60
+#467, Shadow Force, Ghost, Physical, 5, 120
+#468, Hone Claws, Dark, Status, 15, — — 
+#469, Wide Guard, Rock, Status, 10, — —
+#470, Guard Split, Psychic, Status, 10, — — 
+#471, Power Split, Psychic, Status, 10, — — 
+#472, Wonder Room, Psychic, Status, 10, — — 
+#473, Psyshock, Psychic, Special, 10, 80
+#474, Venoshock, Poison, Special, 10, 65
+#475, Autotomize, Steel, Status, 15, — — 
+#476, Rage Powder, Bug, Status, 20, — — 
+#477, Telekinesis, Psychic, Status, 15, — — 
+#478, Magic Room, Psychic, Status, 10, — — 
+#479, Smack Down, Rock, Physical, 15, 50
+#480, Storm Throw, Fighting, Physical, 10, 60
+#481, Flame Burst, Fire, Special, 15, 70
+#482, Sludge Wave, Poison, Special, 10, 95
+#483, Quiver Dance, Bug, Status, 20, — — 
+#484, Heavy Slam, Steel, Physical, 10, —
+#485, Synchronoise, Psychic, Special, 10, 120
+#486, Electro Ball, Electric, Special, 10, —
+#487, Soak, Water, Status, 20, —
+#488, Flame Charge, Fire, Physical, 20, 50
+#489, Coil, Poison, Status, 20, — — 
+#490, Low Sweep, Fighting, Physical, 20, 65
+#491, Acid Spray, Poison, Special, 20, 40
+#492, Foul Play, Dark, Physical, 15, 95
+#493, Simple Beam, Normal, Status, 15, —
+#494, Entrainment, Normal, Status, 15, —
+#495, After You, Normal, Status, 15, — — 
+#496, Round, Normal, Special, 15, 60
+#497, Echoed Voice, Normal, Special, 15, 40
+#498, Chip Away, Normal, Physical, 20, 70
+#499, Clear Smog, Poison, Special, 15, 50
+#500, Stored Power, Psychic, Special, 10, 20
+#501, Quick Guard, Fighting, Status, 15, — — 
+#502, Ally Switch, Psychic, Status, 15, — — 
+#503, Scald, Water, Special, 15, 80
+#504, Shell Smash, Normal, Status, 15, — — 
+#505, Heal Pulse, Psychic, Status, 10, — — 
+#506, Hex, Ghost, Special, 10, 65
+#507, Sky Drop, Flying, Physical, 10, 60
+#508, Shift Gear, Steel, Status, 10, — — 
+#509, Circle Throw, Fighting, Physical, 10, 60
+#510, Incinerate, Fire, Special, 15, 60
+#511, Quash, Dark, Status, 15, —
+#512, Acrobatics, Flying, Physical, 15, 55
+#513, Reflect Type, Normal, Status, 15, — — 
+#514, Retaliate, Normal, Physical, 5, 70
+#515, Final Gambit, Fighting, Special, 5, —
+#516, Bestow, Normal, Status, 15, — — 
+#517, Inferno, Fire, Special, 5, 100
+#518, Water Pledge, Water, Special, 10, 80
+#519, Fire Pledge, Fire, Special, 10, 80
+#520, Grass Pledge, Grass, Special, 10, 80
+#521, Volt Switch, Electric, Special, 20, 70
+#522, Struggle Bug, Bug, Special, 20, 50
+#523, Bulldoze, Ground, Physical, 20, 60
+#524, Frost Breath, Ice, Special, 10, 60
+#525, Dragon Tail, Dragon, Physical, 10, 60
+#526, Work Up, Normal, Status, 30, — — 
+#527, Electroweb, Electric, Special, 15, 55
+#528, Wild Charge, Electric, Physical, 15, 90
+#529, Drill Run, Ground, Physical, 10, 80
+#530, Dual Chop, Dragon, Physical, 15, 40
+#531, Heart Stamp, Psychic, Physical, 25, 60
+#532, Horn Leech, Grass, Physical, 10, 75
+#533, Sacred Sword, Fighting, Physical, 15, 90
+#534, Razor Shell, Water, Physical, 10, 75
+#535, Heat Crash, Fire, Physical, 10, —
+#536, Leaf Tornado, Grass, Special, 10, 65
+#537, Steamroller, Bug, Physical, 20, 65
+#538, Cotton Guard, Grass, Status, 10, — — 
+#539, Night Daze, Dark, Special, 10, 85
+#540, Psystrike, Psychic, Special, 10, 100
+#541, Tail Slap, Normal, Physical, 10, 25
+#542, Hurricane, Flying, Special, 10, 110
+#543, Head Charge, Normal, Physical, 15, 120
+#544, Gear Grind, Steel, Physical, 15, 50
+#545, Searing Shot, Fire, Special, 5, 100
+#546, Techno Blast, Normal, Special, 5, 120
+#547, Relic Song, Normal, Special, 10, 75
+#548, Secret Sword, Fighting, Special, 10, 85
+#549, Glaciate, Ice, Special, 10, 65
+#550, Bolt Strike, Electric, Physical, 5, 130
+#551, Blue Flare, Fire, Special, 5, 130
+#552, Fiery Dance, Fire, Special, 10, 80
+#553, Freeze Shock, Ice, Physical, 5, 140
+#554, Ice Burn, Ice, Special, 5, 140
+#555, Snarl, Dark, Special, 15, 55
+#556, Icicle Crash, Ice, Physical, 10, 85
+#557, V-create, Fire, Physical, 5, 180
+#558, Fusion Flare, Fire, Special, 5, 100
+#559, Fusion Bolt, Electric, Physical, 5, 100
+#560, Flying Press, Fighting, Physical, 10, 100
+#561, Mat Block, Fighting, Status, 10, — — 
+#562, Belch, Poison, Special, 10, 120
+#563, Rototiller, Ground, Status, 10, — — 
+#564, Sticky Web, Bug, Status, 20, — — 
+#565, Fell Stinger, Bug, Physical, 25, 50
+#566, Phantom Force, Ghost, Physical, 10, 90
+#567, Trick-or-Treat, Ghost, Status, 20, —
+#568, Noble Roar, Normal, Status, 30, —
+#569, Ion Deluge, Electric, Status, 25, — — 
+#570, Parabolic Charge, Electric, Special, 20, 65
+#571, Forest's Curse, Grass, Status, 20, —
+#572, Petal Blizzard, Grass, Physical, 15, 90
+#573, Freeze-Dry, Ice, Special, 20, 70
+#574, Disarming Voice, Fairy, Special, 15, 40
+#575, Parting Shot, Dark, Status, 20, —
+#576, Topsy-Tury, Dark, Status, 20, — — 
+#577, Draining Kiss, Fairy, Special, 10, 50
+#578, Crafty Shield, Fairy, Status, 10, — — 
+#579, Flower Shield, Fairy, Status, 10, — — 
+#580, Grassy Terrain, Grass, Status, 10, — — 
+#581, Misty Terrain, Fairy, Status, 10, — — 
+#582, Electrify, Electric, Status, 20, — — 
+#583, Play Rough, Fairy, Physical, 10, 90
+#584, Fairy Wind, Fairy, Special, 30, 40
+#585, Moonblast, Fairy, Special, 15, 95
+#586, Boomburst, Normal, Special, 10, 140
+#587, Fairy Lock, Fairy, Status, 10, — — 
+#588, King's Shield, Steel, Status, 10, — — 
+#589, Play Nice, Normal, Status, 20, — — 
+#590, Confide, Normal, Status, 20, — — 
+#591, Diamond Storm, Rock, Physical, 5, 100
+#592, Steam Eruption, Water, Special, 5, 110
+#593, Hyperspace Hole, Psychic, Special, 5, 80
+#594, Water Shuriken, Water, Special, 20, 15
+#595, Mystical Fire, Fire, Special, 10, 75
+#596, Spiky Shield, Grass, Status, 10, — — 
+#597, Aromatic Mist, Fairy, Status, 20, — — 
+#598, Eerie Impulse, Electric, Status, 15, —
+#599, Venom Drench, Poison, Status, 20, —
+#600, Powder, Bug, Status, 20, —
+#601, Geomancy, Fairy, Status, 10, — — 
+#602, Magnetic Flux, Electric, Status, 20, — — 
+#603, Happy Hour, Normal, Status, 30, — — 
+#604, Electric Terrain, Electric, Status, 10, — — 
+#605, Dazzling Gleam, Fairy, Special, 10, 80
+#606, Celebrate, Normal, Status, 40, — — 
+#607, Hold Hands, Normal, Status, 40, — — 
+#608, Baby-Doll Eyes, Fairy, Status, 30, —
+#609, Nuzzle, Electric, Physical, 20, 20
+#610, Hold Back, Normal, Physical, 40, 40
+#611, Infestation, Bug, Special, 20, 20
+#612, Power-Up Punch, Fighting, Physical, 20, 40
+#613, Oblion Wing, Flying, Special, 10, 80
+#614, Thousand Arrows, Ground, Physical, 10, 90
+#615, Thousand Waves, Ground, Physical, 10, 90
+#616, Land's Wrath, Ground, Physical, 10, 90
+#617, Light of Ruin, Fairy, Special, 5, 140
+#618, Origin Pulse, Water, Special, 10, 110
+#619, Precipice Blades, Ground, Physical, 10, 120
+#620, Dragon Ascent, Flying, Physical, 5, 120
+#659, Shore Up, Ground, Status, 10, — — 
+#660, First Impression, Bug, Physical, 10, 90
+#661, Baneful Bunker, Poison, Status, 10, — — 
+#662, Spirit Shackle, Ghost, Physical, 10, 80
+#663, Darkest Lariat, Dark, Physical, 10, 85
+#664, Sparkling Aria, Water, Special, 10, 90
+#665, Ice Hammer, Ice, Physical, 10, 100
+#666, Floral Healing, Fairy, Status, 10, — — 
+#667, High Horsepower, Ground, Physical, 10, 95
+#668, Strength Sap, Grass, Status, 10, —
+#669, Solar Blade, Grass, Physical, 10, 125
+#670, Leafage, Grass, Physical, 40, 40
+#671, Spotlight, Normal, Status, 15, — — 
+#672, Toxic Thread, Poison, Status, 20, —
+#673, Laser Focus, Normal, Status, 30, — — 
+#674, Gear Up, Steel, Status, 20, — — 
+#675, Throat Chop, Dark, Physical, 15, 80
+#676, Pollen Puff, Bug, Special, 15, 90
+#677, Anchor Shot, Steel, Physical, 20, 80
+#678, Psychic Terrain, Psychic, Status, 10, — — 
+#679, Lunge, Bug, Physical, 15, 80
+#680, Fire Lash, Fire, Physical, 15, 80
+#681, Power Trip, Dark, Physical, 10, 20
+#682, Burn Up, Fire, Special, 5, 130
+#683, Speed Swap, Psychic, Status, 10, — — 
+#684, Smart Strike, Steel, Physical, 10, 70
+#685, Purify, Poison, Status, 20, — — 
+#686, Reelation Dance, Normal, Special, 15, 90
+#687, Core Enforcer, Dragon, Special, 10, 100
+#688, Trop Kick, Grass, Physical, 15, 70
+#689, Instruct, Psychic, Status, 15, — — 
+#690, Beak Blast, Flying, Physical, 15, 100
+#691, Clanging Scales, Dragon, Special, 5, 110
+#692, Dragon Hammer, Dragon, Physical, 15, 90
+#693, Brutal Swing, Dark, Physical, 20, 60
+#694, Aurora Veil, Ice, Status, 20, — — 
+#704, Shell Trap, Fire, Special, 5, 150
+#705, Fleur Cannon, Fairy, Special, 5, 130
+#706, Psychic Fangs, Psychic, Physical, 10, 85
+#707, Stomping Tantrum, Ground, Physical, 10, 75
+#708, Shadow Bone, Ghost, Physical, 10, 85
+#709, Accelerock, Rock, Physical, 20, 40
+#710, Liquidation, Water, Physical, 10, 85
+#711, Prismatic Laser, Psychic, Special, 10, 160
+#712, Spectral Thief, Ghost, Physical, 10, 90
+#713, Sunsteel Strike, Steel, Physical, 5, 100
+#714, Moongeist Beam, Ghost, Special, 5, 100
+#715, Tearful Look, Normal, Status, 20, — — 
+#716, Zing Zap, Electric, Physical, 10, 80
+#717, Nature's Madness, Fairy, Special, 10, —
+#718, Multi-Attack, Normal, Physical, 10, 120
+#720, Mind Blown, Fire, Special, 5, 150
+#721, Plasma Fists, Electric, Physical, 15, 100
+#722, Photon Geyser, Psychic, Special, 5, 100
+#729, Zippy Zap, Electric, Physical, 10, 80
+#730, Splishy Splash, Water, Special, 15, 90
+#731, Floaty Fall, Flying, Physical, 15, 90
+#732, Pika Papow, Electric, Special, 20, — — 
+#733, Bouncy Bubble, Water, Special, 20, 60
+#734, Buzzy Buzz, Electric, Special, 20, 60
+#735, Sizzly Slide, Fire, Physical, 20, 60
+#736, Glitzy Glow, Psychic, Special, 15, 80
+#737, Baddy Bad, Dark, Special, 15, 80
+#738, Sappy Seed, Grass, Physical, 10, 100
+#739, Freezy Frost, Ice, Special, 10, 100
+#740, Sparkly Swirl, Fairy, Special, 5, 120
+#741, Veevee Volley, Normal, Physical, 20, — — 
+#742, Double Iron Bash, Steel, Physical, 5, 60
+#743, Max Guard, Normal, Status, 10, — — 
+#744, Dynamax Cannon, Dragon, Special, 5, 100
+#745, Snipe Shot, Water, Special, 15, 80
+#746, Jaw Lock, Dark, Physical, 10, 80
+#747, Stuff Cheeks, Normal, Status, 10, — — 
+#748, No Retreat, Fighting, Status, 5, — — 
+#749, Tar Shot Rock, Status, 15, —,
+#750, Magic Powder, Psychic, Status, 20, —
+#751, Dragon Darts, Dragon, Physical, 10, 50
+#752, Teatime, Normal, Status, 10, — — 
+#753, Octolock, Fighting, Status, 15, —
+#754, Bolt Beak, Electric, Physical, 10, 85
+#755, Fishious Rend, Water, Physical, 10, 85
+#756, Court Change, Normal, Status, 10, —
+#775, Clangorous Soul, Dragon, Status, 5, — — 
+#776, Body Press, Fighting, Physical, 10, 80
+#777, Decorate, Fairy, Status, 15, — — 
+#778, Drum Beating, Grass, Physical, 10, 80
+#779, Snap Trap, Grass, Physical, 15, 35
+#780, Pyro Ball, Fire, Physical, 5, 120
+#781, Behemoth Blade, Steel, Physical, 5, 100
+#782, Behemoth Bash, Steel, Physical, 5, 100
+#783, Aura Wheel, Electric, Physical, 10, 110
+#784, Breaking Swipe, Dragon, Physical, 15, 60
+#785, Branch Poke, Grass, Physical, 40, 40
+#786, Overdrie, Electric, Special, 10, 80
+#787, Apple Acid, Grass, Special, 10, 80
+#788, Grav Apple, Grass, Physical, 10, 80
+#789, Spirit Break, Fairy, Physical, 15, 75
+#790, Strange Steam, Fairy, Special, 10, 90
+#791, Life Dew, Water, Status, 10, — — 
+#792, Obstruct, Dark, Status, 10, —
+#793, False Surrender, Dark, Physical, 10, 80
+#794, Meteor Assault, Fighting, Physical, 5, 150
+#795, Eternabeam, Dragon, Special, 5, 160
+#796, Steel Beam, Steel, Special, 5, 140
+#797, Expanding Force, Psychic, Special, 10, 80
+#798, Steel Roller, Steel, Physical, 5, 130
+#799, Scale Shot, Dragon, Physical, 20, 25
+#800, Meteor Beam Rock, Special, 10, 120,
+#801, Shell Side Arm, Poison, Special, 10, 90
+#802, Misty Explosion, Fairy, Special, 5, 100
+#803, Grassy Glide, Grass, Physical, 20, 70
+#804, Rising Voltage, Electric, Special, 20, 70
+#805, Terrain Pulse, Normal, Special, 10, 50
+#806, Skitter Smack, Bug, Physical, 10, 70
+#807, Burning Jealousy, Fire, Special, 5, 70
+#808, Lash Out, Dark, Physical, 5, 75
+#809, Poltergeist, Ghost, Physical, 5, 110
+#810, Corrosive Gas, Poison, Status, 40, —
+#811, Coaching, Fighting, Status, 10, — — 
+#812, Flip Turn, Water, Physical, 20, 60
+#813, Triple Axel, Ice, Physical, 10, 20
+#814, Dual Wingbeat, Flying, Physical, 10, 40
+#815, Scorching Sands, Ground, Special, 10, 70
+#816, Jungle Healing, Grass, Status, 10, — — 
+#817, Wicked Blow, Dark, Physical, 5, 80
+#818, Surging Strikes, Water, Physical, 5, 25
+#819, Thunder Cage, Electric, Special, 15, 80
+#820, Dragon Energy, Dragon, Special, 5, 150
+#821, Freezing Glare, Psychic, Special, 10, 90
+#822, Fiery Wrath, Dark, Special, 10, 90
+#823, Thunderous Kick, Fighting, Physical, 10, 90
+#824, Glacial Lance, Ice, Physical, 5, 130
+#825, Astral Barrage, Ghost, Special, 5, 120
+#826, Eerie Spell, Psychic, Special, 5, 80
