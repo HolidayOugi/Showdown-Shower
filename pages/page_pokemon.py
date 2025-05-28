@@ -90,7 +90,75 @@ with col3:
         width=130,
     )
 
-    st.plotly_chart(fig, use_container_width=False)
+    st.plotly_chart(fig, use_container_width=False, config={
+    'displayModeBar': False,
+    'displaylogo': False
+})
+
+st.subheader("Stats")
+
+col1, col2 = st.columns([10, 1])
+
+with col1:
+
+
+    stats = {
+        'HP': row['HP'],
+        'Attack': row['Attack'],
+        'Defense': row['Defense'],
+        'Sp. Atk': row['Sp. Atk'],
+        'Sp. Def': row['Sp. Def'],
+        'Speed': row['Speed']
+    }
+
+    labels = list(stats.keys())[::-1]
+    values = list(stats.values())[::-1]
+
+    colors = ['#f44336' if v < 70 else '#ffeb3b' if v < 100 else '#4caf50' for v in values]
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Bar(
+        x=values,
+        y=labels,
+        orientation='h',
+        marker_color=colors,
+        text=values,
+        textposition='auto',
+        hovertemplate='%{y}: %{x}<extra></extra>',
+    ))
+
+    fig.update_xaxes(tickfont=dict(color='black'))
+    fig.update_yaxes(tickfont=dict(color='black'))
+
+    fig.update_layout(
+        xaxis=dict(range=[0, 150]),
+        margin=dict(t=20, b=20, l=50, r=20),
+        height=300,
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        showlegend=False
+    )
+
+    st.plotly_chart(fig, use_container_width=True, config={
+        'displayModeBar': False,
+        'displaylogo': False
+    })
+
+with col2:
+
+    move_url = f"https://bulbapedia.bulbagarden.net/wiki/{pokemon}_(Pok%C3%A9mon)#Stats"
+    with open('./assets/icons/bulba.png', "rb") as f:
+        img_bytes = f.read()
+    img_b64 = base64.b64encode(img_bytes).decode()
+    html_code = f'''
+                <a href="{move_url}" target="_blank">
+                    <img src="data:image/png;base64,{img_b64}" width="24" style="vertical-align:middle;" />
+                </a>
+                '''
+    st.markdown(html_code, unsafe_allow_html=True)
+
+st.subheader(f"Most used moves by {pokemon} in {selected_format}")
 
 moves_df = pd.read_csv('./input/moves.csv')
 moves_df = moves_df.map(lambda x: x.lstrip() if isinstance(x, str) else x)
@@ -155,7 +223,10 @@ for move, count in moves_to_show:
             paper_bgcolor='white'
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, config={
+    'displayModeBar': False,
+    'displaylogo': False
+})
 
     with col2:
         move_key = move.replace(" ", "_")
