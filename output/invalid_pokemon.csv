@@ -1,91 +1,91 @@
-pokemon,format,played,won,lost,moves,win_rate,usage,Type1,Type2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
-Altaria,[Gen 1] UBERS,3,2,1,[],66.66666666666666,0.08032128514056225,Dragon,Flying,490,75,70,90,70,105,80
-Ampharos,[Gen 1] OU,1,0,1,"[('Tail Glow', 1), ('Zippy Zap', 1)]",0.0,0.0011710150358330601,Electric,,510,90,75,85,115,90,55
-Arceus,[Gen 1] UBERS,1,0,1,"[('Perish Song', 1), ('Stone Axe', 1), ('Tidy Up', 1)]",0.0,0.02677376171352075,Normal,,720,120,120,120,120,120,120
-Azelf,[Gen 1] OU,6,2,4,"[('Explosion', 5), ('Psychic', 4), ('Thunder Wave', 2), ('Fire Blast', 1), ('Thunderbolt', 1)]",33.33333333333333,0.007026090214998361,Psychic,,580,75,125,70,125,70,115
-Blaziken,[Gen 1] OU,2,0,2,"[('High Jump Kick', 2), ('Fire Blast', 1), ('Swords Dance', 1)]",0.0,0.0023420300716661202,Fire,Fighting,530,80,120,70,110,70,80
-Blissey,[Gen 1] OU,2,2,0,"[('Thunder Wave', 2), ('Blizzard', 1), ('Psychic', 1), ('Reflect', 1), ('Seismic Toss', 1), ('Soft-Boiled', 1)]",100.0,0.0023420300716661202,Normal,,540,255,10,10,75,135,55
-Celebi,[Gen 1] OU,1,0,1,"[('Psychic', 1), ('Recover', 1), ('Reflect', 1), ('Thunder Wave', 1)]",0.0,0.0011710150358330601,Psychic,Grass,600,100,100,100,100,100,100
-Claydol,[Gen 1] UBERS,3,2,1,[],66.66666666666666,0.08032128514056225,Ground,Psychic,500,60,70,105,70,120,75
-Darkrai,[Gen 1] OU,2,1,1,"[('Ice Beam', 2), ('Hypnosis', 1), ('Thunder', 1), ('Thunder Wave', 1)]",50.0,0.0023420300716661202,Dark,,600,70,90,90,135,90,125
-Deoxys-Speed,[Gen 1] OU,3,3,1,"[('Wrap', 3), ('Thunder Wave', 2), ('Low Kick', 1), ('Psychic', 1)]",75.0,0.0035130451074991804,Psychic,,600,50,95,90,95,90,180
-Drifblim,[Gen 1] OU,1,1,0,"[('Amnesia', 1), ('Explosion', 1), ('Thunder Wave', 1), ('Thunderbolt', 1)]",100.0,0.0011710150358330601,Ghost,Flying,498,150,80,44,90,54,80
-Electivire,[Gen 1] OU,1,1,0,"[('Hyper Beam', 1), ('Thunder Wave', 1), ('Thunderbolt', 1)]",100.0,0.0011710150358330601,Electric,,540,75,123,67,95,85,95
-Empoleon,[Gen 1] OU,3,2,1,"[('Blizzard', 1), ('Drill Peck', 1), ('Swords Dance', 1)]",66.66666666666666,0.0035130451074991804,Water,Steel,530,84,86,88,111,101,60
-Espeon,[Gen 1] OU,1,0,1,"[('Confuse Ray', 1), ('Mimic', 1), ('Psychic', 1), ('Thunder Wave', 1)]",0.0,0.0011710150358330601,Psychic,,525,65,65,60,130,95,110
-Froslass,[Gen 1] OU,4,2,2,"[('Thunder Wave', 3), ('Haze', 2), ('Night Shade', 2), ('Blizzard', 1), ('Body Slam', 1), ('Ice Beam', 1)]",50.0,0.0046840601433322405,Ice,Ghost,480,70,80,70,80,70,110
-Gastrodon,[Gen 1] OU,5,3,2,[],60.0,0.0058550751791653,Water,Ground,475,111,83,68,92,82,39
-Giratina,[Gen 1] UBERS,3,2,2,"[('Spider Web', 3), ('Curse', 2), ('Recover', 2), ('Imprison', 1), ('Last Respects', 1)]",50.0,0.08032128514056225,Ghost,Dragon,680,150,100,120,100,120,90
-Glaceon,[Gen 1] OU,1,0,1,"[('Double Kick', 1), ('Rest', 1), ('Substitute', 1)]",0.0,0.0011710150358330601,Ice,,525,65,60,110,130,95,65
-Gorebyss,[Gen 1] OU,1,0,1,"[('Psychic', 1), ('Rest', 1)]",0.0,0.0011710150358330601,Water,,485,55,84,105,114,75,52
-Heatran,[Gen 1] OU,1,0,1,"[('Stealth Rock', 1)]",0.0,0.0011710150358330601,Fire,Steel,600,91,90,106,130,106,77
-Hitmontop,[Gen 1] UBERS,3,2,1,"[('Agility', 3), ('High Jump Kick', 3), ('Earthquake', 1), ('Hyper Beam', 1)]",66.66666666666666,0.08032128514056225,Fighting,,455,50,95,95,35,110,70
-Jirachi,[Gen 1] OU,10,8,2,"[('Amnesia', 8), ('Thunderbolt', 8), ('Rest', 6), ('Psychic', 4), ('Thunder Wave', 2), ('Fire Punch', 1)]",80.0,0.0117101503583306,Steel,Psychic,600,100,100,100,100,100,100
-Jumpluff,[Gen 1] OU,1,1,0,"[('Stun Spore', 1), ('Toxic', 1)]",100.0,0.0011710150358330601,Grass,Flying,460,75,55,70,55,95,110
-Latias,[Gen 1] OU,2,1,1,"[('Recover', 2), ('Ice Beam', 1), ('Psychic', 1), ('Surf', 1), ('Thunder Wave', 1)]",50.0,0.0023420300716661202,Dragon,Psychic,600,80,80,90,110,130,110
-Latios,[Gen 1] OU,5,3,2,"[('Psychic', 4), ('Recover', 3), ('Ice Beam', 2), ('Surf', 2), ('Thunder Wave', 1)]",60.0,0.0058550751791653,Dragon,Psychic,600,80,90,80,130,110,110
-Lopunny,[Gen 1] OU,1,0,1,"[('Explosion', 1), ('Fake Out', 1)]",0.0,0.0011710150358330601,Normal,,480,65,76,84,54,96,105
-Magnezone,[Gen 1] OU,3,1,2,[],33.33333333333333,0.0035130451074991804,Electric,Steel,535,70,70,115,130,90,60
-Mamoswine,[Gen 1] OU,1,1,0,[],100.0,0.0011710150358330601,Ice,Ground,530,110,130,80,70,60,80
-Manaphy,[Gen 1] OU,6,4,2,"[('Surf', 5), ('Take Heart', 3), ('Ice Beam', 2), ('Rest', 1)]",66.66666666666666,0.007026090214998361,Water,,600,100,100,100,100,100,100
-Metagross,[Gen 1] OU,6,3,3,"[('Psychic', 4), ('Agility', 3), ('Explosion', 3), ('Earthquake', 2), ('Hyper Beam', 1), ('Rock Slide', 1)]",50.0,0.007026090214998361,Steel,Psychic,600,80,135,130,95,90,70
-Milotic,[Gen 1] OU,5,2,3,"[('Recover', 2), ('Surf', 2), ('Blizzard', 1), ('Hypnosis', 1)]",40.0,0.0058550751791653,Water,,540,95,60,79,100,125,81
-Porygon-Z,[Gen 1] OU,5,1,4,"[('Blizzard', 3), ('Thunder Wave', 3), ('Thunderbolt', 2), ('Recover', 1)]",20.0,0.0058550751791653,Normal,,535,85,80,70,135,75,90
-Porygon2,[Gen 1] OU,2,0,2,"[('Thunder Wave', 2), ('Recover', 1), ('Thunderbolt', 1)]",0.0,0.0023420300716661202,Normal,,515,85,80,90,105,95,60
-Quagsire,[Gen 1] OU,2,1,1,"[('Amnesia', 2), ('Earthquake', 1), ('Recover', 1), ('Surf', 1)]",50.0,0.0023420300716661202,Water,Ground,430,95,85,85,65,65,35
-Regice,[Gen 1] OU,5,4,1,"[('Amnesia', 4), ('Ice Beam', 3), ('Thunderbolt', 2), ('Blizzard', 1), ('Rest', 1)]",80.0,0.0058550751791653,Ice,,580,80,50,100,100,200,50
-Regigigas,[Gen 1] OU,20,12,16,"[('Body Slam', 12), ('Hyper Beam', 11), ('Earthquake', 7), ('Double-Edge', 3), ('Thunder Wave', 3), ('Ice Punch', 2), ('Confuse Ray', 1), ('Rest', 1), ('Rock Slide', 1), ('Thunderbolt', 1)]",42.857142857142854,0.0234203007166612,Normal,,670,110,160,110,80,110,100
-Registeel,[Gen 1] OU,1,1,0,"[('Amnesia', 1)]",100.0,0.0011710150358330601,Steel,,580,80,75,150,75,150,50
-Rhyperior,[Gen 1] OU,2,1,1,"[('Earthquake', 2), ('Rock Slide', 2), ('Submission', 1)]",50.0,0.0023420300716661202,Ground,Rock,535,115,140,130,55,55,40
-Sableye,[Gen 1] OU,2,0,2,"[('Recover', 2), ('Thunder Wave', 2), ('Fire Punch', 1), ('Seismic Toss', 1)]",0.0,0.0023420300716661202,Dark,Ghost,380,50,75,75,65,65,50
-Shaymin,[Gen 1] OU,4,3,1,"[('Growth', 2), ('Leech Seed', 1), ('Psychic', 1), ('Rest', 1), ('Seed Flare', 1)]",75.0,0.0046840601433322405,Grass,,600,100,100,100,100,100,100
-Shiftry,[Gen 1] OU,2,1,1,"[('Explosion', 1), ('Razor Leaf', 1)]",50.0,0.0023420300716661202,Grass,Dark,480,90,100,60,90,60,80
-Skarmory,[Gen 1] OU,2,1,1,"[('Drill Peck', 1), ('Whirlwind', 1)]",50.0,0.0023420300716661202,Steel,Flying,465,65,80,140,40,70,70
-Slaking,[Gen 1] OU,2,2,1,"[('Amnesia', 2), ('Body Slam', 2), ('Rest', 2), ('Blizzard', 1), ('Earthquake', 1)]",66.66666666666666,0.0023420300716661202,Normal,,670,150,160,100,95,65,100
-Slowking,[Gen 1] OU,6,3,3,"[('Amnesia', 2), ('Thunder Wave', 2), ('Fire Blast', 1), ('Rest', 1)]",50.0,0.007026090214998361,Water,Psychic,490,95,75,80,100,110,30
-Swampert,[Gen 1] OU,8,6,2,"[('Earthquake', 5), ('Amnesia', 4), ('Blizzard', 4), ('Rest', 1)]",75.0,0.009368120286664481,Water,Ground,535,100,110,90,85,90,60
-Togekiss,[Gen 1] OU,1,0,1,"[('Amnesia', 1), ('Flamethrower', 1), ('Psychic', 1), ('Soft-Boiled', 1)]",0.0,0.0011710150358330601,Normal,Flying,545,85,50,95,120,115,80
-Togetic,[Gen 1] OU,1,1,0,"[('Fire Blast', 1)]",100.0,0.0011710150358330601,Normal,Flying,405,55,40,85,80,105,40
-Torterra,[Gen 1] OU,1,0,1,"[('Body Slam', 1), ('Leech Seed', 1)]",0.0,0.0011710150358330601,Grass,Ground,525,95,109,105,75,85,56
-Uxie,[Gen 1] OU,4,1,3,[],25.0,0.0046840601433322405,Psychic,,580,75,75,130,75,130,95
-Walrein,[Gen 1] OU,1,0,1,"[('Blizzard', 1), ('Body Slam', 1), ('Rest', 1)]",0.0,0.0011710150358330601,Ice,Water,530,110,80,90,95,90,65
-Ambipom,[Gen 2] OU,1,0,1,"[('Baton Pass', 1), ('Counter', 1), ('Return', 1)]",0.0,0.002343511987063814,Normal,,482,75,100,66,60,66,115
-Arceus,[Gen 2] OU,1,1,0,"[('Destiny Bond', 1), ('Encore', 1), ('Population Bomb', 1)]",100.0,0.002343511987063814,Normal,,720,120,120,120,120,120,120
-Arceus-Ground,[Gen 2] OU,1,0,1,[],0.0,0.002343511987063814,Ground,,720,120,120,120,120,120,120
-Electivire,[Gen 2] OU,2,1,1,"[('Ice Punch', 2), ('Cross Chop', 1), ('Fire Punch', 1), ('Thunderbolt', 1)]",50.0,0.004687023974127628,Electric,,540,75,123,67,95,85,95
-Glaceon,[Gen 2] OU,3,2,1,"[('Ice Beam', 3), ('Growth', 1), ('Rest', 1), ('Sleep Talk', 1)]",66.66666666666666,0.007030535961191441,Ice,,525,65,60,110,130,95,65
-Groudon,[Gen 2] OU,5,5,3,"[('Flamethrower', 4), ('Precipice Blades', 4), ('Rock Slide', 4), ('Swords Dance', 4), ('Earthquake', 3), ('Rest', 2), ('Body Slam', 1), ('Protect', 1), ('Sleep Talk', 1), ('Spikes', 1), ('Toxic', 1)]",62.5,0.01171755993531907,Ground,,670,100,150,140,100,90,90
-Latias,[Gen 2] OU,2,2,0,"[('Charm', 2), ('Psychic', 2), ('Recover', 2)]",100.0,0.004687023974127628,Dragon,Psychic,600,80,80,90,110,130,110
-Lickilicky,[Gen 2] OU,3,1,2,"[('Frustration', 3), ('Swords Dance', 3), ('Earthquake', 2), ('Fire Blast', 2), ('Body Slam', 1)]",33.33333333333333,0.007030535961191441,Normal,,515,110,85,95,80,95,50
-Mamoswine,[Gen 2] OU,3,3,0,"[('Earthquake', 3), ('Ice Beam', 2), ('Ancient Power', 1)]",100.0,0.007030535961191441,Ice,Ground,530,110,130,80,70,60,80
-Mismagius,[Gen 2] OU,3,2,1,"[('Thunderbolt', 3), ('Protect', 2), ('Hypnosis', 1), ('Perish Song', 1), ('Toxic', 1)]",66.66666666666666,0.007030535961191441,Ghost,,495,60,60,60,105,105,105
-Rhyperior,[Gen 2] OU,5,4,3,"[('Earthquake', 4), ('Curse', 3), ('Roar', 3), ('Rock Slide', 3), ('Hidden Power', 1), ('Rest', 1)]",57.14285714285714,0.01171755993531907,Ground,Rock,535,115,140,130,55,55,40
-Abomasnow,[Gen 3] OU,11,8,7,"[('Leech Seed', 9), ('Blizzard', 5), ('Protect', 5), ('Ice Beam', 4), ('Giga Drain', 2), ('Hidden Power', 2), ('Toxic', 1)]",53.333333333333336,0.005800188769779962,Grass,Ice,494,90,92,75,92,85,60
-Arceus,[Gen 3] OU,2,1,2,"[('Extreme Speed', 2), ('Earthquake', 1), ('Judgment', 1), ('Swords Dance', 1)]",33.33333333333333,0.0010545797763236294,Normal,,720,120,120,120,120,120,120
-Arceus-Dragon,[Gen 3] OU,1,0,1,"[('Calm Mind', 1), ('Judgment', 1), ('Recover', 1)]",0.0,0.0005272898881618147,Dragon,,720,120,120,120,120,120,120
-Arceus-Ghost,[Gen 3] OU,1,1,0,"[('Judgment', 1)]",100.0,0.0005272898881618147,Ghost,,720,120,120,120,120,120,120
-Cresselia,[Gen 3] OU,5,2,3,"[('Ice Beam', 2), ('Recycle', 2), ('Rest', 2), ('Toxic', 2), ('Calm Mind', 1), ('Trick', 1)]",40.0,0.0026364494408090736,Psychic,,580,120,70,110,75,120,85
-Dusknoir,[Gen 3] OU,1,1,0,[],100.0,0.0005272898881618147,Ghost,,525,45,100,135,65,135,45
-Empoleon,[Gen 3] UBERS,1,0,1,"[('Knock Off', 1), ('Toxic', 1)]",0.0,0.01356300013563,Water,Steel,530,84,86,88,111,101,60
-Froslass,[Gen 3] OU,4,3,3,"[('Spikes', 4), ('Ice Beam', 3), ('Hidden Power', 2), ('Taunt', 2), ('Crunch', 1), ('Destiny Bond', 1)]",50.0,0.002109159552647259,Ice,Ghost,480,70,80,70,80,70,110
-Garchomp,[Gen 3] OU,16,9,13,"[('Earthquake', 12), ('Swords Dance', 9), ('Substitute', 6), ('Hidden Power', 3), ('Fire Blast', 2), ('Rock Slide', 2), ('Shadow Ball', 1)]",40.909090909090914,0.008436638210589036,Dragon,Ground,600,108,130,95,80,85,102
-Garchomp,[Gen 3] UBERS,1,0,1,"[('Iron Tail', 1), ('Rock Slide', 1), ('Spikes', 1)]",0.0,0.01356300013563,Dragon,Ground,600,108,130,95,80,85,102
-Glaceon,[Gen 3] OU,1,0,1,[],0.0,0.0005272898881618147,Ice,,525,65,60,110,130,95,65
-Gliscor,[Gen 3] OU,2,1,1,[],50.0,0.0010545797763236294,Ground,Flying,510,75,95,125,45,75,95
-Heatran,[Gen 3] OU,22,15,15,"[('Hidden Power', 10), ('Explosion', 9), ('Flamethrower', 8), ('Earthquake', 7), ('Fire Blast', 7), ('Will-O-Wisp', 5), ('Eruption', 3), ('Taunt', 2), ('Toxic', 2), ('Roar', 1), ('Substitute', 1)]",50.0,0.011600377539559925,Fire,Steel,600,91,90,106,130,106,77
-Hippowdon,[Gen 3] UBERS,3,0,3,"[('Curse', 2), ('Earthquake', 2), ('Ice Fang', 1), ('Rock Slide', 1)]",0.0,0.040689000406890004,Ground,,525,108,112,118,68,72,47
-Honchkrow,[Gen 3] OU,1,1,0,[],100.0,0.0005272898881618147,Dark,Flying,505,100,125,52,105,52,71
-Infernape,[Gen 3] UBERS,1,1,0,"[('Brick Break', 1), ('Earthquake', 1), ('Substitute', 1)]",100.0,0.01356300013563,Fire,Fighting,534,76,104,71,104,71,108
-Lickilicky,[Gen 3] UBERS,1,0,1,[],0.0,0.01356300013563,Normal,,515,110,85,95,80,95,50
-Lopunny,[Gen 3] OU,1,0,1,"[('Ice Punch', 1), ('Return', 1)]",0.0,0.0005272898881618147,Normal,,480,65,76,84,54,96,105
-Lucario,[Gen 3] UBERS,1,0,1,"[('Earthquake', 1)]",0.0,0.01356300013563,Fighting,Steel,525,70,110,70,115,70,90
-Magmortar,[Gen 3] OU,1,0,1,"[('Substitute', 1)]",0.0,0.0005272898881618147,Fire,,540,75,95,67,125,95,83
-Magnezone,[Gen 3] OU,3,0,3,"[('Protect', 1)]",0.0,0.001581869664485444,Electric,Steel,535,70,70,115,130,90,60
-Mamoswine,[Gen 3] OU,1,0,1,[],0.0,0.0005272898881618147,Ice,Ground,530,110,130,80,70,60,80
-Mismagius,[Gen 3] OU,1,0,1,[],0.0,0.0005272898881618147,Ghost,,495,60,60,60,105,105,105
-Regigigas,[Gen 3] UBERS,1,0,1,"[('Body Slam', 1), ('Protect', 1), ('Substitute', 1)]",0.0,0.01356300013563,Normal,,670,110,160,110,80,110,100
-Roserade,[Gen 3] OU,2,1,1,"[('Leech Seed', 1), ('Solar Beam', 1), ('Synthesis', 1)]",50.0,0.0010545797763236294,Grass,Poison,515,60,70,65,125,105,90
-Roserade,[Gen 3] UBERS,1,0,1,[],0.0,0.01356300013563,Grass,Poison,515,60,70,65,125,105,90
-Rotom-Heat,[Gen 3] UBERS,1,0,1,"[('Pain Split', 1), ('Thunderbolt', 1), ('Toxic', 1)]",0.0,0.01356300013563,Electric,Ghost,520,50,65,107,105,107,86
-Tangrowth,[Gen 3] OU,3,2,1,"[('Solar Beam', 2), ('Hidden Power', 1), ('Knock Off', 1), ('Leech Seed', 1), ('Sleep Powder', 1)]",66.66666666666666,0.001581869664485444,Grass,,535,100,100,125,110,50,50
-Tangrowth,[Gen 3] UBERS,1,0,1,"[('Leech Seed', 1), ('Substitute', 1)]",0.0,0.01356300013563,Grass,,535,100,100,125,110,50,50
+pokemon,format,played,won,lost,moves,win_rate,usage,Pdex,Type1,Type2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
+Altaria,[Gen 1] UBERS,3,2,1,[],66.66666666666666,0.08032128514056225,334,Dragon,Flying,490,75,70,90,70,105,80
+Ampharos,[Gen 1] OU,1,0,1,"[('Tail Glow', 1), ('Zippy Zap', 1)]",0.0,0.0011710150358330601,181,Electric,,510,90,75,85,115,90,55
+Arceus,[Gen 1] UBERS,1,0,1,"[('Perish Song', 1), ('Stone Axe', 1), ('Tidy Up', 1)]",0.0,0.02677376171352075,493,Normal,,720,120,120,120,120,120,120
+Azelf,[Gen 1] OU,6,2,4,"[('Explosion', 5), ('Fire Blast', 1), ('Psychic', 4), ('Thunder Wave', 2), ('Thunderbolt', 1)]",33.33333333333333,0.007026090214998361,482,Psychic,,580,75,125,70,125,70,115
+Blaziken,[Gen 1] OU,2,0,2,"[('Fire Blast', 1), ('High Jump Kick', 2), ('Swords Dance', 1)]",0.0,0.0023420300716661202,257,Fire,Fighting,530,80,120,70,110,70,80
+Blissey,[Gen 1] OU,2,2,0,"[('Blizzard', 1), ('Psychic', 1), ('Reflect', 1), ('Seismic Toss', 1), ('Soft-Boiled', 1), ('Thunder Wave', 2)]",100.0,0.0023420300716661202,242,Normal,,540,255,10,10,75,135,55
+Celebi,[Gen 1] OU,1,0,1,"[('Psychic', 1), ('Recover', 1), ('Reflect', 1), ('Thunder Wave', 1)]",0.0,0.0011710150358330601,251,Psychic,Grass,600,100,100,100,100,100,100
+Claydol,[Gen 1] UBERS,3,2,1,[],66.66666666666666,0.08032128514056225,344,Ground,Psychic,500,60,70,105,70,120,75
+Darkrai,[Gen 1] OU,2,1,1,"[('Hypnosis', 1), ('Ice Beam', 2), ('Thunder', 1), ('Thunder Wave', 1)]",50.0,0.0023420300716661202,491,Dark,,600,70,90,90,135,90,125
+Deoxys-Speed,[Gen 1] OU,3,3,1,"[('Low Kick', 1), ('Psychic', 1), ('Thunder Wave', 2), ('Wrap', 3)]",75.0,0.0035130451074991804,386-speed,Psychic,,600,50,95,90,95,90,180
+Drifblim,[Gen 1] OU,1,1,0,"[('Amnesia', 1), ('Explosion', 1), ('Thunder Wave', 1), ('Thunderbolt', 1)]",100.0,0.0011710150358330601,426,Ghost,Flying,498,150,80,44,90,54,80
+Electivire,[Gen 1] OU,1,1,0,"[('Hyper Beam', 1), ('Thunder Wave', 1), ('Thunderbolt', 1)]",100.0,0.0011710150358330601,466,Electric,,540,75,123,67,95,85,95
+Empoleon,[Gen 1] OU,3,2,1,"[('Blizzard', 1), ('Drill Peck', 1), ('Swords Dance', 1)]",66.66666666666666,0.0035130451074991804,395,Water,Steel,530,84,86,88,111,101,60
+Espeon,[Gen 1] OU,1,0,1,"[('Confuse Ray', 1), ('Mimic', 1), ('Psychic', 1), ('Thunder Wave', 1)]",0.0,0.0011710150358330601,196,Psychic,,525,65,65,60,130,95,110
+Froslass,[Gen 1] OU,4,2,2,"[('Blizzard', 1), ('Body Slam', 1), ('Haze', 2), ('Ice Beam', 1), ('Night Shade', 2), ('Thunder Wave', 3)]",50.0,0.0046840601433322405,478,Ice,Ghost,480,70,80,70,80,70,110
+Gastrodon,[Gen 1] OU,5,3,2,[],60.0,0.0058550751791653,423,Water,Ground,475,111,83,68,92,82,39
+Giratina,[Gen 1] UBERS,3,2,2,"[('Curse', 2), ('Imprison', 1), ('Last Respects', 1), ('Recover', 2), ('Spider Web', 3)]",50.0,0.08032128514056225,487,Ghost,Dragon,680,150,100,120,100,120,90
+Glaceon,[Gen 1] OU,1,0,1,"[('Double Kick', 1), ('Rest', 1), ('Substitute', 1)]",0.0,0.0011710150358330601,471,Ice,,525,65,60,110,130,95,65
+Gorebyss,[Gen 1] OU,1,0,1,"[('Psychic', 1), ('Rest', 1)]",0.0,0.0011710150358330601,368,Water,,485,55,84,105,114,75,52
+Heatran,[Gen 1] OU,1,0,1,"[('Stealth Rock', 1)]",0.0,0.0011710150358330601,485,Fire,Steel,600,91,90,106,130,106,77
+Hitmontop,[Gen 1] UBERS,3,2,1,"[('Agility', 3), ('Earthquake', 1), ('High Jump Kick', 3), ('Hyper Beam', 1)]",66.66666666666666,0.08032128514056225,237,Fighting,,455,50,95,95,35,110,70
+Jirachi,[Gen 1] OU,10,8,2,"[('Amnesia', 8), ('Fire Punch', 1), ('Psychic', 4), ('Rest', 6), ('Thunder Wave', 2), ('Thunderbolt', 8)]",80.0,0.0117101503583306,385,Steel,Psychic,600,100,100,100,100,100,100
+Jumpluff,[Gen 1] OU,1,1,0,"[('Stun Spore', 1), ('Toxic', 1)]",100.0,0.0011710150358330601,189,Grass,Flying,460,75,55,70,55,95,110
+Latias,[Gen 1] OU,2,1,1,"[('Ice Beam', 1), ('Psychic', 1), ('Recover', 2), ('Surf', 1), ('Thunder Wave', 1)]",50.0,0.0023420300716661202,380,Dragon,Psychic,600,80,80,90,110,130,110
+Latios,[Gen 1] OU,5,3,2,"[('Ice Beam', 2), ('Psychic', 4), ('Recover', 3), ('Surf', 2), ('Thunder Wave', 1)]",60.0,0.0058550751791653,381,Dragon,Psychic,600,80,90,80,130,110,110
+Lopunny,[Gen 1] OU,1,0,1,"[('Explosion', 1), ('Fake Out', 1)]",0.0,0.0011710150358330601,428,Normal,,480,65,76,84,54,96,105
+Magnezone,[Gen 1] OU,3,1,2,[],33.33333333333333,0.0035130451074991804,462,Electric,Steel,535,70,70,115,130,90,60
+Mamoswine,[Gen 1] OU,1,1,0,[],100.0,0.0011710150358330601,473,Ice,Ground,530,110,130,80,70,60,80
+Manaphy,[Gen 1] OU,6,4,2,"[('Ice Beam', 2), ('Rest', 1), ('Surf', 5), ('Take Heart', 3)]",66.66666666666666,0.007026090214998361,490,Water,,600,100,100,100,100,100,100
+Metagross,[Gen 1] OU,6,3,3,"[('Agility', 3), ('Earthquake', 2), ('Explosion', 3), ('Hyper Beam', 1), ('Psychic', 4), ('Rock Slide', 1)]",50.0,0.007026090214998361,376,Steel,Psychic,600,80,135,130,95,90,70
+Milotic,[Gen 1] OU,5,2,3,"[('Blizzard', 1), ('Hypnosis', 1), ('Recover', 2), ('Surf', 2)]",40.0,0.0058550751791653,350,Water,,540,95,60,79,100,125,81
+Porygon-Z,[Gen 1] OU,5,1,4,"[('Blizzard', 3), ('Recover', 1), ('Thunder Wave', 3), ('Thunderbolt', 2)]",20.0,0.0058550751791653,474,Normal,,535,85,80,70,135,75,90
+Porygon2,[Gen 1] OU,2,0,2,"[('Recover', 1), ('Thunder Wave', 2), ('Thunderbolt', 1)]",0.0,0.0023420300716661202,233,Normal,,515,85,80,90,105,95,60
+Quagsire,[Gen 1] OU,2,1,1,"[('Amnesia', 2), ('Earthquake', 1), ('Recover', 1), ('Surf', 1)]",50.0,0.0023420300716661202,195,Water,Ground,430,95,85,85,65,65,35
+Regice,[Gen 1] OU,5,4,1,"[('Amnesia', 4), ('Blizzard', 1), ('Ice Beam', 3), ('Rest', 1), ('Thunderbolt', 2)]",80.0,0.0058550751791653,378,Ice,,580,80,50,100,100,200,50
+Regigigas,[Gen 1] OU,20,12,16,"[('Body Slam', 12), ('Confuse Ray', 1), ('Double-Edge', 3), ('Earthquake', 7), ('Hyper Beam', 11), ('Ice Punch', 2), ('Rest', 1), ('Rock Slide', 1), ('Thunder Wave', 3), ('Thunderbolt', 1)]",42.857142857142854,0.0234203007166612,486,Normal,,670,110,160,110,80,110,100
+Registeel,[Gen 1] OU,1,1,0,"[('Amnesia', 1)]",100.0,0.0011710150358330601,379,Steel,,580,80,75,150,75,150,50
+Rhyperior,[Gen 1] OU,2,1,1,"[('Earthquake', 2), ('Rock Slide', 2), ('Submission', 1)]",50.0,0.0023420300716661202,464,Ground,Rock,535,115,140,130,55,55,40
+Sableye,[Gen 1] OU,2,0,2,"[('Fire Punch', 1), ('Recover', 2), ('Seismic Toss', 1), ('Thunder Wave', 2)]",0.0,0.0023420300716661202,302,Dark,Ghost,380,50,75,75,65,65,50
+Shaymin,[Gen 1] OU,4,3,1,"[('Growth', 2), ('Leech Seed', 1), ('Psychic', 1), ('Rest', 1), ('Seed Flare', 1)]",75.0,0.0046840601433322405,492,Grass,,600,100,100,100,100,100,100
+Shiftry,[Gen 1] OU,2,1,1,"[('Explosion', 1), ('Razor Leaf', 1)]",50.0,0.0023420300716661202,275,Grass,Dark,480,90,100,60,90,60,80
+Skarmory,[Gen 1] OU,2,1,1,"[('Drill Peck', 1), ('Whirlwind', 1)]",50.0,0.0023420300716661202,227,Steel,Flying,465,65,80,140,40,70,70
+Slaking,[Gen 1] OU,2,2,1,"[('Amnesia', 2), ('Blizzard', 1), ('Body Slam', 2), ('Earthquake', 1), ('Rest', 2)]",66.66666666666666,0.0023420300716661202,289,Normal,,670,150,160,100,95,65,100
+Slowking,[Gen 1] OU,6,3,3,"[('Amnesia', 2), ('Fire Blast', 1), ('Rest', 1), ('Thunder Wave', 2)]",50.0,0.007026090214998361,199,Water,Psychic,490,95,75,80,100,110,30
+Swampert,[Gen 1] OU,8,6,2,"[('Amnesia', 4), ('Blizzard', 4), ('Earthquake', 5), ('Rest', 1)]",75.0,0.009368120286664481,260,Water,Ground,535,100,110,90,85,90,60
+Togekiss,[Gen 1] OU,1,0,1,"[('Amnesia', 1), ('Flamethrower', 1), ('Psychic', 1), ('Soft-Boiled', 1)]",0.0,0.0011710150358330601,468,Normal,Flying,545,85,50,95,120,115,80
+Togetic,[Gen 1] OU,1,1,0,"[('Fire Blast', 1)]",100.0,0.0011710150358330601,176,Normal,Flying,405,55,40,85,80,105,40
+Torterra,[Gen 1] OU,1,0,1,"[('Body Slam', 1), ('Leech Seed', 1)]",0.0,0.0011710150358330601,389,Grass,Ground,525,95,109,105,75,85,56
+Uxie,[Gen 1] OU,4,1,3,[],25.0,0.0046840601433322405,480,Psychic,,580,75,75,130,75,130,95
+Walrein,[Gen 1] OU,1,0,1,"[('Blizzard', 1), ('Body Slam', 1), ('Rest', 1)]",0.0,0.0011710150358330601,365,Ice,Water,530,110,80,90,95,90,65
+Ambipom,[Gen 2] OU,1,0,1,"[('Baton Pass', 1), ('Counter', 1), ('Return', 1)]",0.0,0.002343511987063814,424,Normal,,482,75,100,66,60,66,115
+Arceus,[Gen 2] OU,1,1,0,"[('Destiny Bond', 1), ('Encore', 1), ('Population Bomb', 1)]",100.0,0.002343511987063814,493,Normal,,720,120,120,120,120,120,120
+Arceus-Ground,[Gen 2] OU,1,0,1,[],0.0,0.002343511987063814,493-ground,Ground,,720,120,120,120,120,120,120
+Electivire,[Gen 2] OU,2,1,1,"[('Cross Chop', 1), ('Fire Punch', 1), ('Ice Punch', 2), ('Thunderbolt', 1)]",50.0,0.004687023974127628,466,Electric,,540,75,123,67,95,85,95
+Glaceon,[Gen 2] OU,3,2,1,"[('Growth', 1), ('Ice Beam', 3), ('Rest', 1), ('Sleep Talk', 1)]",66.66666666666666,0.007030535961191441,471,Ice,,525,65,60,110,130,95,65
+Groudon,[Gen 2] OU,5,5,3,"[('Body Slam', 1), ('Earthquake', 3), ('Flamethrower', 4), ('Precipice Blades', 4), ('Protect', 1), ('Rest', 2), ('Rock Slide', 4), ('Sleep Talk', 1), ('Spikes', 1), ('Swords Dance', 4), ('Toxic', 1)]",62.5,0.01171755993531907,383,Ground,,670,100,150,140,100,90,90
+Latias,[Gen 2] OU,2,2,0,"[('Charm', 2), ('Psychic', 2), ('Recover', 2)]",100.0,0.004687023974127628,380,Dragon,Psychic,600,80,80,90,110,130,110
+Lickilicky,[Gen 2] OU,3,1,2,"[('Body Slam', 1), ('Earthquake', 2), ('Fire Blast', 2), ('Frustration', 3), ('Swords Dance', 3)]",33.33333333333333,0.007030535961191441,463,Normal,,515,110,85,95,80,95,50
+Mamoswine,[Gen 2] OU,3,3,0,"[('Ancient Power', 1), ('Earthquake', 3), ('Ice Beam', 2)]",100.0,0.007030535961191441,473,Ice,Ground,530,110,130,80,70,60,80
+Mismagius,[Gen 2] OU,3,2,1,"[('Hypnosis', 1), ('Perish Song', 1), ('Protect', 2), ('Thunderbolt', 3), ('Toxic', 1)]",66.66666666666666,0.007030535961191441,429,Ghost,,495,60,60,60,105,105,105
+Rhyperior,[Gen 2] OU,5,4,3,"[('Curse', 3), ('Earthquake', 4), ('Hidden Power', 1), ('Rest', 1), ('Roar', 3), ('Rock Slide', 3)]",57.14285714285714,0.01171755993531907,464,Ground,Rock,535,115,140,130,55,55,40
+Abomasnow,[Gen 3] OU,11,8,7,"[('Blizzard', 5), ('Giga Drain', 2), ('Hidden Power', 2), ('Ice Beam', 4), ('Leech Seed', 9), ('Protect', 5), ('Toxic', 1)]",53.333333333333336,0.005800188769779962,460,Grass,Ice,494,90,92,75,92,85,60
+Arceus,[Gen 3] OU,2,1,2,"[('Earthquake', 1), ('Extreme Speed', 2), ('Judgment', 1), ('Swords Dance', 1)]",33.33333333333333,0.0010545797763236294,493,Normal,,720,120,120,120,120,120,120
+Arceus-Dragon,[Gen 3] OU,1,0,1,"[('Calm Mind', 1), ('Judgment', 1), ('Recover', 1)]",0.0,0.0005272898881618147,493-dragon,Dragon,,720,120,120,120,120,120,120
+Arceus-Ghost,[Gen 3] OU,1,1,0,"[('Judgment', 1)]",100.0,0.0005272898881618147,493-ghost,Ghost,,720,120,120,120,120,120,120
+Cresselia,[Gen 3] OU,5,2,3,"[('Calm Mind', 1), ('Ice Beam', 2), ('Recycle', 2), ('Rest', 2), ('Toxic', 2), ('Trick', 1)]",40.0,0.0026364494408090736,488,Psychic,,580,120,70,110,75,120,85
+Dusknoir,[Gen 3] OU,1,1,0,[],100.0,0.0005272898881618147,477,Ghost,,525,45,100,135,65,135,45
+Empoleon,[Gen 3] UBERS,1,0,1,"[('Knock Off', 1), ('Toxic', 1)]",0.0,0.01356300013563,395,Water,Steel,530,84,86,88,111,101,60
+Froslass,[Gen 3] OU,4,3,3,"[('Crunch', 1), ('Destiny Bond', 1), ('Hidden Power', 2), ('Ice Beam', 3), ('Spikes', 4), ('Taunt', 2)]",50.0,0.002109159552647259,478,Ice,Ghost,480,70,80,70,80,70,110
+Garchomp,[Gen 3] OU,16,9,13,"[('Earthquake', 12), ('Fire Blast', 2), ('Hidden Power', 3), ('Rock Slide', 2), ('Shadow Ball', 1), ('Substitute', 6), ('Swords Dance', 9)]",40.909090909090914,0.008436638210589036,445,Dragon,Ground,600,108,130,95,80,85,102
+Garchomp,[Gen 3] UBERS,1,0,1,"[('Iron Tail', 1), ('Rock Slide', 1), ('Spikes', 1)]",0.0,0.01356300013563,445,Dragon,Ground,600,108,130,95,80,85,102
+Glaceon,[Gen 3] OU,1,0,1,[],0.0,0.0005272898881618147,471,Ice,,525,65,60,110,130,95,65
+Gliscor,[Gen 3] OU,2,1,1,[],50.0,0.0010545797763236294,472,Ground,Flying,510,75,95,125,45,75,95
+Heatran,[Gen 3] OU,22,15,15,"[('Earthquake', 7), ('Eruption', 3), ('Explosion', 9), ('Fire Blast', 7), ('Flamethrower', 8), ('Hidden Power', 10), ('Roar', 1), ('Substitute', 1), ('Taunt', 2), ('Toxic', 2), ('Will-O-Wisp', 5)]",50.0,0.011600377539559925,485,Fire,Steel,600,91,90,106,130,106,77
+Hippowdon,[Gen 3] UBERS,3,0,3,"[('Curse', 2), ('Earthquake', 2), ('Ice Fang', 1), ('Rock Slide', 1)]",0.0,0.040689000406890004,450,Ground,,525,108,112,118,68,72,47
+Honchkrow,[Gen 3] OU,1,1,0,[],100.0,0.0005272898881618147,430,Dark,Flying,505,100,125,52,105,52,71
+Infernape,[Gen 3] UBERS,1,1,0,"[('Brick Break', 1), ('Earthquake', 1), ('Substitute', 1)]",100.0,0.01356300013563,392,Fire,Fighting,534,76,104,71,104,71,108
+Lickilicky,[Gen 3] UBERS,1,0,1,[],0.0,0.01356300013563,463,Normal,,515,110,85,95,80,95,50
+Lopunny,[Gen 3] OU,1,0,1,"[('Ice Punch', 1), ('Return', 1)]",0.0,0.0005272898881618147,428,Normal,,480,65,76,84,54,96,105
+Lucario,[Gen 3] UBERS,1,0,1,"[('Earthquake', 1)]",0.0,0.01356300013563,448,Fighting,Steel,525,70,110,70,115,70,90
+Magmortar,[Gen 3] OU,1,0,1,"[('Substitute', 1)]",0.0,0.0005272898881618147,467,Fire,,540,75,95,67,125,95,83
+Magnezone,[Gen 3] OU,3,0,3,"[('Protect', 1)]",0.0,0.001581869664485444,462,Electric,Steel,535,70,70,115,130,90,60
+Mamoswine,[Gen 3] OU,1,0,1,[],0.0,0.0005272898881618147,473,Ice,Ground,530,110,130,80,70,60,80
+Mismagius,[Gen 3] OU,1,0,1,[],0.0,0.0005272898881618147,429,Ghost,,495,60,60,60,105,105,105
+Regigigas,[Gen 3] UBERS,1,0,1,"[('Body Slam', 1), ('Protect', 1), ('Substitute', 1)]",0.0,0.01356300013563,486,Normal,,670,110,160,110,80,110,100
+Roserade,[Gen 3] OU,2,1,1,"[('Leech Seed', 1), ('Solar Beam', 1), ('Synthesis', 1)]",50.0,0.0010545797763236294,407,Grass,Poison,515,60,70,65,125,105,90
+Roserade,[Gen 3] UBERS,1,0,1,[],0.0,0.01356300013563,407,Grass,Poison,515,60,70,65,125,105,90
+Rotom-Heat,[Gen 3] UBERS,1,0,1,"[('Pain Split', 1), ('Thunderbolt', 1), ('Toxic', 1)]",0.0,0.01356300013563,479-heat,Electric,Ghost,520,50,65,107,105,107,86
+Tangrowth,[Gen 3] OU,3,2,1,"[('Hidden Power', 1), ('Knock Off', 1), ('Leech Seed', 1), ('Sleep Powder', 1), ('Solar Beam', 2)]",66.66666666666666,0.001581869664485444,465,Grass,,535,100,100,125,110,50,50
+Tangrowth,[Gen 3] UBERS,1,0,1,"[('Leech Seed', 1), ('Substitute', 1)]",0.0,0.01356300013563,465,Grass,,535,100,100,125,110,50,50

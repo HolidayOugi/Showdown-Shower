@@ -1,6 +1,6 @@
 import pandas as pd
 from collections import defaultdict, Counter
-import re, ast
+import re
 
 def parse_log(log):
     lines = log.splitlines()
@@ -90,7 +90,7 @@ def pokemon_dataframe(df_logs):
     }).reset_index()
 
     df_new = df_new.sort_values(by=['pokemon', 'format']).reset_index(drop=True)
-    df_new['moves'] = df_new['moves'].apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
+    df_new['moves'] = df_new['moves'].apply(lambda x: sorted(x) if isinstance(x, list) else x)
     df_new['win_rate'] = (df_new['won']/(df_new['won']+df_new['lost']))*100
     df_battles = pd.read_csv('../input/battles_PARSED.csv')
     df_format = df_battles['format'].value_counts().rename_axis('format').reset_index(name='counts')
