@@ -48,6 +48,28 @@ with col2:
         image2 = Image.open(f"./assets/icons/{type2.lower()}.png")
         image2 = image2.resize((192, 64))
         st.image(image2, width=64)
+
+    gen_id = None
+    if gen == 'Gen 1':
+        gen_id = 'rb'
+    elif gen == 'Gen 2':
+        gen_id = 'gs'
+    elif gen == 'Gen 3':
+        gen_id = 'rs'
+    elif gen == 'Gen 4':
+        gen_id = 'dp'
+
+    smogon_url = f"https://www.smogon.com/dex/{gen_id}/pokemon/{pokemon.lower()}/"
+    with open('./assets/icons/smogon.png', "rb") as f:
+        img_bytes = f.read()
+    img_b64 = base64.b64encode(img_bytes).decode()
+    html_code = f'''
+                <a href="{smogon_url}" target="_blank">
+                    <img src="data:image/png;base64,{img_b64}" width="24" style="vertical-align:middle;" />
+                </a>
+                '''
+    st.markdown(html_code, unsafe_allow_html=True)
+
 with col3:
 
     fig = go.Figure(data=[go.Pie(
