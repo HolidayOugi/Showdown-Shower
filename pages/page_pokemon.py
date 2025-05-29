@@ -42,7 +42,6 @@ with col2:
     type2 = row['Type2']
     image1 = Image.open(f"./assets/icons/{type1.lower()}.png")
     image1 = image1.resize((192, 64))
-    print(type1, type2)
     st.image(image1, width=64)
     if not pd.isna(type2) and type2 != "":
         image2 = Image.open(f"./assets/icons/{type2.lower()}.png")
@@ -267,8 +266,6 @@ moves_to_show = row['moves'][:visible_moves]
 for move, count in moves_to_show:
     fig = go.Figure()
     move_row = moves_df[moves_df['move'].str.contains(move, case=False, na=False)]
-    if move_row.empty:
-        print(move)
     move_type = move_row['type'].iloc[0]
     color = move_row['color'].iloc[0]
     usage = count/(row['won']+row['lost'])
@@ -374,8 +371,6 @@ with col2:
         max_value=max_date,
         label_visibility="collapsed"
     )
-
-    print(selected_dates)
 
     if len(selected_dates) == 1:
         start_date = selected_dates[0]
