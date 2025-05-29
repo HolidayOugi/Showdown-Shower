@@ -66,6 +66,7 @@ def parse_log(log_text):
             parts = line.split('|')
             if len(parts) > 3:
                 species = parts[3].split(',')[0].strip()
+                species = species.replace('’', "'")
                 team1.add(species.title())
 
         if line.startswith('|switch|p2a:'):
@@ -73,6 +74,7 @@ def parse_log(log_text):
             parts = line.split('|')
             if len(parts) > 3:
                 species = parts[3].split(',')[0].strip()
+                species = species.replace('’', "'")
                 team2.add(species.title())
 
         if line.startswith('|turn|'):
