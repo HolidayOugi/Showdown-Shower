@@ -8,7 +8,7 @@ import base64
 st.title("🧬 Pokémon")
 
 if 'rows_shown' not in st.session_state:
-    st.session_state.rows_shown = 5
+    st.session_state.rows_shown = 10
 
 if 'visible_moves' not in st.session_state:
     st.session_state.visible_moves = 5
@@ -396,5 +396,5 @@ with col1:
 
     if st.session_state.rows_shown < len(filtered_df):
         if st.button("Load more", key="load_more_button"):
-            st.session_state.rows_shown += 5
+            st.session_state.rows_shown += 10
             st.rerun()
