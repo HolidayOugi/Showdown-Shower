@@ -1,6 +1,7 @@
 import streamlit as st
 
 st.set_page_config(page_title='Showdown Shower', initial_sidebar_state="collapsed", layout='centered')
+st.sidebar.title("Home")
 
 st.title("🎮 Showdown Shower")
 st.markdown("Welcome! To the Ultimate Pokémon Showdown replay analysis.")

@@ -3,3 +3,4 @@ streamlit
 pillow
 tabulate
 plotly
+streamlit_plotly_events
