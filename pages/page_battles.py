@@ -12,7 +12,7 @@ formats = [
     if df.endswith(".csv")
 ]
 
-selected_format = st.selectbox('Choose a Format', formats)
+selected_format = st.selectbox('Choose a Format', sorted(formats))
 
 format_df = pd.read_csv(f'./output/tiers/{selected_format}.csv')
 
