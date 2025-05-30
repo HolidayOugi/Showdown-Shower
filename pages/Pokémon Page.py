@@ -253,11 +253,87 @@ with col2:
                 '''
     st.markdown(html_code, unsafe_allow_html=True)
 
+
+types_df = pd.read_csv('./input/types.csv')
+
+weak = set()
+resistant = set()
+immunity = set()
+quad_weak = set()
+quad_resistant = set()
+
+type1_weak = set(eval(types_df[types_df['type']  == type1]['weak'].iloc[0]))
+type1_resistant = set(eval(types_df[types_df['type']  == type1]['resistant'].iloc[0]))
+type1_immunity = set(eval(types_df[types_df['type']  == type1]['immunity'].iloc[0]))
+if not pd.isna(type2) and type2 != "":
+    type2_weak = set(eval(types_df[types_df['type'] == type2]['weak'].iloc[0]))
+    type2_resistant = set(eval(types_df[types_df['type'] == type2]['resistant'].iloc[0]))
+    type2_immunity = set(eval(types_df[types_df['type'] == type2]['immunity'].iloc[0]))
+    for t in type1_weak:
+        if t in type2_weak:
+            quad_weak.add(t)
+        elif t in type2_resistant:
+            continue
+        elif t in type2_immunity:
+            immunity.add(t)
+        else:
+            weak.add(t)
+    for t in type1_resistant:
+        if t in type2_weak:
+            continue
+        elif t in type2_resistant:
+            quad_resistant.add(t)
+        elif t in type2_immunity:
+            immunity.add(t)
+        else:
+            resistant.add(t)
+    for t in type1_immunity:
+        immunity.add(t)
+
+    for t in type2_weak:
+        if t in type1_weak:
+            quad_weak.add(t)
+        elif t in type1_resistant:
+            continue
+        elif t in type1_immunity:
+            immunity.add(t)
+        else:
+            weak.add(t)
+    for t in type2_resistant:
+        if t in type1_weak:
+            continue
+        elif t in type1_resistant:
+            quad_resistant.add(t)
+        elif t in type1_immunity:
+            immunity.add(t)
+        else:
+            resistant.add(t)
+    for t in type2_immunity:
+        immunity.add(t)
+else:
+    weak = type1_weak
+    resistant = type1_resistant
+    immunity = type1_immunity
+
+def render_type_row(label, types):
+    if types:
+        cols = st.columns(len(types) + 1)
+        cols[0].markdown(f"**{label}:**")
+        for i, t in enumerate(types):
+            img = Image.open(f"./assets/icons/{t.lower()}.png").resize((192, 64))
+            cols[i + 1].image(img, width=64)
+
+render_type_row("Quad weak", quad_weak)
+render_type_row("Weak", weak)
+render_type_row("Resistant", resistant)
+render_type_row("Quad resistant", quad_resistant)
+render_type_row("Immune", immunity)
+
 st.subheader(f"Most used moves by {pokemon} in {selected_format}")
+
 
 moves_df = pd.read_csv('./input/moves.csv')
 moves_df = moves_df.map(lambda x: x.lstrip() if isinstance(x, str) else x)
-types_df = pd.read_csv('./input/types.csv')
 moves_df = pd.merge(moves_df, types_df, on='type')
 
 visible_moves = st.session_state.visible_moves
@@ -296,15 +372,29 @@ for move, count in moves_to_show:
             showlegend=False
         ))
 
-        fig.add_annotation(
-            x=0.5,
-            y=move,
-            text=move,
-            showarrow=False,
-            font=dict(size=16, color='black'),
-            xanchor='center',
-            yanchor='middle'
-        )
+        if move_type == type1 or move_type == type2:
+
+            fig.add_annotation(
+                x=0.5,
+                y=move,
+                text=f"<b>{move}</b>",
+                showarrow=False,
+                font=dict(size=16, color='black'),
+                xanchor='center',
+                yanchor='middle'
+            )
+
+        else:
+
+            fig.add_annotation(
+                x=0.5,
+                y=move,
+                text=move,
+                showarrow=False,
+                font=dict(size=16, color='black'),
+                xanchor='center',
+                yanchor='middle'
+            )
 
         fig.update_layout(
             dragmode=False,

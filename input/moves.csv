@@ -302,7 +302,7 @@ Id,move,type,attack,power,pp
 #301, Ice Ball, Ice, Physical, 20, 30
 #302, Needle Arm, Grass, Physical, 15, 60
 #303, Slack Off, Normal, Status, 10, — — 
-#304, Hyper oice, Normal, Special, 10, 90
+#304, Hyper Voice, Normal, Special, 10, 90
 #305, Poison Fang, Poison, Physical, 15, 50
 #306, Crush Claw, Normal, Physical, 10, 75
 #307, Blast Burn, Fire, Special, 5, 150

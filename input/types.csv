@@ -1,18 +1,18 @@
-type,color
-Normal,#a1a1a1
-Fire,#d33a30
-Fighting,#ef8731
-Water,#4d79bc
-Grass,#5d9d3c
-Poison,#6d4c97
-Electric,#f1c341
-Ground,#89532a
-Psychic,#db4d79
-Rock,#adaa82
-Ice,#79cced
-Bug,#93a335
-Dragon,#505ea9
-Ghost,#6a436c
-Dark,#4f3f3f
-Steel,#74a3ba
-Flying,#4d79bc
+type,color,weak,resistant,immunity
+Normal,#a1a1a1,"['Fighting']","[]","['Ghost']"
+Fire,#d33a30,"['Ground', 'Rock', 'Water']","['Bug', 'Fire', 'Grass', 'Steel', 'Ice']","[]"
+Fighting,#ef8731,"['Flying', 'Psychic']","['Bug', 'Rock', 'Dark']","[]"
+Water,#4d79bc,"['Electric', 'Grass']","['Fire', 'Water', 'Ice', 'Steel']","[]"
+Grass,#5d9d3c,"['Fire', 'Ice', 'Poison', 'Flying', 'Bug']","['Water', 'Electric', 'Grass', 'Ground']","[]"
+Poison,#6d4c97,"['Ground', 'Psychic']","['Grass', 'Fighting', 'Poison', 'Bug']","[]"
+Electric,#f1c341,"['Ground']","['Electric', 'Flying', 'Steel']","[]"
+Ground,#89532a,"['Water', 'Ice', 'Grass']","['Poison', 'Rock']","['Electric']"
+Psychic,#db4d79,"['Bug', 'Ghost', 'Dark']","['Fighting', 'Psychic']","[]"
+Rock,#adaa82,"['Water', 'Grass', 'Fighting', 'Ground', 'Steel']","['Normal', 'Fire', 'Poison', 'Flying']","[]"
+Ice,#79cced,"['Fire', 'Fighting', 'Rock', 'Steel']","['Ice']","[]"
+Bug,#93a335,"['Fire', 'Flying', 'Rock']","['Grass', 'Fighting', 'Ground']","[]"
+Dragon,#505ea9,"['Ice', 'Dragon']","['Fire', 'Water', 'Electric', 'Grass']","[]"
+Ghost,#6a436c,"['Ghost', 'Dark']","['Poison', 'Bug']","['Normal', 'Fighting']"
+Dark,#4f3f3f,"['Fighting', 'Bug']","['Ghost', 'Dark']","['Psychic']"
+Steel,#74a3ba,"['Fire', 'Fighting', 'Ground']","['Normal', 'Grass', 'Ice', 'Flying', 'Psychic', 'Bug', 'Rock', 'Dragon', 'Steel', 'Ghost', 'Dark']","['Poison']"
+Flying,#4d79bc,"['Electric', 'Ice', 'Rock']","['Grass', 'Fighting', 'Bug']","['Ground']"
