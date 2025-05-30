@@ -25,9 +25,9 @@ def parse_log(log):
 
             if match:
                 player_slot = match.group(1)
-                nickname = match.group(2).strip()
+                nickname = match.group(2).strip().lower()
                 species = match.group(3).strip()
-                nickname_map[nickname] = species
+                nickname_map[nickname] = species.title()
                 if player_slot == 'p1a':
                     team1.add(species.title())
                 else:
@@ -38,7 +38,7 @@ def parse_log(log):
             match = re.match(r'\|move\|p[12]a: ([^|]+)\|([^|]+)\|', line)
 
             if match:
-                nickname = match.group(1).strip().title()
+                nickname = match.group(1).strip().lower()
                 move = match.group(2).strip().title()
                 species = nickname_map.get(nickname, nickname)
                 moves_used[species].add(move)

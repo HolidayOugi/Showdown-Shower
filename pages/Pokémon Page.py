@@ -339,6 +339,18 @@ moves_df = pd.merge(moves_df, types_df, on='type')
 visible_moves = st.session_state.visible_moves
 moves_to_show = row['moves'][:visible_moves]
 
+def hex_to_rgba(hex_color, factor):
+
+    hex_color = hex_color.lstrip('#')
+    r = int(hex_color[0:2], 16)
+    g = int(hex_color[2:4], 16)
+    b = int(hex_color[4:6], 16)
+
+    r_new = int(r + (255 - r) * factor)
+    g_new = int(g + (255 - g) * factor)
+    b_new = int(b + (255 - b) * factor)
+    return f'rgb({r_new}, {g_new}, {b_new})'
+
 for move, count in moves_to_show:
     fig = go.Figure()
     move_row = moves_df[moves_df['move'].str.contains(move, case=False, na=False)]
@@ -354,7 +366,7 @@ for move, count in moves_to_show:
             x=[1],
             y=[move],
             orientation='h',
-            marker=dict(color='#e0e0e0'),
+            marker=dict(color=hex_to_rgba(color, 0.7)),
             hoverinfo='skip',
             showlegend=False
         ))
