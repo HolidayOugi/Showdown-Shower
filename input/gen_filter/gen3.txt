@@ -392,3 +392,5 @@ Deoxys-Defense
 Deoxys-Speed
 Unown-G
 Unown-Question
+Unown-F
+Unown-I

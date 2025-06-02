@@ -3,14 +3,15 @@ from datetime import datetime
 import re
 
 def normalize_format(fmt):
-    fmt = fmt.strip().lower().replace('\r', '')  # rimuovi spazi, newline
+    fmt = fmt.strip().lower().replace('\r', '')
     match = re.search(r'gen\s*([1-5])', fmt)
     if not match:
         match = re.search(r'gen([1-5])', fmt)
     if match:
         gen = match.group(1)
     else:
-        return None  # formato non valido
+        print(fmt)
+        return None
 
     if 'ou' in fmt:
         return f"[Gen {gen}] OU"
@@ -103,15 +104,14 @@ def parse_log(log_text):
 
     return winner, forfeit, list(team1), list(team2), max_turn, switch1, switch2
 
-df= pd.read_csv("../input/data.csv", index_col=[0])
+df= pd.read_csv("../input/data.csv")
 pd.set_option('display.max_columns', None)
-#df['uploadtime'] = pd.to_datetime(df['uploadtime'], unit='s')
-#cleaned = df['players'].str.strip("[]")
-#split_players = cleaned.str.extractall(r"'([^']+)'").unstack()
-#split_players.columns = ['player1', 'player2']
-#df = df.drop(columns=['players', 'Unnamed: 0', 'formatid']).join(split_players)
+df['uploadtime'] = pd.to_datetime(df['uploadtime'], unit='s')
+cleaned = df['players'].str.strip("[]")
+split_players = cleaned.str.extractall(r"'([^']+)'").unstack()
+split_players.columns = ['player1', 'player2']
+df = df.drop(columns=['players', 'formatid']).join(split_players)
 df['Winner'], df['Forfeit'], df['Team 1'], df['Team 2'], df['Turns'], df['# Switches 1'], df['# Switches 2']= zip(*df['log'].map(parse_log))
 df = df.drop('log', axis=1)
 df['format'] = df['format'].apply(normalize_format)
-print(df)
 df.to_csv('../input/battles_PARSED.csv', index=False)

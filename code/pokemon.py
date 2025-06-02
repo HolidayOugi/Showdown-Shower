@@ -1,6 +1,30 @@
 import pandas as pd
 from collections import defaultdict, Counter
 import re
+from pathlib import Path
+
+def normalize_format(fmt):
+    fmt = fmt.strip().lower().replace('\r', '')
+    match = re.search(r'gen\s*([1-5])', fmt)
+    if not match:
+        match = re.search(r'gen([1-5])', fmt)
+    if match:
+        gen = match.group(1)
+    else:
+        return None
+
+    if 'ou' in fmt:
+        return f"[Gen {gen}] OU"
+    elif 'uu' in fmt and 'uubl' not in fmt:
+        return f"[Gen {gen}] UU"
+    elif 'nu' in fmt:
+        return f"[Gen {gen}] NU"
+    elif 'uubl' in fmt:
+        return f"[Gen {gen}] UUBL"
+    elif 'uber' in fmt:
+        return f"[Gen {gen}] UBERS"
+    else:
+        return f"[Gen {gen}] Other"
 
 def parse_log(log):
     lines = log.splitlines()
@@ -50,7 +74,16 @@ def parse_log(log):
 def pokemon_dataframe(df_logs):
     rows = []
 
+    total = len(df_logs)
+
+    cleaned = df_logs['players'].str.strip("[]")
+    split_players = cleaned.str.extractall(r"'([^']+)'").unstack()
+    split_players.columns = ['player1', 'player2']
+    df_logs = df_logs.drop(columns=['players', 'formatid']).join(split_players)
+    counter = 1
+
     for _, row in df_logs.iterrows():
+        print("Elaborating: " + str(counter) + " of " + str(total))
         log = row['log']
         winner, tier, team1, team2, moves_used = parse_log(log)
 
@@ -69,18 +102,19 @@ def pokemon_dataframe(df_logs):
                 'moves': Counter(moves_used.get(mon, []))
             })
 
+        counter += 1
+
     df_help = pd.DataFrame(rows)
 
     df_help['pokemon'] = df_help['pokemon'].str.replace("’", "'", regex=False) #farfetch
-    df_help['format'] = df_help['format'].apply(
-        lambda x: x.split(']')[0] + ']' + ' ' + x.split(']')[1].strip().upper() if ']' in x else x.upper())
+    df_help['format'] = df_help['format'].apply(normalize_format)
 
     def merge_counters(series):
-        total = Counter()
+        total_counters = Counter()
         for c in series:
             if isinstance(c, Counter):
-                total.update(c)
-        return sorted(total.items(), key=lambda x: (-x[1], x[0]))
+                total_counters.update(c)
+        return sorted(total_counters.items(), key=lambda x: (-x[1], x[0]))
 
     df_new = df_help.groupby(['pokemon', 'format']).agg({
         'played': 'sum',
@@ -98,7 +132,7 @@ def pokemon_dataframe(df_logs):
     df_new['usage'] = (df_new['played']/df_new['counts'])*100
     df_new = df_new.drop(columns='counts')
     df_stats = pd.read_csv('../input/pokemon_stats.csv')
-    df_new = pd.merge(df_new, df_stats, on='pokemon')
+    df_new = pd.merge(df_new, df_stats, on='pokemon', how='left')
 
     return df_new
 
@@ -124,10 +158,16 @@ def filter_pokemon(pokemon_df):
 
     return pokemon_df, invalid_pokemon
 
-df= pd.read_csv("../input/data.csv", index_col=[0])
-pd.set_option('display.max_columns', None)
 
-df_summary = pokemon_dataframe(df)
+if Path('../output/pokemon_completetest.csv').exists():
+    df_summary=pd.read_csv('../output/pokemon_completetest.csv')
+
+else:
+    df= pd.read_csv("../input/data.csv")
+    pd.set_option('display.max_columns', None)
+
+    df_summary = pokemon_dataframe(df)
+    df_summary.to_csv('../output/pokemon_completetest.csv', index = False)
 
 pokemon_df, invalid_pokemon = filter_pokemon(df_summary)
 

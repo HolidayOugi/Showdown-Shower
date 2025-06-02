@@ -206,6 +206,8 @@ Pdex,pokemon,Type1,Type2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 201-r,Unown-R,Psychic,,336,48,72,48,72,48,48
 201-x,Unown-X,Psychic,,336,48,72,48,72,48,48
 201-g,Unown-G,Psychic,,336,48,72,48,72,48,48
+201-f,Unown-F,Psychic,,336,48,72,48,72,48,48
+201-i,Unown-I,Psychic,,336,48,72,48,72,48,48
 201-question,Unown-Question,Psychic,,336,48,72,48,72,48,48
 202,Wobbuffet,Psychic,,405,190,33,58,33,58,33
 203,Girafarig,Normal,Psychic,455,70,80,65,90,65,85
@@ -255,7 +257,7 @@ Pdex,pokemon,Type1,Type2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 247,Pupitar,Rock,Ground,410,70,84,70,65,70,51
 248,Tyranitar,Rock,Dark,600,100,134,110,95,100,61
 249,Lugia,Psychic,Flying,680,106,90,130,90,154,110
-250,Ho-oh,Fire,Flying,680,106,130,90,110,154,90
+250,Ho-Oh,Fire,Flying,680,106,130,90,110,154,90
 251,Celebi,Psychic,Grass,600,100,100,100,100,100,100
 252,Treecko,Grass,,310,40,45,35,65,55,70
 253,Grovyle,Grass,,405,50,65,45,85,65,95

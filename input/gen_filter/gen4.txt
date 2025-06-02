@@ -527,3 +527,5 @@ Shellos-East
 Unown-D
 Wormadam-Sandy
 Wormadam-Trash
+Unown-F
+Unown-I
