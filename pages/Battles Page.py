@@ -44,6 +44,10 @@ fig = px.bar(
 fig.update_layout(barmode='relative')
 st.plotly_chart(fig, use_container_width=True)
 
+st.divider()
+
+
+
 selected_format = st.selectbox('Choose a Format', sorted(formats))
 
 format_df = pd.read_csv(f'./output/tiers/{selected_format}.csv')
@@ -57,6 +61,10 @@ fig = px.scatter(
     format_df_ratings,
     x='rating',
     y='Switch percent',
+    labels={
+        'rating': 'Rating',
+        'Switch percent': 'Switch (%)'
+    },
     hover_name='id',
     title=f'Probability of turn having a switch based on rating in {selected_format}'
 )

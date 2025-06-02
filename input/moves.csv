@@ -140,7 +140,7 @@ Id,move,type,attack,power,pp
 #139, Poison Gas, Poison, Status, 40, —
 #140, Barrage, Normal, Physical, 20, 15
 #141, Leech Life, Bug, Physical, 10, 80
-#142, Loely Kiss, Normal, Status, 10, —
+#142, Lovely Kiss, Normal, Status, 10, —
 #143, Sky Attack, Flying, Physical, 5, 140
 #144, Transform, Normal, Status, 10, — — 
 #145, Bubble, Water, Special, 30, 40
@@ -174,7 +174,7 @@ Id,move,type,attack,power,pp
 #173, Snore, Normal, Special, 15, 50
 #174, Curse, Ghost, Status, 10, — — 
 #175, Flail, Normal, Physical, 15, —
-#176, Conersion 2, Normal, Status, 30, — — 
+#176, Conversion 2, Normal, Status, 30, — —
 #177, Aeroblast, Flying, Special, 5, 100
 #178, Cotton Spore, Grass, Status, 40, —
 #179, Reversal, Fighting, Physical, 15, —
