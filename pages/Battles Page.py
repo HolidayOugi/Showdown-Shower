@@ -6,6 +6,11 @@ import os
 from collections import Counter
 from PIL import Image
 
+if 'barmode' not in st.session_state:
+    st.session_state.barmode = "Total"
+if 'last_range' not in st.session_state:
+    st.session_state.last_range = (None, None)
+
 def format_quarter(q):
     year = q[:4]
     quarter = q[4:]
@@ -36,6 +41,7 @@ with col1:
     match_df['year_month'] = pd.to_datetime(match_df['year_month'], format='%Y-%m')
     match_df['quarter'] = match_df['year_month'].dt.to_period('Q').astype(str)
 
+
     match_df['quarter'] = match_df['quarter'].apply(format_quarter)
 
 
@@ -50,7 +56,19 @@ with col1:
     ]
 
     agg_df = filtered_df.groupby(['quarter', 'format']).agg({'count': 'sum'}).reset_index()
-    barmode  = st.radio("Choose visualization type", ["Total", "Format"])
+
+    start_index = quarters.index(start_quarter)
+    end_index = quarters.index(end_quarter)
+    current_range = (start_index, end_index)
+
+    if current_range != st.session_state.last_range:
+        if end_index - start_index <= 8:
+            st.session_state.barmode = "Format"
+        else:
+            st.session_state.barmode = "Total"
+        st.session_state.last_range = current_range
+
+    barmode = st.radio("Choose visualization type", ["Total", "Format"], key="barmode")
 
 with col2:
     if barmode == "Format":
