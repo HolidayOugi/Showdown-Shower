@@ -10,10 +10,6 @@ st.title("👤 Players")
 if 'rows_shown' not in st.session_state:
     st.session_state.rows_shown = 5
 
-players_df = pd.read_csv('./output/players.csv')
-players_df['pokemon_used'] = players_df['pokemon_used'].apply(eval)
-pokemon_df = pd.read_csv('./input/pokemon_stats.csv')
-
 formats = [
     os.path.splitext(df)[0]
     for df in os.listdir('./output/tiers')
@@ -22,8 +18,9 @@ formats = [
 
 selected_format = st.selectbox('Choose a Format', sorted(formats))
 
-players_df = players_df[players_df['format'] == selected_format]
-
+players_df = pd.read_csv(f'./output/players/{selected_format}_players.csv')
+players_df['pokemon_used'] = players_df['pokemon_used'].apply(eval)
+pokemon_df = pd.read_csv('./input/pokemon_stats.csv')
 bigcol1, sep, bigcol2 = st.columns([20, 1, 20])
 
 with bigcol1:

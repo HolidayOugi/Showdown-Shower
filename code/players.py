@@ -8,8 +8,6 @@ formats = [
     if f.endswith('.csv')
 ]
 
-players = []
-
 for f in formats:
     df = pd.read_csv(f'../output/tiers/{f}.csv', parse_dates=['uploadtime'])
     df['rating'] = pd.to_numeric(df['rating'], errors='coerce')
@@ -54,8 +52,4 @@ for f in formats:
     stats = stats.reset_index()[
         ['name', 'format', 'played', 'wins', 'losses', 'first_played', 'last_played', 'lowest_rating', 'highest_rating', 'pokemon_used']]
 
-    players.append(stats)
-
-players_df = pd.concat(players, ignore_index=True)
-
-players_df.to_csv('../output/players.csv', index=False)
+    stats.to_csv(f'../output/players/{f}_players.csv', index=False)
