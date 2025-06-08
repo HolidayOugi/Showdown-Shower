@@ -135,7 +135,6 @@ with col1:
 
         format_df['rating'] = pd.to_numeric(format_df['rating'], errors='coerce')
         format_df_ratings = format_df.dropna(subset=['rating'])
-        print(format_df_ratings['rating'].isna().sum())
         format_df_ratings['Switches'] = format_df_ratings['# Switches 1']+format_df_ratings['# Switches 2']
         format_df_ratings['Switch percent'] = (format_df_ratings['Switches']/format_df_ratings['Turns'])*100
 
@@ -338,15 +337,15 @@ with col2:
                 ]
     })
 
-    st.markdown(f"### Top 5 Most Used Pokémon in {selected_format}")
+    st.markdown(f"### Top 6 Most Used Pokémon in {selected_format}")
 
     usage_df = pd.read_csv('./output/pokemon.csv')
     usage_df = usage_df[usage_df['format'] == selected_format]
     usage_df = usage_df.sort_values(by='usage', ascending=False)
-    usage_df = usage_df.head(5)
+    usage_df = usage_df.head(6)
 
-    col1, col2, col3, col4, col5 = st.columns([3, 3, 3, 3, 3])
-    cols = [col1, col2, col3, col4, col5]
+    col1, col2, col3, col4, col5, col6 = st.columns([3, 3, 3, 3, 3, 3])
+    cols = [col1, col2, col3, col4, col5, col6]
 
     for i, col in enumerate(cols):
         if i < len(usage_df):
