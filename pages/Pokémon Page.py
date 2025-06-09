@@ -96,7 +96,7 @@ with bigcol1:
             height=130,
             width=130,
             annotations=[dict(
-                text="Win Rate",
+                text="Winrate",
                 x=0.5,
                 y=0.5,
                 font=dict(size=14, color="white"),

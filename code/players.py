@@ -25,6 +25,11 @@ for f in formats:
         highest_rating=('rating', 'max'),
     )
 
+    valid_ratings = all_players.dropna(subset=['rating'])
+    rating_lists = valid_ratings.sort_values('uploadtime').groupby('name')['rating'].apply(list)
+
+    stats['rating_list'] = stats.index.map(rating_lists)
+
     wins1 = df[df['Winner'] == df['player1']]['player1'].value_counts()
     wins2 = df[df['Winner'] == df['player2']]['player2'].value_counts()
     wins = wins1.add(wins2, fill_value=0).astype(int)
@@ -50,6 +55,6 @@ for f in formats:
     stats['format'] = f
 
     stats = stats.reset_index()[
-        ['name', 'format', 'played', 'wins', 'losses', 'first_played', 'last_played', 'lowest_rating', 'highest_rating', 'pokemon_used']]
+        ['name', 'format', 'played', 'wins', 'losses', 'first_played', 'last_played', 'lowest_rating', 'highest_rating', 'rating_list', 'pokemon_used']]
 
     stats.to_csv(f'../output/players/{f}_players.csv', index=False)
