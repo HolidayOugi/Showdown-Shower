@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 import plotly.express as px
 import plotly.graph_objects as go
 import os
@@ -10,6 +12,9 @@ if 'barmode' not in st.session_state:
     st.session_state.barmode = "Total"
 if 'last_range' not in st.session_state:
     st.session_state.last_range = (None, None)
+
+sns.set(rc={'ytick.labelcolor': 'white', 'xtick.labelcolor': 'white'})
+sns.set(rc={'axes.facecolor': '#0000FF', 'figure.facecolor': (0, 0, 0, 0)})
 
 def format_quarter(q):
     year = q[:4]
@@ -166,23 +171,6 @@ with col1:
 
         st.plotly_chart(fig, use_container_width=True)
 
-        format_df["uploadtime"] = pd.to_datetime(format_df["uploadtime"])
-        format_df['hour'] = format_df['uploadtime'].dt.hour
-        bins = list(range(0, 25, 2))
-        labels = [f"{b}-{b + 2}" for b in bins[:-1]]
-        format_df['hour_bin'] = pd.cut(format_df['hour'], bins=bins, right=False, labels=labels)
-        hour_counts = format_df['hour_bin'].value_counts().sort_index().reset_index()
-        hour_counts.columns = ['hour_bin', 'matches']
-        hour_counts['hour_bin'] = hour_counts['hour_bin'].astype(str)
-
-
-        fig = px.bar(hour_counts,
-                      x='hour_bin', y='matches',
-                      labels={'hour_bin': 'Hours', 'matches': '# Matches'},
-                      title=f'Frequency of matches during certain hours (GMT) in {selected_format}')
-
-        fig.update_xaxes(type='category')
-        st.plotly_chart(fig, use_container_width=True)
 
     with subcol2:
 
@@ -247,24 +235,93 @@ with col1:
         fig.update_layout(xaxis_showticklabels=False, yaxis_range=[0, 100])
         st.plotly_chart(fig, use_container_width=True)
 
-        format_df['weekday'] = format_df['uploadtime'].dt.weekday
-        weekday_count = format_df.groupby('weekday').size().reset_index(name='count')
-        weekday_count['weekday_name'] = weekday_count['weekday'].map({
-            0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday'
-        })
 
-        weekday_count = weekday_count.sort_values('weekday')
+    format_df["uploadtime"] = pd.to_datetime(format_df["uploadtime"])
+    format_df['weekday'] = format_df['uploadtime'].dt.weekday
+    format_df['weekday'] = format_df['weekday'].map({
+        0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday'
+    })
+    format_df['hour'] = format_df['uploadtime'].dt.hour
+    bins = list(range(0, 25, 2))
+    labels = [f"{b}-{b + 2}" for b in bins[:-1]]
+    format_df['hour_bin'] = pd.cut(format_df['hour'], bins=bins, right=False, labels=labels)
 
-        fig = px.bar(weekday_count,
-                     x='weekday_name',
-                     y='count',
-                     labels={
-                         'weekday_name': 'Weekday',
-                         'count': '# Matches'
-                     },
-                     title=f'Frequency of matches during certain days (GMT) in {selected_format}')
+    selected_mode = st.selectbox('Choose a visualization mode', ['Separated', 'Combined'])
+    if selected_mode == 'Separated':
 
-        st.plotly_chart(fig, use_container_width=True)
+        weekday_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        format_df['weekday'] = pd.Categorical(format_df['weekday'], categories=weekday_order, ordered=True)
+
+
+
+        subcol1, subcol2 = st.columns(2)
+
+        with subcol1:
+            hour_counts = format_df['hour_bin'].value_counts().sort_index().reset_index()
+            hour_counts.columns = ['hour_bin', 'matches']
+            hour_counts['hour_bin'] = hour_counts['hour_bin'].astype(str)
+
+            fig = px.bar(hour_counts,
+                         x='hour_bin', y='matches',
+                         labels={'hour_bin': 'Hours', 'matches': '# Matches'},
+                         title=f'Frequency of matches during certain hours (GMT) in {selected_format}')
+
+            fig.update_xaxes(type='category')
+            st.plotly_chart(fig, use_container_width=True)
+
+        with subcol2:
+            weekday_count = format_df.groupby('weekday').size().reset_index(name='count')
+            weekday_count = weekday_count.sort_values('weekday')
+
+            fig = px.bar(weekday_count,
+                         x='weekday',
+                         y='count',
+                         labels={
+                             'weekday': 'Weekday',
+                             'count': '# Matches'
+                         },
+                         title=f'Frequency of matches during certain days (GMT) in {selected_format}')
+
+            st.plotly_chart(fig, use_container_width=True)
+
+    else:
+
+
+        count_df = format_df.groupby(['weekday', 'hour_bin']).size().reset_index(name='match_count')
+        weekday_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        hour_bin_order = ['0-2', '2-4', '4-6', '6-8', '8-10', '10-12', '12-14',
+                          '14-16', '16-18', '18-20', '20-22', '22-24']
+
+        pivot_df = count_df.pivot(
+            index='weekday',
+            columns='hour_bin',
+            values='match_count'
+        ).fillna(0)
+
+        pivot_df = pivot_df.reindex(weekday_order)
+        pivot_df = pivot_df[hour_bin_order]
+
+        fig, ax = plt.subplots(figsize=(12, 6))
+
+
+        sns.heatmap(
+            pivot_df,
+            annot=True,
+            fmt="d",
+            cmap='YlOrRd',
+            linewidths=.5,
+            ax=ax,
+        )
+
+        fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
+        ax.set_title(f'Distribution of Matches per Weekday and Hour Interval (GMT) in {selected_format}', color='white')
+        ax.set_xlabel('Hour Interval')
+        ax.set_ylabel('Weekday')
+        ax.xaxis.label.set_color('white')
+        ax.yaxis.label.set_color('white')
+
+        plt.tight_layout()
+        st.pyplot(fig, use_container_width=True)
 
 with col2:
 

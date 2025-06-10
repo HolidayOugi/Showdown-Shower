@@ -4,3 +4,5 @@ pillow
 tabulate
 plotly
 streamlit_plotly_events
+matplotlib
+seaborn
