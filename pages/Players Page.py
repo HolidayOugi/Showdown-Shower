@@ -206,41 +206,37 @@ with bigcol2:
     if selected_mode == 'Separated':
 
         weekday_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-        format_df['weekday'] = pd.Categorical(format_df['weekday'], categories=weekday_order, ordered=True)
+        ordered_hours = sorted(format_df['hour_bin'].unique(), key=lambda x: int(x.split('-')[0]))
 
-        col1, col2 = st.columns(2)
+        subcol1, subcol2 = st.columns(2)
 
-        with col1:
+        with subcol1:
+            fig_hour = px.histogram(
+                format_df,
+                x='hour_bin',
+                nbins=len(format_df['hour_bin'].unique()),
+                category_orders={'hour_bin': ordered_hours},
+                labels={'hour_bin': 'Hours'},
+                title=f'Frequency of matches during certain hours (GMT) in {selected_format}'
+            )
+            fig_hour.update_xaxes(type='category')
+            fig_hour.update_layout(bargap=0)
+            fig_hour.update_layout(yaxis_title='# Matches')
+            st.plotly_chart(fig_hour, use_container_width=True)
 
-
-            hour_counts = format_df['hour_bin'].value_counts().sort_index().reset_index()
-            hour_counts.columns = ['hour_bin', 'matches']
-            hour_counts['hour_bin'] = hour_counts['hour_bin'].astype(str)
-
-            fig = px.bar(hour_counts,
-                         x='hour_bin', y='matches',
-                         labels={'hour_bin': 'Hours', 'matches': '# Matches'},
-                         title=f'Frequency of matches during certain hours (GMT)<br>by {row['name']} in {selected_format}')
-
-            fig.update_xaxes(type='category')
-            st.plotly_chart(fig, use_container_width=True)
-
-        with col2:
-
-            weekday_count = format_df.groupby('weekday').size().reset_index(name='count')
-
-            weekday_count = weekday_count.sort_values('weekday')
-
-            fig = px.bar(weekday_count,
-                         x='weekday',
-                         y='count',
-                         labels={
-                             'weekday': 'Weekday',
-                             'count': '# Matches'
-                         },
-                         title=f'Frequency of matches during certain days (GMT)<br>by {row['name']} in {selected_format}')
-
-            st.plotly_chart(fig, use_container_width=True)
+        with subcol2:
+            fig_weekday = px.histogram(
+                format_df,
+                x='weekday',
+                nbins=7,
+                category_orders={'weekday': weekday_order},
+                labels={'weekday': 'Weekday', 'matches': '# Matches'},
+                title=f'Frequency of matches during certain days (GMT) in {selected_format}'
+            )
+            fig_weekday.update_xaxes(type='category')
+            fig_weekday.update_layout(bargap=0)
+            fig_weekday.update_layout(yaxis_title='# Matches')
+            st.plotly_chart(fig_weekday, use_container_width=True)
 
     else:
 
