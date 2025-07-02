@@ -7,6 +7,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import os
 import glob
+import plotly.io as pio
 
 sns.set(rc={'ytick.labelcolor': 'white', 'xtick.labelcolor': 'white'})
 sns.set(rc={'axes.facecolor': '#0000FF', 'figure.facecolor': (0, 0, 0, 0)})
@@ -22,10 +23,10 @@ with open('./output/tiers/formats.txt', 'r') as f:
 selected_format = st.selectbox('Choose a Format', sorted(formats))
 
 players_df = pd.read_csv(f'./output/players/{selected_format}_players.csv')
-players_df['rating_delta'] = players_df['highest_rating'] - players_df['lowest_rating']
-players_df['pokemon_used'] = players_df['pokemon_used'].apply(eval)
-players_df_filtered = players_df[players_df['played'] >= 10]
 pokemon_df = pd.read_csv('./input/pokemon_stats.csv')
+players_df['pokemon_used'] = players_df['pokemon_used'].apply(eval)
+
+
 bigcol1, sep, bigcol2 = st.columns([10, 1, 10])
 
 with bigcol1:
@@ -35,72 +36,22 @@ with bigcol1:
     col1, col2 = st.columns(2)
 
     with col1:
-        players_df['first_played'] = pd.to_datetime(players_df['first_played'])
-        players_df['last_played'] = pd.to_datetime(players_df['last_played'])
 
-        players_df['time_difference'] = (players_df['last_played'] - players_df['first_played']).dt.days
-        players_df = players_df.sort_values('time_difference', ascending=False)
-
-        fig = px.scatter(
-            players_df,
-            x='rating_delta',
-            y='time_difference',
-            labels={
-                'rating_delta': 'Rating Delta',
-                'time_difference': 'Days between 1st and last match'
-            },
-            hover_name='name',
-            title=f'Time difference between 1st and last match<br>based on rating delta in {selected_format}'
-        )
+        fig = pio.read_json(f"./graphs/players/{selected_format}/fig1.json")
 
         st.plotly_chart(fig, use_container_width=True)
 
-        fig = px.scatter(
-            players_df,
-            x='highest_rating',
-            y='played',
-            labels={
-                'highest_rating': 'Max Rating',
-                'played': 'Matches Played',
-            },
-            hover_name='name',
-            title=f'Correlation between Max Rating and<br>Matches Played in {selected_format}'
-        )
+        fig = pio.read_json(f"./graphs/players/{selected_format}/fig2.json")
 
         st.plotly_chart(fig, use_container_width=True)
 
     with col2:
 
-        players_df_filtered['winrate'] = (players_df_filtered['wins'] / players_df_filtered['played'])*100
-        fig = px.histogram(
-            players_df_filtered,
-            x='winrate',
-            nbins=20,
-            title=f'Winrate distribution in {selected_format}<br>'
-                  f'with 10 or more matches played',
-            labels={'winrate': 'Winrate'},
-            opacity=0.75
-        )
-
-        fig.update_xaxes(range=[0, 100], tickmode='linear', dtick=10)
-
-        fig.update_layout(yaxis_title='# Players')
+        fig = pio.read_json(f"./graphs/players/{selected_format}/fig3.json")
 
         st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True})
 
-        fig = px.histogram(
-            players_df_filtered,
-            x='rating_delta',
-            nbins=10,
-            title=f'Rating Delta in {selected_format}<br>'
-                  f'with 10 or more matches played',
-            labels={'rating_delta': 'Rating Delta'},
-            opacity=0.75
-        )
-
-        fig.update_layout(yaxis_title='# Players')
-
-        fig.update_xaxes(tickmode='linear', dtick=100)
+        fig = pio.read_json(f"./graphs/players/{selected_format}/fig4.json")
 
         st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True})
 
