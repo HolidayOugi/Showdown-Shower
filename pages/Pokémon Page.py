@@ -4,6 +4,8 @@ import ast
 from PIL import Image
 import plotly.graph_objects as go
 import base64
+import os
+import glob
 
 st.title("🧬 Pokémon")
 
@@ -16,7 +18,7 @@ if 'visible_moves' not in st.session_state:
 def load_more():
     st.session_state.visible_moves += 5
 
-df = pd.read_csv('./output/pokemon.csv')
+df = pd.read_csv('./output/pokemon.csv',  dtype={'Pdex': str})
 df['moves'] = df['moves'].apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
 df['moves'] = df['moves'].apply(lambda x: sorted(x, key=lambda x: x[1], reverse=True))
 
@@ -36,24 +38,42 @@ with bigcol1:
     gen = selected_format.split(']')[0][1:]
 
 
-    col1, col2, col3, col4 = st.columns([5, 3, 10, 10])
+    col1, col2, col3, col4 = st.columns([5, 4, 10, 10])
 
     with col1:
-
-        image = Image.open(f"./assets/{gen}/{row['Pdex']}.png")
+        pdex = row['Pdex']
+        image_path = f"./assets/{gen}/{pdex}.png"
+        if not os.path.exists(image_path) and '-' in pdex:
+            pdex = pdex.split('-')[0]
+            image_path = f"./assets/{gen}/{pdex}.png"
+        image = Image.open(image_path)
         image = image.resize((128, 128))
         st.image(image, width=128)
 
     with col2:
-        type1 = row['Type1']
-        type2 = row['Type2']
-        image1 = Image.open(f"./assets/icons/{type1.lower()}.png")
-        image1 = image1.resize((192, 64))
-        st.image(image1, width=64)
-        if not pd.isna(type2) and type2 != "":
-            image2 = Image.open(f"./assets/icons/{type2.lower()}.png")
-            image2 = image2.resize((192, 64))
-            st.image(image2, width=64)
+        type1 = row['Type 1']
+        type2 = row['Type 2']
+        if gen != 'Gen 9':
+            if type1 == 'Fairy' or type2 == 'Fairy':
+                old_types = pd.read_csv('./input/old_types.csv')
+                old_row = old_types[old_types['pokemon'] == pokemon]
+                type1 = old_row['Type 1'].iloc[0]
+                type2 = old_row['Type 2'].iloc[0]
+            image1 = Image.open(f"./assets/icons/old/{type1.lower()}.png")
+            image1 = image1.resize((192, 64))
+            st.image(image1, width=64)
+            if not pd.isna(type2) and type2 != "":
+                image2 = Image.open(f"./assets/icons/old/{type2.lower()}.png")
+                image2 = image2.resize((192, 64))
+                st.image(image2, width=64)
+        else:
+            image1 = Image.open(f"./assets/icons/new/{type1.lower()}.png")
+            image1 = image1.resize((500, 110))
+            st.image(image1, width=110)
+            if not pd.isna(type2) and type2 != "":
+                image2 = Image.open(f"./assets/icons/new/{type2.lower()}.png")
+                image2 = image2.resize((500, 110))
+                st.image(image2, width=110)
 
         gen_id = None
         if gen == 'Gen 1':
@@ -64,6 +84,8 @@ with bigcol1:
             gen_id = 'rs'
         elif gen == 'Gen 4':
             gen_id = 'dp'
+        elif gen == 'Gen 9':
+            gen_id = 'sv'
 
         smogon_url = f"https://www.smogon.com/dex/{gen_id}/pokemon/{pokemon.lower()}/"
         with open('./assets/icons/smogon.png', "rb") as f:
@@ -271,13 +293,13 @@ with bigcol1:
     quad_weak = set()
     quad_resistant = set()
 
-    type1_weak = set(eval(types_df[types_df['type']  == type1]['weak'].iloc[0]))
-    type1_resistant = set(eval(types_df[types_df['type']  == type1]['resistant'].iloc[0]))
-    type1_immunity = set(eval(types_df[types_df['type']  == type1]['immunity'].iloc[0]))
+    type1_weak = set(eval(types_df[types_df['Type']  == type1]['weak'].iloc[0]))
+    type1_resistant = set(eval(types_df[types_df['Type']  == type1]['resistant'].iloc[0]))
+    type1_immunity = set(eval(types_df[types_df['Type']  == type1]['immunity'].iloc[0]))
     if not pd.isna(type2) and type2 != "":
-        type2_weak = set(eval(types_df[types_df['type'] == type2]['weak'].iloc[0]))
-        type2_resistant = set(eval(types_df[types_df['type'] == type2]['resistant'].iloc[0]))
-        type2_immunity = set(eval(types_df[types_df['type'] == type2]['immunity'].iloc[0]))
+        type2_weak = set(eval(types_df[types_df['Type'] == type2]['weak'].iloc[0]))
+        type2_resistant = set(eval(types_df[types_df['Type'] == type2]['resistant'].iloc[0]))
+        type2_immunity = set(eval(types_df[types_df['Type'] == type2]['immunity'].iloc[0]))
         for t in type1_weak:
             if t in type2_weak:
                 quad_weak.add(t)
@@ -329,8 +351,12 @@ with bigcol1:
             cols = st.columns(len(types) + 1)
             cols[0].markdown(f"**{label}:**")
             for i, t in enumerate(types):
-                img = Image.open(f"./assets/icons/{t.lower()}.png").resize((192, 64))
-                cols[i + 1].image(img, width=64)
+                if gen != 'Gen 9':
+                    img = Image.open(f"./assets/icons/old/{t.lower()}.png").resize((192, 64))
+                    cols[i + 1].image(img, width=64)
+                else:
+                    img = Image.open(f"./assets/icons/new/{t.lower()}.png").resize((500, 100))
+                    cols[i + 1].image(img, width=100)
 
     render_type_row("Quad weak", quad_weak)
     render_type_row("Weak", weak)
@@ -348,7 +374,7 @@ with bigcol2:
 
     moves_df = pd.read_csv('./input/moves.csv')
     moves_df = moves_df.map(lambda x: x.lstrip() if isinstance(x, str) else x)
-    moves_df = pd.merge(moves_df, types_df, on='type')
+    moves_df = pd.merge(moves_df, types_df, on='Type')
 
     visible_moves = st.session_state.visible_moves
     moves_to_show = row['moves'][:visible_moves]
@@ -367,8 +393,8 @@ with bigcol2:
 
     for move, count in moves_to_show:
         fig = go.Figure()
-        move_row = moves_df[moves_df['move'].str.contains(move, case=False, na=False)]
-        move_type = move_row['type'].iloc[0]
+        move_row = moves_df[moves_df['Name'].str.contains(move, case=False, na=False)]
+        move_type = move_row['Type'].iloc[0]
         color = move_row['color'].iloc[0]
         usage = count/(row['won']+row['lost'])
 
@@ -467,7 +493,19 @@ with sep2:
 with bigcol3:
 
     st.subheader(f"Replays of {pokemon} in {selected_format}")
-    format_df = pd.read_csv(f'./output/tiers/{selected_format}.csv')
+
+    df_path = f'./output/tiers/{selected_format}.csv'
+    if os.path.exists(df_path):
+        format_df = pd.read_csv(df_path)
+
+    else:
+        pattern = glob.escape(f'./output/tiers/{selected_format}') + "_*.csv"
+        parts = sorted(glob.glob(pattern))
+
+        if parts:
+            part_dfs = [pd.read_csv(part) for part in parts]
+            format_df = pd.concat(part_dfs, ignore_index=True)
+
     format_df = format_df[format_df['Team 1'].apply(lambda x: pokemon in x) | format_df['Team 2'].apply(lambda x: pokemon in x)]
 
 

@@ -1,4 +1,4 @@
-type,color,weak,resistant,immunity
+Type,color,weak,resistant,immunity
 Normal,#a1a1a1,"['Fighting']","[]","['Ghost']"
 Fire,#d33a30,"['Ground', 'Rock', 'Water']","['Bug', 'Fire', 'Grass', 'Steel', 'Ice']","[]"
 Fighting,#ef8731,"['Flying', 'Psychic']","['Bug', 'Rock', 'Dark']","[]"
@@ -14,5 +14,6 @@ Bug,#93a335,"['Fire', 'Flying', 'Rock']","['Grass', 'Fighting', 'Ground']","[]"
 Dragon,#505ea9,"['Ice', 'Dragon']","['Fire', 'Water', 'Electric', 'Grass']","[]"
 Ghost,#6a436c,"['Ghost', 'Dark']","['Poison', 'Bug']","['Normal', 'Fighting']"
 Dark,#4f3f3f,"['Fighting', 'Bug']","['Ghost', 'Dark']","['Psychic']"
-Steel,#74a3ba,"['Fire', 'Fighting', 'Ground']","['Normal', 'Grass', 'Ice', 'Flying', 'Psychic', 'Bug', 'Rock', 'Dragon', 'Steel', 'Ghost', 'Dark']","['Poison']"
+Steel,#74a3ba,"['Fire', 'Fighting', 'Ground']","['Normal', 'Grass', 'Ice', 'Flying', 'Psychic', 'Bug', 'Rock', 'Dragon', 'Steel']","['Poison']"
 Flying,#4d79bc,"['Electric', 'Ice', 'Rock']","['Grass', 'Fighting', 'Bug']","['Ground']"
+Fairy,#f170f1,"['Poison', 'Steel']","['Fighting', 'Bug', 'Dark']",['Dragon']

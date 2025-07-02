@@ -1,7 +1,7 @@
 import pandas as pd
 import glob
 
-file_paths = sorted(glob.glob("../train-*-of-00011*"))
+file_paths = sorted(glob.glob("../input/train-*-of-00032*"))
 
 dfs = [pd.read_parquet(path) for path in file_paths]
 df_full = pd.concat(dfs, ignore_index=True)

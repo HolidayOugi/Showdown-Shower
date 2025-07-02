@@ -7,6 +7,7 @@ import plotly.graph_objects as go
 import os
 from collections import Counter
 from PIL import Image
+import glob
 
 if 'barmode' not in st.session_state:
     st.session_state.barmode = "Total"
@@ -24,11 +25,10 @@ def format_quarter(q):
 
 st.title("📊 Battles")
 
-formats = [
-    os.path.splitext(df)[0]
-    for df in os.listdir('./output/tiers')
-    if df.endswith(".csv")
-]
+
+
+with open('./output/tiers/formats.txt', 'r') as f:
+    formats = [line.strip() for line in f if line.strip()]
 
 gens = sorted(
     set(f.split(']')[0].strip('[') for f in formats),
@@ -132,7 +132,17 @@ col1, col2 = st.columns([10,7])
 
 with col1:
 
-    format_df = pd.read_csv(f'./output/tiers/{selected_format}.csv')
+    df_path = f'./output/tiers/{selected_format}.csv'
+    if os.path.exists(df_path):
+        format_df = pd.read_csv(df_path)
+
+    else:
+        pattern = glob.escape(f'./output/tiers/{selected_format}') + "_*.csv"
+        parts = sorted(glob.glob(pattern))
+
+        if parts:
+            part_dfs = [pd.read_csv(part) for part in parts]
+            format_df = pd.concat(part_dfs, ignore_index=True)
 
     subcol1, subcol2 = st.columns(2)
 
@@ -334,7 +344,7 @@ with col2:
     types_df =  pd.read_csv('./input/types.csv')
     types_df['count'] = 0
 
-    poke_types = pokemon_df.set_index('pokemon')[['Type1', 'Type2']].to_dict(orient='index')
+    poke_types = pokemon_df.set_index('pokemon')[['Type 1', 'Type 2']].to_dict(orient='index')
 
     type_counter = Counter()
 
@@ -343,8 +353,8 @@ with col2:
         for member in team:
             if member not in poke_types:
                 continue
-            type1 = poke_types[member]['Type1']
-            type2 = poke_types[member]['Type2']
+            type1 = poke_types[member]['Type 1']
+            type2 = poke_types[member]['Type 2']
 
             if type1 and type1 not in types_seen:
                 type_counter[type1] += 1
@@ -354,7 +364,7 @@ with col2:
                 type_counter[type2] += 1
                 types_seen.add(type2)
 
-    types_df['count'] = types_df['type'].map(type_counter).fillna(0).astype(int)
+    types_df['count'] = types_df['Type'].map(type_counter).fillna(0).astype(int)
 
     types_df = types_df[types_df['count'] > 0].sort_values(by='count', ascending=False)
     types_total = types_df['count'].sum()
@@ -367,7 +377,7 @@ with col2:
         y=['bar'] * len(types_df),
         orientation='h',
         marker=dict(color=types_df['color']),
-        customdata=types_df[['type', 'count']],
+        customdata=types_df[['Type', 'count']],
         hovertemplate='%{customdata[0]}: %{customdata[1]} (%{x:.1%})<extra></extra>'
     ))
 
@@ -397,7 +407,7 @@ with col2:
 
     st.markdown(f"### Top 6 Most Used Pokémon in {selected_format}")
 
-    usage_df = pd.read_csv('./output/pokemon.csv')
+    usage_df = pd.read_csv('./output/pokemon.csv', dtype={'Pdex': str})
     usage_df = usage_df[usage_df['format'] == selected_format]
     usage_df = usage_df.sort_values(by='usage', ascending=False)
     usage_df = usage_df.head(6)
@@ -411,19 +421,38 @@ with col2:
                 row = usage_df.take([i])
                 gen = selected_format.split(']')[0][1:]
                 pdex = row['Pdex'].iloc[0]
-                image = Image.open(f"./assets/{gen}/{pdex}.png")
+                image_path = f"./assets/{gen}/{pdex}.png"
+                if not os.path.exists(image_path) and '-' in pdex:
+                    pdex = pdex.split('-')[0]
+                    image_path = f"./assets/{gen}/{pdex}.png"
+                image = Image.open(image_path)
                 image = image.resize((128, 128))
                 st.image(image, width=128)
-                st.markdown(row['pokemon'].iloc[0])
-                type1 = row['Type1'].iloc[0]
-                type2 = row['Type2'].iloc[0]
-                image1 = Image.open(f"./assets/icons/{type1.lower()}.png")
-                image1 = image1.resize((192, 64))
-                st.image(image1, width=64)
-                if not pd.isna(type2) and type2 != "":
-                    image2 = Image.open(f"./assets/icons/{type2.lower()}.png")
-                    image2 = image2.resize((192, 64))
-                    st.image(image2, width=64)
+                name = row['pokemon'].iloc[0]
+                st.markdown(name)
+                type1 = row['Type 1'].iloc[0]
+                type2 = row['Type 2'].iloc[0]
+                if gen != 'Gen 9':
+                    if type1 == 'Fairy' or type2 == 'Fairy':
+                        old_types = pd.read_csv('./input/old_types.csv')
+                        old_row = old_types[old_types['pokemon'] == name]
+                        type1 = old_row['Type 1'].iloc[0]
+                        type2 = old_row['Type 2'].iloc[0]
+                    image1 = Image.open(f"./assets/icons/old/{type1.lower()}.png")
+                    image1 = image1.resize((192, 64))
+                    st.image(image1, width=64)
+                    if not pd.isna(type2) and type2 != "":
+                        image2 = Image.open(f"./assets/icons/old/{type2.lower()}.png")
+                        image2 = image2.resize((192, 64))
+                        st.image(image2, width=64)
+                else:
+                    image1 = Image.open(f"./assets/icons/new/{type1.lower()}.png")
+                    image1 = image1.resize((500, 120))
+                    st.image(image1, width=120)
+                    if not pd.isna(type2) and type2 != "":
+                        image2 = Image.open(f"./assets/icons/new/{type2.lower()}.png")
+                        image2 = image2.resize((500, 120))
+                        st.image(image2, width=120)
                 st.markdown(f'Usage: {'%.2f'%(row['usage'].iloc[0])}%')
         else:
             with col:

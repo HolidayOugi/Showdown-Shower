@@ -4,14 +4,16 @@ import re
 
 def normalize_format(fmt):
     fmt = fmt.strip().lower().replace('\r', '')
-    match = re.search(r'gen\s*([1-5])', fmt)
+    fmt = fmt.replace('[', '').replace(']', '')
+
+    match = re.search(r'gen\s*([1-9]|10)', fmt)
     if not match:
-        match = re.search(r'gen([1-5])', fmt)
-    if match:
-        gen = match.group(1)
-    else:
+        match = re.search(r'gen([1-9]|10)', fmt)
+    if not match:
         print(fmt)
         return None
+
+    gen = match.group(1)
 
     if 'ou' in fmt:
         return f"[Gen {gen}] OU"

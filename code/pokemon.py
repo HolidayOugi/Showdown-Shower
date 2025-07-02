@@ -2,16 +2,20 @@ import pandas as pd
 from collections import defaultdict, Counter
 import re
 from pathlib import Path
+import os
 
 def normalize_format(fmt):
     fmt = fmt.strip().lower().replace('\r', '')
-    match = re.search(r'gen\s*([1-5])', fmt)
+    fmt = fmt.replace('[', '').replace(']', '')
+
+    match = re.search(r'gen\s*([1-9]|10)', fmt)
     if not match:
-        match = re.search(r'gen([1-5])', fmt)
-    if match:
-        gen = match.group(1)
-    else:
+        match = re.search(r'gen([1-9]|10)', fmt)
+    if not match:
+        print(fmt)
         return None
+
+    gen = match.group(1)
 
     if 'ou' in fmt:
         return f"[Gen {gen}] OU"
@@ -131,7 +135,15 @@ def pokemon_dataframe(df_logs):
     df_new = pd.merge(df_new, df_format, on='format')
     df_new['usage'] = (df_new['played']/df_new['counts'])*100
     df_new = df_new.drop(columns='counts')
-    df_stats = pd.read_csv('../input/pokemon_stats.csv')
+    df_stats = pd.read_csv('../input/pokemon_stats.csv', dtype={
+        'Pdex': str,
+        'Hp': int,
+        'Attack': int,
+        'Defense': int,
+        'Sp. Atk': int,
+        'Sp. Def': int,
+        'Speed': int
+    })
     df_new = pd.merge(df_new, df_stats, on='pokemon', how='left')
 
     return df_new
@@ -139,9 +151,12 @@ def pokemon_dataframe(df_logs):
 def filter_pokemon(pokemon_df):
     invalid_pokemon = pd.DataFrame()
 
-    for gen in range(1, 5):
+    for gen in range(1, 10):
         gen_label = f'[Gen {gen}]'
         valid_file = f'../input/gen_filter/gen{gen}.txt'
+
+        if not os.path.exists(valid_file):
+            continue
 
         with open(valid_file, 'r', encoding='utf-8') as f:
             valid_pokemon = set(name.strip().lower() for name in f if name.strip())
@@ -163,15 +178,13 @@ if Path('../output/pokemon_completetest.csv').exists():
     df_summary=pd.read_csv('../output/pokemon_completetest.csv')
 
 else:
-    df= pd.read_csv("../input/data.csv")
+    df = pd.read_csv("../input/data.csv")
     pd.set_option('display.max_columns', None)
 
     df_summary = pokemon_dataframe(df)
     df_summary.to_csv('../output/pokemon_completetest.csv', index = False)
 
 pokemon_df, invalid_pokemon = filter_pokemon(df_summary)
-
-print(pokemon_df)
 
 pokemon_df.to_csv('../output/pokemon.csv', index = False)
 invalid_pokemon.to_csv('../output/invalid_pokemon.csv', index = False)

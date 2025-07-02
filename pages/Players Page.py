@@ -6,6 +6,7 @@ import seaborn as sns
 import plotly.express as px
 import plotly.graph_objects as go
 import os
+import glob
 
 sns.set(rc={'ytick.labelcolor': 'white', 'xtick.labelcolor': 'white'})
 sns.set(rc={'axes.facecolor': '#0000FF', 'figure.facecolor': (0, 0, 0, 0)})
@@ -15,11 +16,8 @@ st.title("👤 Players")
 if 'rows_shown' not in st.session_state:
     st.session_state.rows_shown = 5
 
-formats = [
-    os.path.splitext(df)[0]
-    for df in os.listdir('./output/tiers')
-    if df.endswith(".csv")
-]
+with open('./output/tiers/formats.txt', 'r') as f:
+    formats = [line.strip() for line in f if line.strip()]
 
 selected_format = st.selectbox('Choose a Format', sorted(formats))
 
@@ -190,7 +188,19 @@ with bigcol2:
 
             st.plotly_chart(fig, use_container_width=True)
 
-    format_df = pd.read_csv(f'./output/tiers/{selected_format}.csv')
+    df_path = f'./output/tiers/{selected_format}.csv'
+    if os.path.exists(df_path):
+        format_df = pd.read_csv(df_path)
+
+    else:
+        pattern = glob.escape(f'./output/tiers/{selected_format}') + "_*.csv"
+        parts = sorted(glob.glob(pattern))
+
+        if parts:
+            part_dfs = [pd.read_csv(part) for part in parts]
+            format_df = pd.concat(part_dfs, ignore_index=True)
+
+
     format_df = format_df[(format_df['player1'] == row['name']) | (format_df['player2'] == row['name'])]
     format_df["uploadtime"] = pd.to_datetime(format_df["uploadtime"])
     format_df['weekday'] = format_df['uploadtime'].dt.weekday
@@ -292,19 +302,38 @@ with bigcol2:
                 row_p = total_df.take([i])
                 gen = selected_format.split(']')[0][1:]
                 pdex = row_p['Pdex'].iloc[0]
-                image = Image.open(f"./assets/{gen}/{pdex}.png")
+                image_path = f"./assets/{gen}/{pdex}.png"
+                if not os.path.exists(image_path) and '-' in pdex:
+                    pdex = pdex.split('-')[0]
+                    image_path = f"./assets/{gen}/{pdex}.png"
+                image = Image.open(image_path)
                 image = image.resize((128, 128))
                 st.image(image, width=128)
-                st.markdown(row_p['pokemon'].iloc[0])
-                type1 = row_p['Type1'].iloc[0]
-                type2 = row_p['Type2'].iloc[0]
-                image1 = Image.open(f"./assets/icons/{type1.lower()}.png")
-                image1 = image1.resize((192, 64))
-                st.image(image1, width=64)
-                if not pd.isna(type2) and type2 != "":
-                    image2 = Image.open(f"./assets/icons/{type2.lower()}.png")
-                    image2 = image2.resize((192, 64))
-                    st.image(image2, width=64)
+                name = row_p['pokemon'].iloc[0]
+                st.markdown(name)
+                type1 = row_p['Type 1'].iloc[0]
+                type2 = row_p['Type 2'].iloc[0]
+                if gen != 'Gen 9':
+                    if type1 == 'Fairy' or type2 == 'Fairy':
+                        old_types = pd.read_csv('./input/old_types.csv')
+                        old_row = old_types[old_types['pokemon'] == name]
+                        type1 = old_row['Type 1'].iloc[0]
+                        type2 = old_row['Type 2'].iloc[0]
+                    image1 = Image.open(f"./assets/icons/old/{type1.lower()}.png")
+                    image1 = image1.resize((192, 64))
+                    st.image(image1, width=64)
+                    if not pd.isna(type2) and type2 != "":
+                        image2 = Image.open(f"./assets/icons/old/{type2.lower()}.png")
+                        image2 = image2.resize((192, 64))
+                        st.image(image2, width=64)
+                else:
+                    image1 = Image.open(f"./assets/icons/new/{type1.lower()}.png")
+                    image1 = image1.resize((500, 120))
+                    st.image(image1, width=120)
+                    if not pd.isna(type2) and type2 != "":
+                        image2 = Image.open(f"./assets/icons/new/{type2.lower()}.png")
+                        image2 = image2.resize((500, 120))
+                        st.image(image2, width=120)
                 st.markdown(f'Usage: {'%.2f' % (row_p['percent'].iloc[0])}%')
         else:
             with col:
