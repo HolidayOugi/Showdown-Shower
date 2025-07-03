@@ -22,21 +22,51 @@ with open('./output/tiers/formats.txt', 'r') as f:
 
 selected_format = st.selectbox('Choose a Format', sorted(formats))
 
-players_df = pd.read_csv(f'./output/players/{selected_format}_players.csv')
-pokemon_df = pd.read_csv('./input/pokemon_stats.csv')
-players_df['pokemon_used'] = players_df['pokemon_used'].apply(eval)
+@st.cache_data
+def load_csv(selected_format):
+    players_df = pd.read_csv(f'./output/players/{selected_format}_players.csv')
+    players_df['pokemon_used'] = players_df['pokemon_used'].apply(eval)
+    players_df = players_df.sort_values(by='played', ascending=False)
+    players_df['list_name'] = players_df['name'] + ' - ' + players_df['played'].astype(str) + " matches"
+    return players_df, players_df['list_name'].tolist()
+
+@st.cache_data
+def load_player(players_df, selected_player):
+    row = players_df[players_df['list_name'] == selected_player].iloc[0]
+    df_path = f'./output/tiers/{selected_format}.csv'
+    if os.path.exists(df_path):
+        format_df = pd.read_csv(df_path)
+
+    else:
+        pattern = glob.escape(f'./output/tiers/{selected_format}') + "_*.csv"
+        parts = sorted(glob.glob(pattern))
+
+        if parts:
+            part_dfs = [pd.read_csv(part) for part in parts]
+            format_df = pd.concat(part_dfs, ignore_index=True)
+    format_df['id'] = format_df['id'].apply(lambda x: f"[{x}](https://replay.pokemonshowdown.com/{x})")
+    format_df = format_df.sort_values(by=['uploadtime'])
+    format_df["uploadtime"] = pd.to_datetime(format_df["uploadtime"])
+    format_df = format_df[(format_df['player1'] == row['name']) | (format_df['player2'] == row['name'])]
+    format_df['weekday'] = format_df['uploadtime'].dt.weekday
+    format_df['weekday'] = format_df['weekday'].map({
+        0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday'
+    })
+    format_df['hour'] = format_df['uploadtime'].dt.hour
+    bins = list(range(0, 25, 2))
+    labels = [f"{b}-{b + 2}" for b in bins[:-1]]
+    format_df['hour_bin'] = pd.cut(format_df['hour'], bins=bins, right=False, labels=labels)
+    return row, format_df
 
 
-bigcol1, sep, bigcol2 = st.columns([10, 1, 10])
 
-with bigcol1:
-
+@st.cache_data
+def load_graphs(selected_format):
     st.subheader("Total Player Stats")
 
     col1, col2 = st.columns(2)
 
     with col1:
-
         fig = pio.read_json(f"./graphs/players/{selected_format}/fig1.json")
 
         st.plotly_chart(fig, use_container_width=True)
@@ -46,7 +76,6 @@ with bigcol1:
         st.plotly_chart(fig, use_container_width=True)
 
     with col2:
-
         fig = pio.read_json(f"./graphs/players/{selected_format}/fig3.json")
 
         st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True})
@@ -55,16 +84,8 @@ with bigcol1:
 
         st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True})
 
-with sep:
-    st.markdown("<div style='border-left: 1px solid #ccc; height: 100%;'></div>", unsafe_allow_html=True)
-
-with bigcol2:
-
-    st.subheader("Individual Player Stats")
-    players_df = players_df.sort_values(by='played', ascending=False)
-    players_df['list_name'] = players_df['name'] + ' - ' + players_df['played'].astype(str) + " matches"
-    selected_player = st.selectbox('Choose a player', players_df['list_name'])
-    row = players_df[players_df['list_name'] == selected_player].iloc[0]
+@st.cache_data
+def load_player_graphs(row, selected_player):
     col1, col2, col3 = st.columns(3)
     with col1:
         fig = go.Figure(data=[go.Pie(
@@ -120,12 +141,9 @@ with bigcol2:
 
         row['rating_list'] = eval(row['rating_list'])
 
-
         rating_list = row['rating_list']
 
-
         if rating_list:
-
             df_rating = pd.DataFrame({
                 'Match': list(range(1, len(rating_list) + 1)),
                 'Rating': rating_list
@@ -139,31 +157,10 @@ with bigcol2:
 
             st.plotly_chart(fig, use_container_width=True)
 
-    df_path = f'./output/tiers/{selected_format}.csv'
-    if os.path.exists(df_path):
-        format_df = pd.read_csv(df_path)
+    return row
 
-    else:
-        pattern = glob.escape(f'./output/tiers/{selected_format}') + "_*.csv"
-        parts = sorted(glob.glob(pattern))
-
-        if parts:
-            part_dfs = [pd.read_csv(part) for part in parts]
-            format_df = pd.concat(part_dfs, ignore_index=True)
-
-
-    format_df = format_df[(format_df['player1'] == row['name']) | (format_df['player2'] == row['name'])]
-    format_df["uploadtime"] = pd.to_datetime(format_df["uploadtime"])
-    format_df['weekday'] = format_df['uploadtime'].dt.weekday
-    format_df['weekday'] = format_df['weekday'].map({
-        0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday'
-    })
-    format_df['hour'] = format_df['uploadtime'].dt.hour
-    bins = list(range(0, 25, 2))
-    labels = [f"{b}-{b + 2}" for b in bins[:-1]]
-    format_df['hour_bin'] = pd.cut(format_df['hour'], bins=bins, right=False, labels=labels)
-
-    selected_mode = st.selectbox('Choose a visualization mode', ['Separated', 'Combined'])
+@st.cache_data
+def load_heatmap(row, format_df, selected_mode):
     if selected_mode == 'Separated':
 
         weekday_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -236,8 +233,11 @@ with bigcol2:
         plt.tight_layout()
         st.pyplot(fig, use_container_width=True)
 
+@st.cache_data
+def load_pokemon(row):
     st.markdown(f"### Top 6 Most Used Pokémon by {row['name']}")
 
+    pokemon_df = pd.read_csv('./input/pokemon_stats.csv')
     usage_df = pd.DataFrame(row['pokemon_used'].items(), columns=['pokemon', 'count'])
     usage_df['percent'] = usage_df['count'] / row['played'] * 100
     usage_df = usage_df.sort_values(by='percent', ascending=False)
@@ -290,19 +290,50 @@ with bigcol2:
             with col:
                 st.empty()
 
+@st.cache_data
+def load_replays(matches_df, start_date, end_date):
+    matches_df = matches_df.drop(
+        columns=['format', 'hour', 'hour_bin', 'weekday', 'rating', 'player1', 'player2', 'Winner', 'Forfeit', 'Team 1',
+                 'Team 2', 'Turns', '# Switches 1', '# Switches 2'])
+    filtered_df = matches_df[
+        (matches_df["uploadtime"].dt.date >= start_date) &
+        (matches_df["uploadtime"].dt.date <= end_date)
+        ]
+
+    filtered_df = filtered_df.rename(columns={"id": "Replay", "uploadtime": "Upload Date"})
+
+    return filtered_df
+
+bigcol1, sep, bigcol2 = st.columns([10, 1, 10])
+
+with bigcol1:
+
+    load_graphs(selected_format)
+
+with sep:
+    st.markdown("<div style='border-left: 1px solid #ccc; height: 100%;'></div>", unsafe_allow_html=True)
+
+with bigcol2:
+
+    st.subheader("Individual Player Stats")
+    players_df, player_list = load_csv(selected_format)
+    selected_player = st.selectbox('Choose a player', player_list)
+    row, matches_df = load_player(players_df, selected_player)
+    load_player_graphs(row, selected_player)
+
+    selected_mode = st.selectbox('Choose a visualization mode', ['Separated', 'Combined'])
+
+    load_heatmap(row, matches_df, selected_mode)
+
+    load_pokemon(row)
+
     st.subheader(f"Replays of {row['name']} in {selected_format}")
 
     col1, col2 = st.columns(2)
     with col2:
 
-        format_df = format_df.drop(columns=['format', 'hour', 'hour_bin', 'weekday', 'rating', 'player1', 'player2', 'Winner', 'Forfeit', 'Team 1', 'Team 2', 'Turns', '# Switches 1', '# Switches 2'])
-        format_df['id'] = format_df['id'].apply(lambda x: f"[{x}](https://replay.pokemonshowdown.com/{x})")
-        format_df = format_df.sort_values(by=['uploadtime'])
-        format_df["uploadtime"] = pd.to_datetime(format_df["uploadtime"])
-
-
-        min_date = format_df["uploadtime"].min().date()
-        max_date = format_df["uploadtime"].max().date()
+        min_date = matches_df["uploadtime"].min().date()
+        max_date = matches_df["uploadtime"].max().date()
 
         selected_dates = st.date_input(
             "Dates",
@@ -323,19 +354,14 @@ with bigcol2:
 
     with col1:
 
-        filtered_df = format_df[
-            (format_df["uploadtime"].dt.date >= start_date) &
-            (format_df["uploadtime"].dt.date <= end_date)
-        ]
-
-        filtered_df = filtered_df.rename(columns={"id": "Replay", "uploadtime": "Upload Date"})
+        replay_df = load_replays(matches_df, start_date, end_date)
 
         st.write(
-            filtered_df.head(st.session_state.rows_shown).to_markdown(index=False),
+            replay_df.head(st.session_state.rows_shown).to_markdown(index=False),
             unsafe_allow_html=True
         )
 
-        if st.session_state.rows_shown < len(filtered_df):
+        if st.session_state.rows_shown < len(replay_df):
             if st.button("Load more", key="load_more_button"):
                 st.session_state.rows_shown += 5
                 st.rerun()

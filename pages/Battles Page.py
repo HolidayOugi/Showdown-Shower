@@ -29,6 +29,127 @@ gens = sorted(
     key=lambda x: int(x.split()[1])
 )
 
+@st.cache_data
+def load_graphs(selected_format):
+
+        subcol1, subcol2 = st.columns(2)
+
+        with subcol1:
+
+            fig = pio.read_json(f"./graphs/battle/{selected_format}/fig1.json")
+
+            st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True})
+
+            fig = pio.read_json(f"./graphs/battle/{selected_format}/fig2.json")
+
+            st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True})
+
+        with subcol2:
+
+            fig = pio.read_json(f"./graphs/battle/{selected_format}/fig3.json")
+
+            st.plotly_chart(fig, use_container_width=True)
+
+            fig = pio.read_json(f"./graphs/battle/{selected_format}/fig4.json")
+
+            st.plotly_chart(fig, use_container_width=True)
+
+@st.cache_data
+def load_pokemon(selected_format):
+
+        st.markdown(f"### Most popular types in {selected_format}")
+
+        fig = pio.read_json(f"./graphs/battle/{selected_format}/fig_types.json")
+
+        st.plotly_chart(fig, use_container_width=True, config={
+            'displayModeBar': False,
+            'displaylogo': False,
+            'scrollZoom': False,
+            'doubleClick': False,
+            'editable': False,
+            'staticPlot': False,
+            'responsive': True,
+            'modeBarButtonsToRemove': [
+                'zoom2d', 'pan2d', 'select2d', 'lasso2d',
+                'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d'
+            ]
+        })
+
+        st.markdown(f"### Top 6 Most Used Pokémon in {selected_format}")
+
+        usage_df = pd.read_csv('./output/pokemon.csv', dtype={'Pdex': str})
+        usage_df = usage_df[usage_df['format'] == selected_format]
+        usage_df = usage_df.sort_values(by='usage', ascending=False)
+        usage_df = usage_df.head(6)
+
+        col1, col2, col3, col4, col5, col6 = st.columns([3, 3, 3, 3, 3, 3])
+        cols = [col1, col2, col3, col4, col5, col6]
+
+        for i, col in enumerate(cols):
+            if i < len(usage_df):
+                with col:
+                    row = usage_df.take([i])
+                    gen = selected_format.split(']')[0][1:]
+                    pdex = row['Pdex'].iloc[0]
+                    image_path = f"./assets/{gen}/{pdex}.png"
+                    if not os.path.exists(image_path) and '-' in pdex:
+                        pdex = pdex.split('-')[0]
+                        image_path = f"./assets/{gen}/{pdex}.png"
+                    image = Image.open(image_path)
+                    image = image.resize((128, 128))
+                    st.image(image, width=128)
+                    name = row['pokemon'].iloc[0]
+                    st.markdown(name)
+                    type1 = row['Type 1'].iloc[0]
+                    type2 = row['Type 2'].iloc[0]
+                    if gen != 'Gen 9':
+                        if type1 == 'Fairy' or type2 == 'Fairy':
+                            old_types = pd.read_csv('./input/old_types.csv')
+                            old_row = old_types[old_types['pokemon'] == name]
+                            type1 = old_row['Type 1'].iloc[0]
+                            type2 = old_row['Type 2'].iloc[0]
+                        image1 = Image.open(f"./assets/icons/old/{type1.lower()}.png")
+                        image1 = image1.resize((192, 64))
+                        st.image(image1, width=64)
+                        if not pd.isna(type2) and type2 != "":
+                            image2 = Image.open(f"./assets/icons/old/{type2.lower()}.png")
+                            image2 = image2.resize((192, 64))
+                            st.image(image2, width=64)
+                    else:
+                        image1 = Image.open(f"./assets/icons/new/{type1.lower()}.png")
+                        image1 = image1.resize((500, 120))
+                        st.image(image1, width=120)
+                        if not pd.isna(type2) and type2 != "":
+                            image2 = Image.open(f"./assets/icons/new/{type2.lower()}.png")
+                            image2 = image2.resize((500, 120))
+                            st.image(image2, width=120)
+                    st.markdown(f'Usage: {'%.2f' % (row['usage'].iloc[0])}%')
+            else:
+                with col:
+                    st.empty()
+
+@st.cache_data
+def load_heatmap(selected_mode, selected_format):
+    if selected_mode == 'Separated':
+
+        subcol1, subcol2 = st.columns(2)
+
+        with subcol1:
+
+            fig = pio.read_json(f"./graphs/battle/{selected_format}/fig_hour.json")
+            st.plotly_chart(fig, use_container_width=True)
+
+        with subcol2:
+
+            fig = pio.read_json(f"./graphs/battle/{selected_format}/fig_weekday.json")
+
+            st.plotly_chart(fig, use_container_width=True)
+
+    else:
+
+        st.image(f"./graphs/battle/{selected_format}/heatmap.png", use_container_width=True)
+
+
 col1, col2 = st.columns([3, 10])
 
 with col1:
@@ -122,123 +243,12 @@ with col2:
 
 selected_format = st.selectbox('Choose a Format', sorted(formats))
 
-col1, col2 = st.columns([10,7])
+col1, col2 = st.columns([10, 7])
 
 with col1:
-
-    subcol1, subcol2 = st.columns(2)
-
-    with subcol1:
-
-        fig = pio.read_json(f"./graphs/battle/{selected_format}/fig1.json")
-
-        st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True})
-
-        fig = pio.read_json(f"./graphs/battle/{selected_format}/fig2.json")
-
-        st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True})
-
-
-    with subcol2:
-
-        fig = pio.read_json(f"./graphs/battle/{selected_format}/fig3.json")
-
-        st.plotly_chart(fig, use_container_width=True)
-
-        fig = pio.read_json(f"./graphs/battle/{selected_format}/fig4.json")
-
-        st.plotly_chart(fig, use_container_width=True)
-
-
+    load_graphs(selected_format)
     selected_mode = st.selectbox('Choose a visualization mode', ['Separated', 'Combined'])
-    if selected_mode == 'Separated':
-
-        subcol1, subcol2 = st.columns(2)
-
-        with subcol1:
-
-            fig = pio.read_json(f"./graphs/battle/{selected_format}/fig_hour.json")
-            st.plotly_chart(fig, use_container_width=True)
-
-        with subcol2:
-
-            fig = pio.read_json(f"./graphs/battle/{selected_format}/fig_weekday.json")
-
-            st.plotly_chart(fig, use_container_width=True)
-
-    else:
-
-        st.image(f"./graphs/battle/{selected_format}/heatmap.png", use_container_width=True)
+    load_heatmap(selected_mode, selected_format)
 
 with col2:
-
-    st.markdown(f"### Most popular types in {selected_format}")
-
-    fig = pio.read_json(f"./graphs/battle/{selected_format}/fig_types.json")
-
-    st.plotly_chart(fig, use_container_width=True, config={
-                'displayModeBar': False,
-                'displaylogo': False,
-                'scrollZoom': False,
-                'doubleClick': False,
-                'editable': False,
-                'staticPlot': False,
-                'responsive': True,
-                'modeBarButtonsToRemove': [
-                    'zoom2d', 'pan2d', 'select2d', 'lasso2d',
-                    'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d'
-                ]
-    })
-
-    st.markdown(f"### Top 6 Most Used Pokémon in {selected_format}")
-
-    usage_df = pd.read_csv('./output/pokemon.csv', dtype={'Pdex': str})
-    usage_df = usage_df[usage_df['format'] == selected_format]
-    usage_df = usage_df.sort_values(by='usage', ascending=False)
-    usage_df = usage_df.head(6)
-
-    col1, col2, col3, col4, col5, col6 = st.columns([3, 3, 3, 3, 3, 3])
-    cols = [col1, col2, col3, col4, col5, col6]
-
-    for i, col in enumerate(cols):
-        if i < len(usage_df):
-            with col:
-                row = usage_df.take([i])
-                gen = selected_format.split(']')[0][1:]
-                pdex = row['Pdex'].iloc[0]
-                image_path = f"./assets/{gen}/{pdex}.png"
-                if not os.path.exists(image_path) and '-' in pdex:
-                    pdex = pdex.split('-')[0]
-                    image_path = f"./assets/{gen}/{pdex}.png"
-                image = Image.open(image_path)
-                image = image.resize((128, 128))
-                st.image(image, width=128)
-                name = row['pokemon'].iloc[0]
-                st.markdown(name)
-                type1 = row['Type 1'].iloc[0]
-                type2 = row['Type 2'].iloc[0]
-                if gen != 'Gen 9':
-                    if type1 == 'Fairy' or type2 == 'Fairy':
-                        old_types = pd.read_csv('./input/old_types.csv')
-                        old_row = old_types[old_types['pokemon'] == name]
-                        type1 = old_row['Type 1'].iloc[0]
-                        type2 = old_row['Type 2'].iloc[0]
-                    image1 = Image.open(f"./assets/icons/old/{type1.lower()}.png")
-                    image1 = image1.resize((192, 64))
-                    st.image(image1, width=64)
-                    if not pd.isna(type2) and type2 != "":
-                        image2 = Image.open(f"./assets/icons/old/{type2.lower()}.png")
-                        image2 = image2.resize((192, 64))
-                        st.image(image2, width=64)
-                else:
-                    image1 = Image.open(f"./assets/icons/new/{type1.lower()}.png")
-                    image1 = image1.resize((500, 120))
-                    st.image(image1, width=120)
-                    if not pd.isna(type2) and type2 != "":
-                        image2 = Image.open(f"./assets/icons/new/{type2.lower()}.png")
-                        image2 = image2.resize((500, 120))
-                        st.image(image2, width=120)
-                st.markdown(f'Usage: {'%.2f'%(row['usage'].iloc[0])}%')
-        else:
-            with col:
-                st.empty()
+    load_pokemon(selected_format)

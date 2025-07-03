@@ -18,25 +18,23 @@ if 'visible_moves' not in st.session_state:
 def load_more():
     st.session_state.visible_moves += 5
 
-df = pd.read_csv('./output/pokemon.csv',  dtype={'Pdex': str})
-df['moves'] = df['moves'].apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
-df['moves'] = df['moves'].apply(lambda x: sorted(x, key=lambda x: x[1], reverse=True))
+@st.cache_data
+def load_csv():
+    df = pd.read_csv('./output/pokemon.csv',  dtype={'Pdex': str})
+    df['moves'] = df['moves'].apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
+    df['moves'] = df['moves'].apply(lambda x: sorted(x, key=lambda x: x[1], reverse=True))
+    return df
 
-
-
-bigcol1, sep, bigcol2, sep2, bigcol3 = st.columns([20, 1, 12, 1, 12])
-
-with bigcol1:
-
-    pokemon = st.selectbox('Choose a Pokémon', sorted(df['pokemon'].unique()))
+@st.cache_data
+def load_pokemon(df, pokemon):
     df_filtered = df[df['pokemon'] == pokemon]
     formats = df_filtered['format'].unique()
-    selected_format = st.selectbox('Choose a Format', sorted(formats))
-    row = df_filtered[df_filtered['format'] == selected_format].iloc[0]
+    return df_filtered, formats
 
+@st.cache_data
+def load_info(row, selected_format, types_df):
     st.subheader(f"{pokemon} in {selected_format}")
     gen = selected_format.split(']')[0][1:]
-
 
     col1, col2, col3, col4 = st.columns([5, 4, 10, 10])
 
@@ -92,10 +90,10 @@ with bigcol1:
             img_bytes = f.read()
         img_b64 = base64.b64encode(img_bytes).decode()
         html_code = f'''
-                    <a href="{smogon_url}" target="_blank">
-                        <img src="data:image/png;base64,{img_b64}" width="24" style="vertical-align:middle;" />
-                    </a>
-                    '''
+                        <a href="{smogon_url}" target="_blank">
+                            <img src="data:image/png;base64,{img_b64}" width="24" style="vertical-align:middle;" />
+                        </a>
+                        '''
         st.markdown(html_code, unsafe_allow_html=True)
 
     with col3:
@@ -205,14 +203,11 @@ with bigcol1:
             ]
         })
 
-
-
     st.subheader("Stats")
 
     col1, col2 = st.columns([10, 1])
 
     with col1:
-
 
         stats = {
             'HP': row['HP'],
@@ -278,14 +273,11 @@ with bigcol1:
             img_bytes = f.read()
         img_b64 = base64.b64encode(img_bytes).decode()
         html_code = f'''
-                    <a href="{move_url}" target="_blank">
-                        <img src="data:image/png;base64,{img_b64}" width="24" style="vertical-align:middle;" />
-                    </a>
-                    '''
+                        <a href="{move_url}" target="_blank">
+                            <img src="data:image/png;base64,{img_b64}" width="24" style="vertical-align:middle;" />
+                        </a>
+                        '''
         st.markdown(html_code, unsafe_allow_html=True)
-
-
-    types_df = pd.read_csv('./input/types.csv')
 
     weak = set()
     resistant = set()
@@ -293,9 +285,9 @@ with bigcol1:
     quad_weak = set()
     quad_resistant = set()
 
-    type1_weak = set(eval(types_df[types_df['Type']  == type1]['weak'].iloc[0]))
-    type1_resistant = set(eval(types_df[types_df['Type']  == type1]['resistant'].iloc[0]))
-    type1_immunity = set(eval(types_df[types_df['Type']  == type1]['immunity'].iloc[0]))
+    type1_weak = set(eval(types_df[types_df['Type'] == type1]['weak'].iloc[0]))
+    type1_resistant = set(eval(types_df[types_df['Type'] == type1]['resistant'].iloc[0]))
+    type1_immunity = set(eval(types_df[types_df['Type'] == type1]['immunity'].iloc[0]))
     if not pd.isna(type2) and type2 != "":
         type2_weak = set(eval(types_df[types_df['Type'] == type2]['weak'].iloc[0]))
         type2_resistant = set(eval(types_df[types_df['Type'] == type2]['resistant'].iloc[0]))
@@ -364,19 +356,12 @@ with bigcol1:
     render_type_row("Quad resistant", quad_resistant)
     render_type_row("Immune", immunity)
 
-with sep:
-    st.markdown("<div style='border-left: 1px solid #ccc; height: 100%;'></div>", unsafe_allow_html=True)
-
-with bigcol2:
-
-    st.subheader(f"Most used moves by {pokemon} in {selected_format}")
-
-
+@st.cache_data
+def load_moves(row, types_df, visible_moves):
     moves_df = pd.read_csv('./input/moves.csv')
     moves_df = moves_df.map(lambda x: x.lstrip() if isinstance(x, str) else x)
     moves_df = pd.merge(moves_df, types_df, on='Type')
 
-    visible_moves = st.session_state.visible_moves
     moves_to_show = row['moves'][:visible_moves]
 
     def hex_to_rgba(hex_color, factor):
@@ -396,7 +381,7 @@ with bigcol2:
         move_row = moves_df[moves_df['Name'].str.contains(move, case=False, na=False)]
         move_type = move_row['Type'].iloc[0]
         color = move_row['color'].iloc[0]
-        usage = count/(row['won']+row['lost'])
+        usage = count / (row['won'] + row['lost'])
 
         col1, col2 = st.columns([10, 1])
 
@@ -424,7 +409,7 @@ with bigcol2:
                 showlegend=False
             ))
 
-            if move_type == type1 or move_type == type2:
+            if move_type == row['Type 1'] or move_type == row['Type 2']:
 
                 fig.add_annotation(
                     x=0.5,
@@ -469,7 +454,7 @@ with bigcol2:
                     'zoom2d', 'pan2d', 'select2d', 'lasso2d',
                     'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d'
                 ]
-    })
+            })
 
         with col2:
             move_key = move.replace(" ", "_")
@@ -478,22 +463,14 @@ with bigcol2:
                 img_bytes = f.read()
             img_b64 = base64.b64encode(img_bytes).decode()
             html_code = f'''
-                <a href="{move_url}" target="_blank">
-                    <img src="data:image/png;base64,{img_b64}" width="24" style="vertical-align:middle;" />
-                </a>
-                '''
+                    <a href="{move_url}" target="_blank">
+                        <img src="data:image/png;base64,{img_b64}" width="24" style="vertical-align:middle;" />
+                    </a>
+                    '''
             st.markdown(html_code, unsafe_allow_html=True)
 
-    if visible_moves < len(row['moves']):
-        st.button("Load more", on_click=load_more)
-
-with sep2:
-    st.markdown("<div style='border-left: 1px solid #ccc; height: 100%;'></div>", unsafe_allow_html=True)
-
-with bigcol3:
-
-    st.subheader(f"Replays of {pokemon} in {selected_format}")
-
+@st.cache_data
+def load_format_df(pokemon, selected_format):
     df_path = f'./output/tiers/{selected_format}.csv'
     if os.path.exists(df_path):
         format_df = pd.read_csv(df_path)
@@ -507,18 +484,65 @@ with bigcol3:
             format_df = pd.concat(part_dfs, ignore_index=True)
 
     format_df = format_df[format_df['Team 1'].apply(lambda x: pokemon in x) | format_df['Team 2'].apply(lambda x: pokemon in x)]
-
-
-
-
-    format_df = format_df.drop(columns=['format', 'rating', 'player1', 'player2', 'Winner', 'Forfeit', 'Team 1', 'Team 2', 'Turns', '# Switches 1', '# Switches 2'])
     format_df['id'] = format_df['id'].apply(lambda x: f"[{x}](https://replay.pokemonshowdown.com/{x})")
     format_df = format_df.sort_values(by=['uploadtime'])
     format_df["uploadtime"] = pd.to_datetime(format_df["uploadtime"])
+    return format_df
+
+@st.cache_data
+def load_replays(matches_df, start_date, end_date):
+    matches_df = matches_df.drop(columns=['format', 'rating', 'player1', 'player2', 'Winner', 'Forfeit', 'Team 1', 'Team 2', 'Turns', '# Switches 1', '# Switches 2'])
+    filtered_df = matches_df[
+        (matches_df["uploadtime"].dt.date >= start_date) &
+        (matches_df["uploadtime"].dt.date <= end_date)
+        ]
+
+    filtered_df = filtered_df.rename(columns={"id": "Replay", "uploadtime": "Upload Date"})
+
+    return filtered_df
 
 
-    min_date = format_df["uploadtime"].min().date()
-    max_date = format_df["uploadtime"].max().date()
+bigcol1, sep, bigcol2, sep2, bigcol3 = st.columns([20, 1, 12, 1, 12])
+
+with bigcol1:
+
+    df = load_csv()
+
+    pokemon = st.selectbox('Choose a Pokémon', sorted(df['pokemon'].unique()))
+    df_filtered, formats = load_pokemon(df, pokemon)
+    selected_format = st.selectbox('Choose a Format', sorted(formats))
+    row = df_filtered[df_filtered['format'] == selected_format].iloc[0]
+    types_df = pd.read_csv('./input/types.csv')
+    load_info(row, selected_format, types_df)
+
+with sep:
+    st.markdown("<div style='border-left: 1px solid #ccc; height: 100%;'></div>", unsafe_allow_html=True)
+
+with bigcol2:
+
+    st.subheader(f"Most used moves by {pokemon} in {selected_format}")
+
+    visible_moves = st.session_state.visible_moves
+
+    load_moves(row, types_df, visible_moves)
+
+    if visible_moves < len(row['moves']):
+        st.button("Load more", on_click=load_more)
+
+
+
+
+with sep2:
+    st.markdown("<div style='border-left: 1px solid #ccc; height: 100%;'></div>", unsafe_allow_html=True)
+
+with bigcol3:
+
+    st.subheader(f"Replays of {pokemon} in {selected_format}")
+
+    matches_df = load_format_df(pokemon, selected_format)
+
+    min_date = matches_df["uploadtime"].min().date()
+    max_date = matches_df["uploadtime"].max().date()
 
     selected_dates = st.date_input(
         "Dates",
@@ -537,19 +561,14 @@ with bigcol3:
     else:
         start_date, end_date = selected_dates
 
-    filtered_df = format_df[
-        (format_df["uploadtime"].dt.date >= start_date) &
-        (format_df["uploadtime"].dt.date <= end_date)
-    ]
-
-    filtered_df = filtered_df.rename(columns={"id": "Replay", "uploadtime": "Upload Date"})
+    replay_df = load_replays(matches_df, start_date, end_date)
 
     st.write(
-        filtered_df.head(st.session_state.rows_shown).to_markdown(index=False),
+        replay_df.head(st.session_state.rows_shown).to_markdown(index=False),
         unsafe_allow_html=True
     )
 
-    if st.session_state.rows_shown < len(filtered_df):
+    if st.session_state.rows_shown < len(replay_df):
         if st.button("Load more", key="load_more_button"):
             st.session_state.rows_shown += 5
             st.rerun()
