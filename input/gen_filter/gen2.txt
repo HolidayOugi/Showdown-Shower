@@ -252,3 +252,7 @@ Celebi
 Unown-C
 Unown-R
 Unown-X
+Unown-F
+Unown-I
+Unown-M
+Unown-W

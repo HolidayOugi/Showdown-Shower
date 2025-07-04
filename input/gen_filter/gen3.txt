@@ -394,3 +394,5 @@ Unown-G
 Unown-Question
 Unown-F
 Unown-I
+Unown-M
+Unown-W

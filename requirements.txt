@@ -6,3 +6,6 @@ plotly
 streamlit_plotly_events
 matplotlib
 seaborn
+fastparquet
+tqdm
+numpy

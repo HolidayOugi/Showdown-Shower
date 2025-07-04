@@ -23,8 +23,8 @@ with open('./output/tiers/formats.txt', 'r') as f:
 selected_format = st.selectbox('Choose a Format', sorted(formats))
 
 @st.cache_data
-def load_csv(selected_format):
-    players_df = pd.read_csv(f'./output/players/{selected_format}_players.csv')
+def load_parquet(selected_format):
+    players_df = pd.read_parquet(f'./output/players/{selected_format}_players.parquet')
     players_df['pokemon_used'] = players_df['pokemon_used'].apply(eval)
     players_df = players_df.sort_values(by='played', ascending=False)
     players_df['list_name'] = players_df['name'] + ' - ' + players_df['played'].astype(str) + " matches"
@@ -33,16 +33,16 @@ def load_csv(selected_format):
 @st.cache_data
 def load_player(players_df, selected_player):
     row = players_df[players_df['list_name'] == selected_player].iloc[0]
-    df_path = f'./output/tiers/{selected_format}.csv'
+    df_path = f'./output/tiers/{selected_format}.parquet'
     if os.path.exists(df_path):
-        format_df = pd.read_csv(df_path)
+        format_df = pd.read_parquet(df_path)
 
     else:
-        pattern = glob.escape(f'./output/tiers/{selected_format}') + "_*.csv"
+        pattern = glob.escape(f'./output/tiers/{selected_format}') + "_*.parquet"
         parts = sorted(glob.glob(pattern))
 
         if parts:
-            part_dfs = [pd.read_csv(part) for part in parts]
+            part_dfs = [pd.read_parquet(part) for part in parts]
             format_df = pd.concat(part_dfs, ignore_index=True)
     format_df['id'] = format_df['id'].apply(lambda x: f"[{x}](https://replay.pokemonshowdown.com/{x})")
     format_df = format_df.sort_values(by=['uploadtime'])
@@ -67,20 +67,24 @@ def load_graphs(selected_format):
     col1, col2 = st.columns(2)
 
     with col1:
-        fig = pio.read_json(f"./graphs/players/{selected_format}/fig1.json")
+        with open(f"./graphs/players/{selected_format}/fig1.json", 'r', encoding='utf-8') as f:
+            fig = pio.from_json(f.read())
 
         st.plotly_chart(fig, use_container_width=True)
 
-        fig = pio.read_json(f"./graphs/players/{selected_format}/fig2.json")
+        with open(f"./graphs/players/{selected_format}/fig2.json", 'r', encoding='utf-8') as f:
+            fig = pio.from_json(f.read())
 
         st.plotly_chart(fig, use_container_width=True)
 
     with col2:
-        fig = pio.read_json(f"./graphs/players/{selected_format}/fig3.json")
+        with open(f"./graphs/players/{selected_format}/fig3.json", 'r', encoding='utf-8') as f:
+            fig = pio.from_json(f.read())
 
         st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True})
 
-        fig = pio.read_json(f"./graphs/players/{selected_format}/fig4.json")
+        with open(f"./graphs/players/{selected_format}/fig4.json", 'r', encoding='utf-8') as f:
+            fig = pio.from_json(f.read())
 
         st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True})
 
@@ -252,11 +256,16 @@ def load_pokemon(row):
             with col:
                 row_p = total_df.take([i])
                 gen = selected_format.split(']')[0][1:]
+                gen_number = int(gen.split()[1])
+                if gen_number < 6:
+                    gen_path = gen
+                else:
+                    gen_path = 'HOME'
                 pdex = row_p['Pdex'].iloc[0]
-                image_path = f"./assets/{gen}/{pdex}.png"
+                image_path = f"./assets/{gen_path}/{pdex}.png"
                 if not os.path.exists(image_path) and '-' in pdex:
                     pdex = pdex.split('-')[0]
-                    image_path = f"./assets/{gen}/{pdex}.png"
+                    image_path = f"./assets/{gen_path}/{pdex}.png"
                 image = Image.open(image_path)
                 image = image.resize((128, 128))
                 st.image(image, width=128)
@@ -264,7 +273,7 @@ def load_pokemon(row):
                 st.markdown(name)
                 type1 = row_p['Type 1'].iloc[0]
                 type2 = row_p['Type 2'].iloc[0]
-                if gen != 'Gen 9':
+                if gen_number < 6:
                     if type1 == 'Fairy' or type2 == 'Fairy':
                         old_types = pd.read_csv('./input/old_types.csv')
                         old_row = old_types[old_types['pokemon'] == name]
@@ -294,7 +303,9 @@ def load_pokemon(row):
 def load_replays(matches_df, start_date, end_date):
     matches_df = matches_df.drop(
         columns=['format', 'hour', 'hour_bin', 'weekday', 'rating', 'player1', 'player2', 'Winner', 'Forfeit', 'Team 1',
-                 'Team 2', 'Turns', '# Switches 1', '# Switches 2'])
+                 'Team 2', 'Turns', '# Switches 1', '# Switches 2', 'views'])
+    if 'inputlog' in matches_df:
+        matches_df = matches_df.drop(columns = ['inputlog'])
     filtered_df = matches_df[
         (matches_df["uploadtime"].dt.date >= start_date) &
         (matches_df["uploadtime"].dt.date <= end_date)
@@ -316,7 +327,7 @@ with sep:
 with bigcol2:
 
     st.subheader("Individual Player Stats")
-    players_df, player_list = load_csv(selected_format)
+    players_df, player_list = load_parquet(selected_format)
     selected_player = st.selectbox('Choose a player', player_list)
     row, matches_df = load_player(players_df, selected_player)
     load_player_graphs(row, selected_player)

@@ -19,8 +19,8 @@ def load_more():
     st.session_state.visible_moves += 5
 
 @st.cache_data
-def load_csv():
-    df = pd.read_csv('./output/pokemon.csv',  dtype={'Pdex': str})
+def load_parquet():
+    df = pd.read_parquet('./output/pokemon.parquet')
     df['moves'] = df['moves'].apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
     df['moves'] = df['moves'].apply(lambda x: sorted(x, key=lambda x: x[1], reverse=True))
     return df
@@ -35,15 +35,20 @@ def load_pokemon(df, pokemon):
 def load_info(row, selected_format, types_df):
     st.subheader(f"{pokemon} in {selected_format}")
     gen = selected_format.split(']')[0][1:]
+    gen_number = int(gen.split()[1])
+    if gen_number < 6:
+        gen_path = gen
+    else:
+        gen_path = 'HOME'
 
     col1, col2, col3, col4 = st.columns([5, 4, 10, 10])
 
     with col1:
         pdex = row['Pdex']
-        image_path = f"./assets/{gen}/{pdex}.png"
+        image_path = f"./assets/{gen_path}/{pdex}.png"
         if not os.path.exists(image_path) and '-' in pdex:
             pdex = pdex.split('-')[0]
-            image_path = f"./assets/{gen}/{pdex}.png"
+            image_path = f"./assets/{gen_path}/{pdex}.png"
         image = Image.open(image_path)
         image = image.resize((128, 128))
         st.image(image, width=128)
@@ -51,7 +56,7 @@ def load_info(row, selected_format, types_df):
     with col2:
         type1 = row['Type 1']
         type2 = row['Type 2']
-        if gen != 'Gen 9':
+        if gen_number < 6:
             if type1 == 'Fairy' or type2 == 'Fairy':
                 old_types = pd.read_csv('./input/old_types.csv')
                 old_row = old_types[old_types['pokemon'] == pokemon]
@@ -82,6 +87,14 @@ def load_info(row, selected_format, types_df):
             gen_id = 'rs'
         elif gen == 'Gen 4':
             gen_id = 'dp'
+        elif gen == 'Gen 5':
+            gen_id = 'bw'
+        elif gen == 'Gen 6':
+            gen_id = 'xy'
+        elif gen == 'Gen 7':
+            gen_id = 'sm'
+        elif gen == 'Gen 8':
+            gen_id = 'ss'
         elif gen == 'Gen 9':
             gen_id = 'sv'
 
@@ -343,7 +356,7 @@ def load_info(row, selected_format, types_df):
             cols = st.columns(len(types) + 1)
             cols[0].markdown(f"**{label}:**")
             for i, t in enumerate(types):
-                if gen != 'Gen 9':
+                if gen_number < 6:
                     img = Image.open(f"./assets/icons/old/{t.lower()}.png").resize((192, 64))
                     cols[i + 1].image(img, width=64)
                 else:
@@ -471,16 +484,16 @@ def load_moves(row, types_df, visible_moves):
 
 @st.cache_data
 def load_format_df(pokemon, selected_format):
-    df_path = f'./output/tiers/{selected_format}.csv'
+    df_path = f'./output/tiers/{selected_format}.parquet'
     if os.path.exists(df_path):
-        format_df = pd.read_csv(df_path)
+        format_df = pd.read_parquet(df_path)
 
     else:
-        pattern = glob.escape(f'./output/tiers/{selected_format}') + "_*.csv"
+        pattern = glob.escape(f'./output/tiers/{selected_format}') + "_*.parquet"
         parts = sorted(glob.glob(pattern))
 
         if parts:
-            part_dfs = [pd.read_csv(part) for part in parts]
+            part_dfs = [pd.read_parquet(part) for part in parts]
             format_df = pd.concat(part_dfs, ignore_index=True)
 
     format_df = format_df[format_df['Team 1'].apply(lambda x: pokemon in x) | format_df['Team 2'].apply(lambda x: pokemon in x)]
@@ -491,7 +504,9 @@ def load_format_df(pokemon, selected_format):
 
 @st.cache_data
 def load_replays(matches_df, start_date, end_date):
-    matches_df = matches_df.drop(columns=['format', 'rating', 'player1', 'player2', 'Winner', 'Forfeit', 'Team 1', 'Team 2', 'Turns', '# Switches 1', '# Switches 2'])
+    matches_df = matches_df.drop(columns=['format', 'rating', 'player1', 'player2', 'Winner', 'Forfeit', 'Team 1', 'Team 2', 'Turns', '# Switches 1', '# Switches 2', 'views'])
+    if 'inputlog' in matches_df:
+        matches_df = matches_df.drop(columns = ['inputlog'])
     filtered_df = matches_df[
         (matches_df["uploadtime"].dt.date >= start_date) &
         (matches_df["uploadtime"].dt.date <= end_date)
@@ -506,7 +521,7 @@ bigcol1, sep, bigcol2, sep2, bigcol3 = st.columns([20, 1, 12, 1, 12])
 
 with bigcol1:
 
-    df = load_csv()
+    df = load_parquet()
 
     pokemon = st.selectbox('Choose a Pokémon', sorted(df['pokemon'].unique()))
     df_filtered, formats = load_pokemon(df, pokemon)

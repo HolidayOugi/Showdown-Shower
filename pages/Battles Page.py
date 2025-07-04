@@ -36,23 +36,36 @@ def load_graphs(selected_format):
 
         with subcol1:
 
-            fig = pio.read_json(f"./graphs/battle/{selected_format}/fig1.json")
+            path = f"./graphs/battle/{selected_format}/fig1.json"
 
-            st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True})
+            if os.path.exists(path):
 
-            fig = pio.read_json(f"./graphs/battle/{selected_format}/fig2.json")
+                fig = pio.read_json(path)
 
-            st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True})
+            st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},  key=f"{selected_format}_fig1")
+
+            path = f"./graphs/battle/{selected_format}/fig2.json"
+
+            if os.path.exists(path):
+                fig = pio.read_json(path)
+
+            st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},  key=f"{selected_format}_fig2")
 
         with subcol2:
 
-            fig = pio.read_json(f"./graphs/battle/{selected_format}/fig3.json")
+            path = f"./graphs/battle/{selected_format}/fig3.json"
 
-            st.plotly_chart(fig, use_container_width=True)
+            if os.path.exists(path):
+                fig = pio.read_json(path)
 
-            fig = pio.read_json(f"./graphs/battle/{selected_format}/fig4.json")
+            st.plotly_chart(fig, use_container_width=True,  key=f"{selected_format}_fig3")
 
-            st.plotly_chart(fig, use_container_width=True)
+            path = f"./graphs/battle/{selected_format}/fig4.json"
+
+            if os.path.exists(path):
+                fig = pio.read_json(path)
+
+            st.plotly_chart(fig, use_container_width=True,  key=f"{selected_format}_fig4")
 
 @st.cache_data
 def load_pokemon(selected_format):
@@ -77,7 +90,7 @@ def load_pokemon(selected_format):
 
         st.markdown(f"### Top 6 Most Used Pokémon in {selected_format}")
 
-        usage_df = pd.read_csv('./output/pokemon.csv', dtype={'Pdex': str})
+        usage_df = pd.read_parquet('./output/pokemon.parquet')
         usage_df = usage_df[usage_df['format'] == selected_format]
         usage_df = usage_df.sort_values(by='usage', ascending=False)
         usage_df = usage_df.head(6)
@@ -90,11 +103,16 @@ def load_pokemon(selected_format):
                 with col:
                     row = usage_df.take([i])
                     gen = selected_format.split(']')[0][1:]
+                    gen_number = int(gen.split()[1])
+                    if gen_number < 6:
+                        gen_path = gen
+                    else:
+                        gen_path = 'HOME'
                     pdex = row['Pdex'].iloc[0]
-                    image_path = f"./assets/{gen}/{pdex}.png"
+                    image_path = f"./assets/{gen_path}/{pdex}.png"
                     if not os.path.exists(image_path) and '-' in pdex:
                         pdex = pdex.split('-')[0]
-                        image_path = f"./assets/{gen}/{pdex}.png"
+                        image_path = f"./assets/{gen_path}/{pdex}.png"
                     image = Image.open(image_path)
                     image = image.resize((128, 128))
                     st.image(image, width=128)
@@ -102,7 +120,7 @@ def load_pokemon(selected_format):
                     st.markdown(name)
                     type1 = row['Type 1'].iloc[0]
                     type2 = row['Type 2'].iloc[0]
-                    if gen != 'Gen 9':
+                    if gen_number < 6:
                         if type1 == 'Fairy' or type2 == 'Fairy':
                             old_types = pd.read_csv('./input/old_types.csv')
                             old_row = old_types[old_types['pokemon'] == name]
@@ -156,9 +174,9 @@ with col1:
 
     selected_gen = st.selectbox('Choose a Gen', sorted(gens))
 
-    match_df = pd.read_csv(f'./output/matches/{selected_gen}_matches.csv')
+    match_df = pd.read_parquet(f'./output/matches/{selected_gen}_matches.parquet')
 
-    match_df['year_month'] = pd.to_datetime(match_df['year_month'], format='%Y-%m')
+    match_df['year_month'] = match_df['year_month'].dt.to_timestamp()
     match_df['quarter'] = match_df['year_month'].dt.to_period('Q').astype(str)
 
 

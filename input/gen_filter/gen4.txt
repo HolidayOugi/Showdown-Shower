@@ -529,3 +529,5 @@ Wormadam-Sandy
 Wormadam-Trash
 Unown-F
 Unown-I
+Unown-M
+Unown-W
