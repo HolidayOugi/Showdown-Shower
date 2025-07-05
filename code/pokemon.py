@@ -7,7 +7,7 @@ from tqdm import tqdm
 import json
 import glob
 
-def load_pokemon():
+def load_pokemon(input_folder, output_folder):
 
     def parse_log(log):
         lines = log.splitlines()
@@ -150,7 +150,7 @@ def load_pokemon():
 
         return pokemon_df, invalid_pokemon
 
-    input_dir = "../input/parquet"
+    input_dir = input_folder
     dfs = pd.DataFrame()
     file_list = os.listdir(input_dir)
     processed_files = set()
@@ -187,5 +187,5 @@ def load_pokemon():
                     dfs = pd.concat([dfs, df_pokemon], ignore_index=True)
 
     pokemon_df, invalid_pokemon = filter_pokemon(dfs)
-    pokemon_df.to_parquet('../output/pokemon.parquet', index=False)
-    invalid_pokemon.to_parquet('../output/invalid_pokemon.parquet', index=False)
+    pokemon_df.to_parquet(f'{output_folder}/pokemon.parquet', index=False)
+    invalid_pokemon.to_parquet(f'{output_folder}/invalid_pokemon.parquet', index=False)

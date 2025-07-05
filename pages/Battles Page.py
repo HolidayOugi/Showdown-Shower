@@ -249,13 +249,24 @@ with col2:
             )
         )
 
-        fig.add_bar(
-            x=[None],
-            y=[None],
-            name="<span style='visibility:hidden'>Format UBERS</span>",
-            marker=dict(color="rgba(0,0,0,0)"),
-            showlegend=True
-        )
+        if agg_df['format'].str.contains("ANYTHINGGOES").any():
+
+            fig.add_bar(
+                x=[None],
+                y=[None],
+                name="<span style='visibility:hidden'>Format ANYTHINGGOES</span>",
+                marker=dict(color="rgba(0,0,0,0)"),
+                showlegend=True
+            )
+        else:
+
+            fig.add_bar(
+                x=[None],
+                y=[None],
+                name="<span style='visibility:hidden'>Format UBERS</span>",
+                marker=dict(color="rgba(0,0,0,0)"),
+                showlegend=True
+            )
 
     st.plotly_chart(fig, use_container_width=True)
 

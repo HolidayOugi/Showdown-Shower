@@ -7,17 +7,17 @@ import glob
 from tqdm import tqdm
 
 
-def load_players():
+def load_players(input_folder, output_folder):
     with open('../output/tiers/formats.txt', 'r') as f:
         formats = [line.strip() for line in f if line.strip()]
 
     for f in formats:
-        df_path = f'../output/tiers/{f}.parquet'
+        df_path = f'{input_folder}/{f}.parquet'
         if os.path.exists(df_path):
             df = pd.read_parquet(df_path)
 
         else:
-            pattern = glob.escape(f'../output/tiers/{f}') + "_*.parquet"
+            pattern = glob.escape(f'{input_folder}/{f}') + "_*.parquet"
             parts = sorted(glob.glob(pattern))
 
             if parts:
@@ -75,4 +75,4 @@ def load_players():
         stats = stats.reset_index()[
             ['name', 'format', 'played', 'wins', 'losses', 'first_played', 'last_played', 'lowest_rating', 'highest_rating', 'rating_list', 'pokemon_used']]
 
-        stats.to_parquet(f'../output/players/{f}_players.parquet', index=False)
+        stats.to_parquet(f'{output_folder}/{f}_players.parquet', index=False)

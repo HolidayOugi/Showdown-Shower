@@ -4,7 +4,7 @@ import os
 from tqdm import tqdm
 import numpy as np
 
-def load_battle():
+def load_battle(input_folder, output_folder):
 
     def parse_log(log_text):
         lines = log_text.splitlines()
@@ -84,8 +84,8 @@ def load_battle():
 
         return winner, forfeit, list(team1), list(team2), max_turn, switch1, switch2
 
-    INPUT_FOLDER = "../input/parquet"
-    OUTPUT_FOLDER = "../output/tiers"
+    INPUT_FOLDER = input_folder
+    OUTPUT_FOLDER = output_folder
     tqdm.pandas()
 
     for filename in os.listdir(INPUT_FOLDER):

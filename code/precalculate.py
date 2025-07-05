@@ -13,7 +13,7 @@ from tqdm import tqdm
 
 warnings.simplefilter('ignore')
 
-def precalculate():
+def precalculate(input_folder, output_folder):
 
 
     sns.set(rc={'ytick.labelcolor': 'white', 'xtick.labelcolor': 'white'})
@@ -25,15 +25,15 @@ def precalculate():
 
         for format in tqdm(formats, desc=f"Calculating battle graphs", leave=False):
             print(format)
-            df_path = f'../output/tiers/{format}.parquet'
-            path = f'../graphs/battle/{format}'
+            df_path = f'{input_folder}/tiers/{format}.parquet'
+            path = f'{output_folder}/battle/{format}'
             os.makedirs(path, exist_ok=True)
 
             if os.path.exists(df_path):
                 format_df = pd.read_parquet(df_path)
 
             else:
-                pattern = glob.escape(f'../output/tiers/{format}') + "_*.parquet"
+                pattern = glob.escape(f'{input_folder}/tiers/{format}') + "_*.parquet"
                 parts = sorted(glob.glob(pattern))
 
                 if parts:
@@ -64,7 +64,7 @@ def precalculate():
 
 
 
-            pio.write_json(fig, f'../graphs/battle/{format}/fig1.json')
+            pio.write_json(fig, f'{output_folder}/battle/{format}/fig1.json')
 
             fig = px.scatter(
                 format_df_ratings,
@@ -78,7 +78,7 @@ def precalculate():
                 title=f'Number of turns based on rating in {format}'
             )
 
-            pio.write_json(fig, f'../graphs/battle/{format}/fig2.json')
+            pio.write_json(fig, f'{output_folder}/battle/{format}/fig2.json')
 
             max_rating = format_df_ratings['rating'].max()
             min_rating = format_df_ratings['rating'].min()
@@ -110,7 +110,7 @@ def precalculate():
                 fig.update_traces(mode='lines+markers')
                 fig.update_layout(xaxis_showticklabels=False, yaxis_range=[0, 100])
 
-                pio.write_json(fig, f'../graphs/battle/{format}/fig3.json')
+                pio.write_json(fig, f'{output_folder}/battle/{format}/fig3.json')
 
                 def team_similarity(row):
                     team1 = row['Team 1']
@@ -159,7 +159,7 @@ def precalculate():
                 fig.update_traces(mode='lines+markers')
                 fig.update_layout(xaxis_showticklabels=False, yaxis_range=[0, 100])
 
-                pio.write_json(fig, f'../graphs/battle/{format}/fig4.json')
+                pio.write_json(fig, f'{output_folder}/battle/{format}/fig4.json')
 
             format_df["uploadtime"] = pd.to_datetime(format_df["uploadtime"])
             format_df['weekday'] = format_df['uploadtime'].dt.weekday
@@ -186,7 +186,7 @@ def precalculate():
             fig_hour.update_layout(bargap=0)
             fig_hour.update_layout(yaxis_title='# Matches')
 
-            pio.write_json(fig_hour, f'../graphs/battle/{format}/fig_hour.json')
+            pio.write_json(fig_hour, f'{output_folder}/battle/{format}/fig_hour.json')
 
             fig_weekday = px.histogram(
                 format_df,
@@ -200,7 +200,7 @@ def precalculate():
             fig_weekday.update_layout(bargap=0)
             fig_weekday.update_layout(yaxis_title='# Matches')
 
-            pio.write_json(fig_weekday, f'../graphs/battle/{format}/fig_weekday.json')
+            pio.write_json(fig_weekday, f'{output_folder}/battle/{format}/fig_weekday.json')
 
             count_df = format_df.groupby(['weekday', 'hour_bin']).size().reset_index(name='match_count')
             weekday_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -235,7 +235,7 @@ def precalculate():
             ax.yaxis.label.set_color('white')
 
             plt.tight_layout()
-            fig.savefig(f'../graphs/battle/{format}/heatmap.png', bbox_inches='tight')
+            fig.savefig(f'{output_folder}/battle/{format}/heatmap.png', bbox_inches='tight')
             plt.close(fig)
 
             format_df['full_team'] = format_df.apply(lambda row: list(set(row['Team 1'] + row['Team 2'])), axis=1)
@@ -289,7 +289,7 @@ def precalculate():
                 barmode='stack',
             )
 
-            pio.write_json(fig, f'../graphs/battle/{format}/fig_types.json')
+            pio.write_json(fig, f'{output_folder}/battle/{format}/fig_types.json')
 
     def players():
 
@@ -298,8 +298,8 @@ def precalculate():
 
         for format in tqdm(formats, desc=f"Calculating player graphs", leave=False):
             print(format)
-            players_path = f'../output/players/{format}_players.parquet'
-            path = f'../graphs/players/{format}'
+            players_path = f'{input_folder}/players/{format}_players.parquet'
+            path = f'{output_folder}/players/{format}'
             os.makedirs(path, exist_ok=True)
 
             if os.path.exists(players_path):
@@ -331,7 +331,7 @@ def precalculate():
             )
 
             fig_json = pio.to_json(fig)
-            with open(f'../graphs/players/{format}/fig1.json', 'w', encoding='utf-8') as f:
+            with open(f'{output_folder}/players/{format}/fig1.json', 'w', encoding='utf-8') as f:
                 f.write(fig_json)
 
             fig = px.scatter(
@@ -347,7 +347,7 @@ def precalculate():
             )
 
             fig_json = pio.to_json(fig)
-            with open(f'../graphs/players/{format}/fig2.json', 'w', encoding='utf-8') as f:
+            with open(f'{output_folder}/players/{format}/fig2.json', 'w', encoding='utf-8') as f:
                 f.write(fig_json)
 
             players_df_filtered['winrate'] = (players_df_filtered['wins'] / players_df_filtered['played']) * 100
@@ -366,7 +366,7 @@ def precalculate():
             fig.update_layout(yaxis_title='# Players')
 
             fig_json = pio.to_json(fig)
-            with open(f'../graphs/players/{format}/fig3.json', 'w', encoding='utf-8') as f:
+            with open(f'{output_folder}/players/{format}/fig3.json', 'w', encoding='utf-8') as f:
                 f.write(fig_json)
 
             fig = px.histogram(
@@ -384,7 +384,7 @@ def precalculate():
             fig.update_xaxes(tickmode='linear', dtick=100)
 
             fig_json = pio.to_json(fig)
-            with open(f'../graphs/players/{format}/fig4.json', 'w', encoding='utf-8') as f:
+            with open(f'{output_folder}/players/{format}/fig4.json', 'w', encoding='utf-8') as f:
                 f.write(fig_json)
 
 

@@ -300,12 +300,8 @@ def load_pokemon(row):
                 st.empty()
 
 @st.cache_data
-def load_replays(matches_df, start_date, end_date):
-    matches_df = matches_df.drop(
-        columns=['format', 'hour', 'hour_bin', 'weekday', 'rating', 'player1', 'player2', 'Winner', 'Forfeit', 'Team 1',
-                 'Team 2', 'Turns', '# Switches 1', '# Switches 2', 'views'])
-    if 'inputlog' in matches_df:
-        matches_df = matches_df.drop(columns = ['inputlog'])
+def load_replays(matches_df_raw, start_date, end_date):
+    matches_df = matches_df_raw[['id', 'uploadtime']]
     filtered_df = matches_df[
         (matches_df["uploadtime"].dt.date >= start_date) &
         (matches_df["uploadtime"].dt.date <= end_date)

@@ -4,7 +4,7 @@ import glob
 
 from tqdm import tqdm
 
-def matches():
+def load_matches(input_folder, output_folder):
 
     formats = [
         os.path.splitext(f)[0]
@@ -21,13 +21,13 @@ def matches():
     for gen in gens:
         match_series = []
         gen_formats = [g for g in formats if gen in g]
-        for tier in tqdm(gen_formats, desc=f"Calculating matches of {gen}", leave=False):
-            df_path = f'../output/tiers/{tier}.parquet'
+        for tier in tqdm(gen_formats, desc=f"Calculating matches of {gen}"):
+            df_path = f'{input_folder}/{tier}.parquet'
             if os.path.exists(df_path):
                 df = pd.read_parquet(df_path)
 
             else:
-                pattern = glob.escape(f'../output/tiers/{tier}') + "_*.parquet"
+                pattern = glob.escape(f'{input_folder}/{tier}') + "_*.parquet"
                 parts = sorted(glob.glob(pattern))
 
                 if parts:
@@ -49,4 +49,4 @@ def matches():
             df_agg = df_agg.merge(total_matches, on=['year_month'])
             df_agg['percentage'] = (df_agg['count'] / df_agg['total']) * 100
             df_agg = df_agg.sort_values('year_month')
-            df_agg.to_parquet(f'../output/matches/{gen}_matches.parquet', index=False)
+            df_agg.to_parquet(f'{output_folder}/{gen}_matches.parquet', index=False)
