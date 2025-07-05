@@ -148,7 +148,7 @@ def combine_datasets(EXISTING_TIER_DIR, OUTPUT_DIR, PARQUET_DIR, parquet):
             df_replays = pd.read_parquet(df_path)
             total_played = len(df_replays)
         else:
-            pattern = glob.escape(f'{PARQUET_DIR}/{fmt}.parquet') + "_*.parquet"
+            pattern = glob.escape(f'{PARQUET_DIR}/{fmt}') + "_*.parquet"
             parts = sorted(glob.glob(pattern))
 
             if parts:

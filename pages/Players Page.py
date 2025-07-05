@@ -145,21 +145,21 @@ def load_player_graphs(row, selected_player):
 
         row['rating_list'] = eval(row['rating_list'])
 
-        rating_list = row['rating_list']
+    rating_list = row['rating_list']
 
-        if rating_list:
-            df_rating = pd.DataFrame({
-                'Match': list(range(1, len(rating_list) + 1)),
-                'Rating': rating_list
-            })
+    if rating_list is not None and rating_list.size > 0:
+        df_rating = pd.DataFrame({
+            'Match': list(range(1, len(rating_list) + 1)),
+            'Rating': rating_list
+        })
 
-            df_rating['Smoothed Rating'] = df_rating['Rating'].rolling(window=20, min_periods=1).mean()
+        df_rating['Smoothed Rating'] = df_rating['Rating'].rolling(window=20, min_periods=1).mean()
 
-            fig = px.line(df_rating, x='Match', y='Smoothed Rating',
-                          title=f"Rating history for {selected_player} in {selected_format}",
-                          markers=False)
+        fig = px.line(df_rating, x='Match', y='Smoothed Rating',
+                      title=f"Rating history for {selected_player} in {selected_format}",
+                      markers=False)
 
-            st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True)
 
     return row
 
