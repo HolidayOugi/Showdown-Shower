@@ -8,6 +8,7 @@ import plotly.graph_objects as go
 import os
 import glob
 import plotly.io as pio
+import numpy as np
 
 sns.set(rc={'ytick.labelcolor': 'white', 'xtick.labelcolor': 'white'})
 sns.set(rc={'axes.facecolor': '#0000FF', 'figure.facecolor': (0, 0, 0, 0)})
@@ -148,8 +149,12 @@ def load_player_graphs(row, selected_player):
     rating_list = row['rating_list']
 
     if rating_list is not None and rating_list.size > 0:
+        if isinstance(rating_list, (list, np.ndarray)):
+            match_range = list(range(1, len(rating_list) + 1))
+        else:
+            match_range = [1]
         df_rating = pd.DataFrame({
-            'Match': list(range(1, len(rating_list) + 1)),
+            'Match': match_range,
             'Rating': rating_list
         })
 

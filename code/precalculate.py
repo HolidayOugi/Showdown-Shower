@@ -23,7 +23,7 @@ def precalculate(input_folder, output_folder):
         with open('../output/tiers/formats.txt', 'r') as f:
             formats = [line.strip() for line in f if line.strip()]
 
-        for format in tqdm(formats, desc=f"Calculating battle graphs", leave=False):
+        for format in tqdm(formats, desc=f"Calculating battle graphs"):
             print(format)
             df_path = f'{input_folder}/tiers/{format}.parquet'
             path = f'{output_folder}/battle/{format}'
@@ -296,7 +296,7 @@ def precalculate(input_folder, output_folder):
         with open('../output/tiers/formats.txt', 'r') as f:
             formats = [line.strip() for line in f if line.strip()]
 
-        for format in tqdm(formats, desc=f"Calculating player graphs", leave=False):
+        for format in tqdm(formats, desc=f"Calculating player graphs"):
             print(format)
             players_path = f'{input_folder}/players/{format}_players.parquet'
             path = f'{output_folder}/players/{format}'

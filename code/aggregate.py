@@ -109,6 +109,8 @@ def combine_datasets(EXISTING_TIER_DIR, OUTPUT_DIR, PARQUET_DIR, parquet):
 
     df_new = pd.read_parquet(f"{OUTPUT_DIR}/{parquet}")
 
+    fmts = df_new['format'].unique()
+
     df = pd.concat([df_old, df_new], ignore_index=True)
 
     df['moves'] = df['moves'].apply(lambda x: json.loads(x) if isinstance(x, str) else x)
@@ -142,7 +144,7 @@ def combine_datasets(EXISTING_TIER_DIR, OUTPUT_DIR, PARQUET_DIR, parquet):
 
     usage_list = []
 
-    for fmt in agg_df['format'].unique():
+    for fmt in fmts:
         df_path = f'{PARQUET_DIR}/{fmt}.parquet'
         if os.path.exists(df_path):
             df_replays = pd.read_parquet(df_path)
@@ -163,7 +165,11 @@ def combine_datasets(EXISTING_TIER_DIR, OUTPUT_DIR, PARQUET_DIR, parquet):
         df_fmt['usage'] = (df_fmt['played'] / total_played) * 100
         usage_list.append(df_fmt)
 
-    agg_df = pd.concat(usage_list, ignore_index=True)
+    updated_formats = {df['format'].iloc[0] for df in usage_list if not df.empty}
+
+    agg_df = agg_df[~agg_df['format'].isin(updated_formats)]
+
+    agg_df = pd.concat([agg_df] + usage_list, ignore_index=True)
 
     agg_df = agg_df.drop(columns='total_format_played')
 
