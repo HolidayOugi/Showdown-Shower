@@ -23,6 +23,16 @@ def load_pokemon(input_folder, output_folder):
             if line.startswith('|win|'):
                 winner = line.split('|')[2]
 
+            elif line.startswith('|poke|p1|'):
+                species = line.split('|')[3].split(',')[0].strip()
+                species = species.replace('’', "'")
+                team1.add(species.title())
+
+            elif line.startswith('|poke|p2|'):
+                species = line.split('|')[3].split(',')[0].strip()
+                species = species.replace('’', "'")
+                team2.add(species.title())
+
             elif line.startswith('|switch|p1a:') or line.startswith('|switch|p2a:'):
                 match = re.match(r'\|switch\|(p[12]a): ([^|]+)\|([^|,]+)', line)
 

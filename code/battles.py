@@ -27,22 +27,32 @@ def load_battle(input_folder, output_folder):
             if line.startswith('|tie'):
                 winner = 'Tie'
 
-            if line.startswith('|player|p1|'):
+            elif line.startswith('|player|p1|'):
                 p1 = line.split('|')[3]
 
-            if line.startswith('|player|p2|'):
+            elif line.startswith('|player|p2|'):
                 p2 = line.split('|')[3]
 
-            if line.startswith('|teamsize|p1|'):
+            elif line.startswith('|teamsize|p1|'):
                 tsize1 = int(line.split('|')[3])
 
-            if line.startswith('|teamsize|p2|'):
+            elif line.startswith('|teamsize|p2|'):
                 tsize2 = int(line.split('|')[3])
 
-            if line.startswith('|win|'):
+            elif line.startswith('|win|'):
                 winner = line.split('|')[2]
 
-            if line.startswith('|switch|p1a:'):
+            elif line.startswith('|poke|p1|'):
+                species = line.split('|')[3].split(',')[0].strip()
+                species = species.replace('’', "'")
+                team1.add(species.title())
+
+            elif line.startswith('|poke|p2|'):
+                species = line.split('|')[3].split(',')[0].strip()
+                species = species.replace('’', "'")
+                team2.add(species.title())
+
+            elif line.startswith('|switch|p1a:'):
                 switch1 += 1
                 parts = line.split('|')
                 if len(parts) > 3:
@@ -50,7 +60,7 @@ def load_battle(input_folder, output_folder):
                     species = species.replace('’', "'")
                     team1.add(species.title())
 
-            if line.startswith('|switch|p2a:'):
+            elif line.startswith('|switch|p2a:'):
                 switch2 += 1
                 parts = line.split('|')
                 if len(parts) > 3:
@@ -58,13 +68,13 @@ def load_battle(input_folder, output_folder):
                     species = species.replace('’', "'")
                     team2.add(species.title())
 
-            if line.startswith('|turn|'):
+            elif line.startswith('|turn|'):
                 max_turn += 1
 
-            if line.startswith('|faint|p1a'):
+            elif line.startswith('|faint|p1a'):
                 faint1 += 1
 
-            if line.startswith('|faint|p2a'):
+            elif line.startswith('|faint|p2a'):
                 faint2 += 1
 
         if winner == p1:

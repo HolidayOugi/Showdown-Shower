@@ -21,7 +21,92 @@ if 'rows_shown' not in st.session_state:
 with open('./output/tiers/formats.txt', 'r') as f:
     formats = [line.strip() for line in f if line.strip()]
 
-selected_format = st.selectbox('Choose a Format', sorted(formats))
+
+@st.cache_data
+def get_player_data(file_path, selected_player):
+    players_df = pd.read_parquet(file_path)
+    players_df['pokemon_used'] = players_df['pokemon_used'].apply(eval)
+
+    if "name" in players_df.columns and selected_player in players_df["name"].values:
+        return players_df
+    return None
+
+def load_single_player(selected_player, parquet_dir):
+    for file in os.listdir(parquet_dir):
+        if file.endswith("_players.parquet"):
+            file_path = os.path.join(parquet_dir, file)
+            players_df = get_player_data(file_path, selected_player)
+            if players_df is not None:
+
+                selected_format = file.replace("_players.parquet", "")
+                with st.expander(f"{selected_format}"):
+                    st.subheader(f"Stats for {selected_player} in {selected_format}")
+
+                    col1, sep, col2 = st.columns([10, 1, 10])
+                    key = f"{selected_player} ({selected_format})"
+                    with col1:
+                        row, matches_df = load_player(players_df, selected_player, selected_format)
+                        selected_mode = st.selectbox('Choose a visualization mode', ['Separated', 'Combined'],
+                                                     key=f"{key}_mode")
+                        load_heatmap(row, matches_df, selected_mode, selected_format)
+
+                    with sep:
+                        st.markdown("<div style='border-left: 1px solid #ccc; height: 100%;'></div>",
+                                    unsafe_allow_html=True)
+
+                    with col2:
+                        load_player_graphs(row, selected_player, selected_format)
+
+                    col1, sep, col2 = st.columns([10, 1, 10])
+
+                    with col1:
+                        load_pokemon(row, selected_format)
+
+                    with sep:
+                        st.markdown("<div style='border-left: 1px solid #ccc; height: 100%;'></div>",
+                                    unsafe_allow_html=True)
+
+                    with col2:
+                        st.subheader(f"Replays of {row['name']} in {selected_format}")
+
+                        subcol1, subcol2 = st.columns(2)
+                        with subcol2:
+
+                            min_date = matches_df["uploadtime"].min().date()
+                            max_date = matches_df["uploadtime"].max().date()
+
+                            selected_dates = st.date_input(
+                                "Dates",
+                                value=(min_date, max_date),
+                                min_value=min_date,
+                                max_value=max_date,
+                                label_visibility="collapsed"
+                            )
+
+                            if len(selected_dates) == 1:
+                                start_date = selected_dates[0]
+                                end_date = max_date
+                            elif len(selected_dates) == 0:
+                                start_date = min_date
+                                end_date = max_date
+                            else:
+                                start_date, end_date = selected_dates
+
+                        with subcol1:
+
+                            replay_df = load_replays(matches_df, start_date, end_date)
+
+                            st.write(
+                                replay_df.head(st.session_state.rows_shown).to_markdown(index=False),
+                                unsafe_allow_html=True
+                            )
+
+                            if st.session_state.rows_shown < len(replay_df):
+                                if st.button("Load more", key=f"{key}_load"):
+                                    st.session_state.rows_shown += 5
+                                    st.rerun()
+
+
 
 @st.cache_data
 def load_parquet(selected_format):
@@ -32,8 +117,11 @@ def load_parquet(selected_format):
     return players_df, players_df['list_name'].tolist()
 
 @st.cache_data
-def load_player(players_df, selected_player):
-    row = players_df[players_df['list_name'] == selected_player].iloc[0]
+def load_player(players_df, selected_player, selected_format):
+    if 'list_name' in players_df.columns:
+        row = players_df[players_df['list_name'] == selected_player].iloc[0]
+    else:
+        row = players_df[players_df['name'] == selected_player].iloc[0]
     df_path = f'./output/tiers/{selected_format}.parquet'
     if os.path.exists(df_path):
         format_df = pd.read_parquet(df_path)
@@ -63,7 +151,7 @@ def load_player(players_df, selected_player):
 
 @st.cache_data
 def load_graphs(selected_format):
-    st.subheader("Total Player Stats")
+    st.subheader("Total Player Stats by Format")
 
     col1, col2 = st.columns(2)
 
@@ -90,8 +178,9 @@ def load_graphs(selected_format):
         st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True})
 
 @st.cache_data
-def load_player_graphs(row, selected_player):
+def load_player_graphs(row, selected_player, selected_format):
     col1, col2, col3 = st.columns(3)
+    key = f"{selected_player} ({selected_format})"
     with col1:
         fig = go.Figure(data=[go.Pie(
             values=[row['wins'], row['losses']],
@@ -131,7 +220,8 @@ def load_player_graphs(row, selected_player):
                 'zoom2d', 'pan2d', 'select2d', 'lasso2d',
                 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d'
             ]
-        })
+        },
+                        key=f"{key}_pie"                        )
 
     with col2:
         st.markdown(f"First Played: {row['first_played']}")
@@ -164,12 +254,12 @@ def load_player_graphs(row, selected_player):
                       title=f"Rating history for {selected_player} in {selected_format}",
                       markers=False)
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, key=f"{key}_rating")
 
     return row
 
 @st.cache_data
-def load_heatmap(row, format_df, selected_mode):
+def load_heatmap(row, format_df, selected_mode, selected_format):
     if selected_mode == 'Separated':
 
         weekday_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -243,8 +333,8 @@ def load_heatmap(row, format_df, selected_mode):
         st.pyplot(fig, use_container_width=True)
 
 @st.cache_data
-def load_pokemon(row):
-    st.markdown(f"### Top 6 Most Used Pokémon by {row['name']}")
+def load_pokemon(row, selected_format):
+    st.markdown(f"### Top 6 Most Used Pokémon by {row['name']} in {selected_format}")
 
     pokemon_df = pd.read_csv('./input/pokemon_stats.csv')
     usage_df = pd.DataFrame(row['pokemon_used'].items(), columns=['pokemon', 'count'])
@@ -316,6 +406,11 @@ def load_replays(matches_df_raw, start_date, end_date):
 
     return filtered_df
 
+
+parquet_dir = './output/players'
+
+selected_format = st.selectbox('Choose a Format', sorted(formats))
+
 bigcol1, sep, bigcol2 = st.columns([10, 1, 10])
 
 with bigcol1:
@@ -327,17 +422,19 @@ with sep:
 
 with bigcol2:
 
-    st.subheader("Individual Player Stats")
+    st.subheader("Individual Player Stats by Format")
     players_df, player_list = load_parquet(selected_format)
     selected_player = st.selectbox('Choose a player', player_list)
-    row, matches_df = load_player(players_df, selected_player)
-    load_player_graphs(row, selected_player)
+    row, matches_df = load_player(players_df, selected_player, selected_format)
+    load_player_graphs(row, selected_player, selected_format)
 
-    selected_mode = st.selectbox('Choose a visualization mode', ['Separated', 'Combined'])
+    key = f"{selected_player} ({selected_format})"
 
-    load_heatmap(row, matches_df, selected_mode)
+    selected_mode = st.selectbox('Choose a visualization mode', ['Separated', 'Combined'], key=f"{key}_mode")
 
-    load_pokemon(row)
+    load_heatmap(row, matches_df, selected_mode, selected_format)
+
+    load_pokemon(row, selected_format)
 
     st.subheader(f"Replays of {row['name']} in {selected_format}")
 
@@ -352,7 +449,8 @@ with bigcol2:
             value=(min_date, max_date),
             min_value=min_date,
             max_value=max_date,
-            label_visibility="collapsed"
+            label_visibility="collapsed",
+            key="individual"
         )
 
         if len(selected_dates) == 1:
@@ -374,6 +472,6 @@ with bigcol2:
         )
 
         if st.session_state.rows_shown < len(replay_df):
-            if st.button("Load more", key="load_more_button"):
+            if st.button("Load more", key=f"{key}_load"):
                 st.session_state.rows_shown += 5
                 st.rerun()
