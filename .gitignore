@@ -161,3 +161,4 @@ cython_debug/
 #.idea/
 
 /input/parquet/
+/input/new_data/

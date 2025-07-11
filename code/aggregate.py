@@ -60,7 +60,7 @@ for filename in os.listdir(NEW_DATA_DIR):
             df_new['format'] = os.path.splitext(filename)[0]
             df_existing['players'] = df_existing['players'].apply(normalize_players)
             df_merged = pd.concat([df_existing, df_new], ignore_index=True).drop_duplicates(subset='id')
-            df_merged.to_parquet(existing_file_path, index=False)
+            df_merged.to_parquet(existing_file_path, index=False, engine='pyarrow', row_group_size=1000)
             print(f"Joined {filename} → {target_file}")
         except Exception as e:
             print(e)
@@ -140,17 +140,17 @@ def combine_datasets(EXISTING_TIER_DIR, OUTPUT_DIR, PARQUET_DIR, parquet):
         'Speed': 'first'
     })
 
-    agg_df["win_rate"] = agg_df["won"] / agg_df["played"] * 100
+    agg_df['win_rate'] = (agg_df['won']/(agg_df['won']+agg_df['lost']))*100
 
     usage_list = []
 
     for fmt in fmts:
-        df_path = f'{PARQUET_DIR}/{fmt}.parquet'
+        df_path = f'{EXISTING_TIER_DIR}/tiers/{fmt}.parquet'
         if os.path.exists(df_path):
             df_replays = pd.read_parquet(df_path)
             total_played = len(df_replays)
         else:
-            pattern = glob.escape(f'{PARQUET_DIR}/{fmt}') + "_*.parquet"
+            pattern = glob.escape(f'{EXISTING_TIER_DIR}/tiers/{fmt}') + "_*.parquet"
             parts = sorted(glob.glob(pattern))
 
             if parts:
@@ -161,7 +161,6 @@ def combine_datasets(EXISTING_TIER_DIR, OUTPUT_DIR, PARQUET_DIR, parquet):
                 continue
 
         df_fmt = agg_df[agg_df['format'] == fmt].copy()
-        df_fmt['total_format_played'] = total_played
         df_fmt['usage'] = (df_fmt['played'] / total_played) * 100
         usage_list.append(df_fmt)
 
@@ -170,8 +169,6 @@ def combine_datasets(EXISTING_TIER_DIR, OUTPUT_DIR, PARQUET_DIR, parquet):
     agg_df = agg_df[~agg_df['format'].isin(updated_formats)]
 
     agg_df = pd.concat([agg_df] + usage_list, ignore_index=True)
-
-    agg_df = agg_df.drop(columns='total_format_played')
 
     agg_df['moves'] = agg_df['moves'].apply(lambda x: sorted(x) if isinstance(x, list) else x)
     agg_df['moves'] = agg_df['moves'].apply(lambda x: json.dumps(x))
