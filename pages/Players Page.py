@@ -79,6 +79,7 @@ def load_player(players_df, selected_player, selected_format):
             repo_id="HolidayOugi/showdown-shower-resources",
             repo_type="dataset",
             filename=f"tiers/{filename}"))
+
     format_df['id'] = format_df['id'].apply(lambda x: f"[{x}](https://replay.pokemonshowdown.com/{x})")
     format_df = format_df.sort_values(by=['uploadtime'])
     format_df["uploadtime"] = pd.to_datetime(format_df["uploadtime"])
