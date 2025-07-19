@@ -7,9 +7,12 @@ import glob
 from tqdm import tqdm
 
 
-def load_players(input_folder, output_folder):
-    with open('../output/tiers/formats.txt', 'r') as f:
-        formats = [line.strip() for line in f if line.strip()]
+def load_players(input_folder, output_folder, format_list=None):
+    if format_list is None:
+        with open('../input/formats.txt', 'r') as f:
+            formats = [line.strip() for line in f if line.strip()]
+    else:
+        formats = format_list
 
     for f in formats:
         df_path = f'{input_folder}/{f}.parquet'

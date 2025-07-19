@@ -9,6 +9,7 @@ import os
 import glob
 import plotly.io as pio
 import numpy as np
+from huggingface_hub import hf_hub_download
 
 sns.set(rc={'ytick.labelcolor': 'white', 'xtick.labelcolor': 'white'})
 sns.set(rc={'axes.facecolor': '#0000FF', 'figure.facecolor': (0, 0, 0, 0)})
@@ -18,102 +19,47 @@ st.title("👤 Players")
 if 'rows_shown' not in st.session_state:
     st.session_state.rows_shown = 5
 
-with open('./output/tiers/formats.txt', 'r') as f:
+with open('./input/formats.txt', 'r') as f:
     formats = [line.strip() for line in f if line.strip()]
 
 
 @st.cache_data
 def get_player_data(file_path, selected_player):
-    players_df = pd.read_parquet(file_path)
-    players_df['pokemon_used'] = players_df['pokemon_used'].apply(eval)
+    if not os.path.exists(file_path):
+        filename = os.path.basename(file_path)
+        players_df = pd.read_parquet(hf_hub_download(
+            repo_id="HolidayOugi/showdown-shower-resources",
+            repo_type="dataset",
+            filename=f"players/{filename}",
+        ))
+    else:
+        players_df = pd.read_parquet(file_path)
+    players_df["rating_list"] = players_df["rating_list"].apply(
+        lambda x: str(x) if isinstance(x, (np.ndarray, list)) else x)
+    players_df["pokemon_used"] = players_df["pokemon_used"].apply(lambda x: str(x) if isinstance(x, dict) else x)
 
     if "name" in players_df.columns and selected_player in players_df["name"].values:
         return players_df
     return None
 
-def load_single_player(selected_player, parquet_dir):
-    for file in os.listdir(parquet_dir):
-        if file.endswith("_players.parquet"):
-            file_path = os.path.join(parquet_dir, file)
-            players_df = get_player_data(file_path, selected_player)
-            if players_df is not None:
-
-                selected_format = file.replace("_players.parquet", "")
-                with st.expander(f"{selected_format}"):
-                    st.subheader(f"Stats for {selected_player} in {selected_format}")
-
-                    col1, sep, col2 = st.columns([10, 1, 10])
-                    key = f"{selected_player} ({selected_format})"
-                    with col1:
-                        row, matches_df = load_player(players_df, selected_player, selected_format)
-                        selected_mode = st.selectbox('Choose a visualization mode', ['Separated', 'Combined'],
-                                                     key=f"{key}_mode")
-                        load_heatmap(row, matches_df, selected_mode, selected_format)
-
-                    with sep:
-                        st.markdown("<div style='border-left: 1px solid #ccc; height: 100%;'></div>",
-                                    unsafe_allow_html=True)
-
-                    with col2:
-                        load_player_graphs(row, selected_player, selected_format)
-
-                    col1, sep, col2 = st.columns([10, 1, 10])
-
-                    with col1:
-                        load_pokemon(row, selected_format)
-
-                    with sep:
-                        st.markdown("<div style='border-left: 1px solid #ccc; height: 100%;'></div>",
-                                    unsafe_allow_html=True)
-
-                    with col2:
-                        st.subheader(f"Replays of {row['name']} in {selected_format}")
-
-                        subcol1, subcol2 = st.columns(2)
-                        with subcol2:
-
-                            min_date = matches_df["uploadtime"].min().date()
-                            max_date = matches_df["uploadtime"].max().date()
-
-                            selected_dates = st.date_input(
-                                "Dates",
-                                value=(min_date, max_date),
-                                min_value=min_date,
-                                max_value=max_date,
-                                label_visibility="collapsed"
-                            )
-
-                            if len(selected_dates) == 1:
-                                start_date = selected_dates[0]
-                                end_date = max_date
-                            elif len(selected_dates) == 0:
-                                start_date = min_date
-                                end_date = max_date
-                            else:
-                                start_date, end_date = selected_dates
-
-                        with subcol1:
-
-                            replay_df = load_replays(matches_df, start_date, end_date)
-
-                            st.write(
-                                replay_df.head(st.session_state.rows_shown).to_markdown(index=False),
-                                unsafe_allow_html=True
-                            )
-
-                            if st.session_state.rows_shown < len(replay_df):
-                                if st.button("Load more", key=f"{key}_load"):
-                                    st.session_state.rows_shown += 5
-                                    st.rerun()
-
-
-
 @st.cache_data
 def load_parquet(selected_format):
-    players_df = pd.read_parquet(f'./output/players/{selected_format}_players.parquet')
-    players_df['pokemon_used'] = players_df['pokemon_used'].apply(eval)
+    path = f'./output/players/{selected_format}_players.parquet'
+    if not os.path.exists(path):
+        filename = f"{selected_format}_players.parquet"
+        players_df = pd.read_parquet(hf_hub_download(
+            repo_id="HolidayOugi/showdown-shower-resources",
+            repo_type="dataset",
+            filename=f"players/{filename}",
+        ))
+    else:
+        players_df = pd.read_parquet(f'./output/players/{selected_format}_players.parquet')
     players_df = players_df.sort_values(by='played', ascending=False)
     players_df['list_name'] = players_df['name'] + ' - ' + players_df['played'].astype(str) + " matches"
+
+    players_df["rating_list"] = players_df["rating_list"].apply(lambda x: str(x) if isinstance(x, (np.ndarray, list)) else x)
+    players_df["pokemon_used"] = players_df["pokemon_used"].apply(lambda x: str(x) if isinstance(x, dict) else x)
+
     return players_df, players_df['list_name'].tolist()
 
 @st.cache_data
@@ -122,17 +68,17 @@ def load_player(players_df, selected_player, selected_format):
         row = players_df[players_df['list_name'] == selected_player].iloc[0]
     else:
         row = players_df[players_df['name'] == selected_player].iloc[0]
+
     df_path = f'./output/tiers/{selected_format}.parquet'
     if os.path.exists(df_path):
         format_df = pd.read_parquet(df_path)
 
     else:
-        pattern = glob.escape(f'./output/tiers/{selected_format}') + "_*.parquet"
-        parts = sorted(glob.glob(pattern))
-
-        if parts:
-            part_dfs = [pd.read_parquet(part) for part in parts]
-            format_df = pd.concat(part_dfs, ignore_index=True)
+       filename = f"{selected_format}_players.parquet"
+       format_df = pd.read_parquet(hf_hub_download(
+            repo_id="HolidayOugi/showdown-shower-resources",
+            repo_type="dataset",
+            filename=f"tiers/{filename}"))
     format_df['id'] = format_df['id'].apply(lambda x: f"[{x}](https://replay.pokemonshowdown.com/{x})")
     format_df = format_df.sort_values(by=['uploadtime'])
     format_df["uploadtime"] = pd.to_datetime(format_df["uploadtime"])
@@ -156,23 +102,63 @@ def load_graphs(selected_format):
     col1, col2 = st.columns(2)
 
     with col1:
-        with open(f"./graphs/players/{selected_format}/fig1.json", 'r', encoding='utf-8') as f:
+        path = f"./graphs/players/{selected_format}/fig1.json"
+
+        if not os.path.exists(path):
+
+            path = hf_hub_download(
+                    repo_id="HolidayOugi/showdown-shower-resources",
+                    repo_type="dataset",
+                    filename=f"graphs/players/{selected_format}/fig1.json"
+                )
+
+        with open(path, 'r', encoding='utf-8') as f:
             fig = pio.from_json(f.read())
 
         st.plotly_chart(fig, use_container_width=True)
 
-        with open(f"./graphs/players/{selected_format}/fig2.json", 'r', encoding='utf-8') as f:
+        path = f"./graphs/players/{selected_format}/fig2.json"
+
+        if not os.path.exists(path):
+
+            path = hf_hub_download(
+                    repo_id="HolidayOugi/showdown-shower-resources",
+                    repo_type="dataset",
+                    filename=f"graphs/players/{selected_format}/fig2.json"
+                )
+
+        with open(path, 'r', encoding='utf-8') as f:
             fig = pio.from_json(f.read())
 
         st.plotly_chart(fig, use_container_width=True)
 
     with col2:
-        with open(f"./graphs/players/{selected_format}/fig3.json", 'r', encoding='utf-8') as f:
+
+        path = f"./graphs/players/{selected_format}/fig3.json"
+
+        if not os.path.exists(path):
+
+            path = hf_hub_download(
+                    repo_id="HolidayOugi/showdown-shower-resources",
+                    repo_type="dataset",
+                    filename=f"graphs/players/{selected_format}/fig3.json"
+                )
+        with open(path, 'r', encoding='utf-8') as f:
             fig = pio.from_json(f.read())
 
         st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True})
 
-        with open(f"./graphs/players/{selected_format}/fig4.json", 'r', encoding='utf-8') as f:
+        path = f"./graphs/players/{selected_format}/fig4.json"
+
+        if not os.path.exists(path):
+
+            path = hf_hub_download(
+                    repo_id="HolidayOugi/showdown-shower-resources",
+                    repo_type="dataset",
+                    filename=f"graphs/players/{selected_format}/fig4.json"
+                )
+
+        with open(path, 'r', encoding='utf-8') as f:
             fig = pio.from_json(f.read())
 
         st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True})
@@ -234,7 +220,7 @@ def load_player_graphs(row, selected_player, selected_format):
 
     if isinstance(row['rating_list'], str):
 
-        row['rating_list'] = eval(row['rating_list'])
+        row['rating_list'] = np.fromstring(row['rating_list'].strip("[]"), sep=' ')
 
     rating_list = row['rating_list']
 
@@ -337,6 +323,10 @@ def load_pokemon(row, selected_format):
     st.markdown(f"### Top 6 Most Used Pokémon by {row['name']} in {selected_format}")
 
     pokemon_df = pd.read_csv('./input/pokemon_stats.csv')
+
+    if isinstance(row['pokemon_used'], str):
+        row['pokemon_used'] = eval(row['pokemon_used'])
+
     usage_df = pd.DataFrame(row['pokemon_used'].items(), columns=['pokemon', 'count'])
     usage_df['percent'] = usage_df['count'] / row['played'] * 100
     usage_df = usage_df.sort_values(by='percent', ascending=False)

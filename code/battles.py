@@ -133,7 +133,7 @@ def load_battle(input_folder, output_folder):
                                                '# Switches 2'])
 
                 df = df.drop(columns=['log', 'players', 'formatid', 'private', 'password'], errors='ignore')
-                df['format'] = os.path.splitext(filename)[0]
+                df['format'] = os.path.splitext(filename)[0].rsplit('_part', 1)[0]
                 df = pd.concat([df, df_new], axis=1)
                 df.to_parquet(output_path, index=False)
 

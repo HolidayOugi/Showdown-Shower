@@ -162,3 +162,5 @@ cython_debug/
 
 /input/parquet/
 /input/new_data/
+/output/
+/graphs/

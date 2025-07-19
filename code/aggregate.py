@@ -11,6 +11,7 @@ import glob
 import shutil
 import re
 import numpy as np
+import gc
 
 
 NEW_DATA_DIR = "../input/new_data"
@@ -27,19 +28,23 @@ for filename in os.listdir(NEW_DATA_DIR):
     new_file_path = os.path.join(NEW_DATA_DIR, filename)
     name_base = filename.replace(".parquet", "")
 
-    matches = [
-        f for f in os.listdir(PARQUET_DIR)
-        if f.endswith(".parquet") and f.startswith(name_base)
-    ]
+    escaped_name_base = glob.escape(name_base)
+    part_files = sorted(glob.glob(os.path.join(PARQUET_DIR, f"{escaped_name_base}_part*.parquet")))
+    single_file_path = os.path.join(PARQUET_DIR, f"{name_base}.parquet")
 
-    if not matches:
-        shutil.move(new_file_path, os.path.join(PARQUET_DIR, filename))
+    if not part_files and not os.path.exists(single_file_path):
+        shutil.copy2(new_file_path, single_file_path)
+        print(f"Copied file {name_base} to {new_file_path}")
     else:
-        target_file = matches[0]
-        existing_file_path = os.path.join(PARQUET_DIR, target_file)
         try:
             df_new = pd.read_parquet(new_file_path)
-            df_existing = pd.read_parquet(existing_file_path)
+
+            if part_files:
+                df_existing = pd.concat([pd.read_parquet(f) for f in part_files], ignore_index=True)
+                print(f"Loaded {len(part_files)} chunk(s) with {len(df_existing):,} rows.")
+            else:
+                df_existing = pd.read_parquet(single_file_path)
+                print(f"Loaded single file: {name_base}.parquet, rows: {len(df_existing):,}")
 
 
             def normalize_players(value):
@@ -60,8 +65,32 @@ for filename in os.listdir(NEW_DATA_DIR):
             df_new['format'] = os.path.splitext(filename)[0]
             df_existing['players'] = df_existing['players'].apply(normalize_players)
             df_merged = pd.concat([df_existing, df_new], ignore_index=True).drop_duplicates(subset='id')
-            df_merged.to_parquet(existing_file_path, index=False, engine='pyarrow', row_group_size=1000)
-            print(f"Joined {filename} → {target_file}")
+            del df_new, df_existing
+            gc.collect()
+            base_path = os.path.join(PARQUET_DIR, name_base)
+            if len(df_merged) > 1_000_000:
+                print(f"DataFrame has {len(df_merged)} rows, splitting into chunks.")
+                chunk_size = 1_000_000
+                num_chunks = (len(df_merged) + chunk_size - 1) // chunk_size
+
+                old_chunks = glob.glob(f"{base_path}_part*.parquet")
+                for f in old_chunks:
+                    os.remove(f)
+                    print(f"  → Removed old chunk: {os.path.basename(f)}")
+
+                for i in range(num_chunks):
+                    chunk = df_merged.iloc[i * chunk_size : (i + 1) * chunk_size]
+                    chunk_file = f"{base_path}_part{i+1}.parquet"
+                    chunk.to_parquet(chunk_file, index=False, engine='pyarrow', row_group_size=1000)
+                    print(f"  → Saved chunk {i+1} to {os.path.basename(chunk_file)}")
+
+                single_file = f"{base_path}.parquet"
+                if os.path.exists(single_file):
+                    os.remove(single_file)
+                    print(f"  → Removed old single file: {os.path.basename(single_file)}")
+            else:
+                df_merged.to_parquet(f"{base_path}.parquet", index=False, engine='pyarrow', row_group_size=1000)
+                print(f"Joined {filename} → {name_base}.parquet")
         except Exception as e:
             print(e)
             continue
@@ -69,6 +98,26 @@ for filename in os.listdir(NEW_DATA_DIR):
 os.makedirs(f"{OUTPUT_DIR}/tiers", exist_ok=True)
 
 load_battle(NEW_DATA_DIR, f"{OUTPUT_DIR}/tiers")
+
+part_files = glob.glob(os.path.join(f"{OUTPUT_DIR}/tiers", '*_part*.parquet'))
+
+file_groups = {}
+for f in part_files:
+    base = os.path.basename(f).rsplit('_part', 1)[0]
+    full_base = os.path.join(f"{OUTPUT_DIR}/tiers", base)
+    file_groups.setdefault(full_base, []).append(f)
+
+for base_path, files in file_groups.items():
+    files.sort()
+    df_list = [pd.read_parquet(f) for f in files]
+    df_merged = pd.concat(df_list, ignore_index=True)
+    df_merged.to_parquet(f"{base_path}.parquet", index=False, engine='pyarrow', row_group_size=1000)
+
+    for f in files:
+        os.remove(f)
+
+    del df_list, df_merged
+    gc.collect()
 
 
 for filename in os.listdir(f"{OUTPUT_DIR}/tiers"):
@@ -181,9 +230,11 @@ combine_datasets(EXISTING_TIER_DIR, OUTPUT_DIR, PARQUET_DIR, "invalid_pokemon.pa
 os.makedirs(f"{EXISTING_TIER_DIR}/players", exist_ok=True)
 os.makedirs(f"{EXISTING_TIER_DIR}/matches", exist_ok=True)
 
-load_players(f"{EXISTING_TIER_DIR}/tiers", f"{EXISTING_TIER_DIR}/players")
+format_list = [os.path.splitext(f)[0] for f in os.listdir(f"{OUTPUT_DIR}/tiers") if os.path.isfile(f"{OUTPUT_DIR}/tiers/{f}")]
+
+load_players(f"{EXISTING_TIER_DIR}/tiers", f"{EXISTING_TIER_DIR}/players", format_list)
 load_matches(f"{EXISTING_TIER_DIR}/tiers", f"{EXISTING_TIER_DIR}/matches")
-precalculate(EXISTING_TIER_DIR, "../graphs")
+precalculate(EXISTING_TIER_DIR, "../graphs", format_list)
 
 if os.path.exists(OUTPUT_DIR):
     shutil.rmtree(OUTPUT_DIR)

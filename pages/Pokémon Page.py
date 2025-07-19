@@ -5,7 +5,7 @@ from PIL import Image
 import plotly.graph_objects as go
 import base64
 import os
-import glob
+from huggingface_hub import hf_hub_download
 
 st.title("🧬 Pokémon")
 
@@ -20,7 +20,14 @@ def load_more():
 
 @st.cache_data
 def load_parquet():
-    df = pd.read_parquet('./output/pokemon.parquet')
+    if not os.path.exists('./output/pokemon.parquet'):
+        df = pd.read_parquet(hf_hub_download(
+            repo_id="HolidayOugi/showdown-shower-resources",
+            repo_type="dataset",
+            filename="pokemon.parquet"
+        ))
+    else:
+        df = pd.read_parquet('./output/pokemon.parquet')
     df['moves'] = df['moves'].apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
     df['moves'] = df['moves'].apply(lambda x: sorted(x, key=lambda x: x[1], reverse=True))
     return df
@@ -489,12 +496,11 @@ def load_format_df(pokemon, selected_format):
         format_df = pd.read_parquet(df_path)
 
     else:
-        pattern = glob.escape(f'./output/tiers/{selected_format}') + "_*.parquet"
-        parts = sorted(glob.glob(pattern))
-
-        if parts:
-            part_dfs = [pd.read_parquet(part) for part in parts]
-            format_df = pd.concat(part_dfs, ignore_index=True)
+        format_df = pd.read_parquet(hf_hub_download(
+            repo_id="HolidayOugi/showdown-shower-resources",
+            repo_type="dataset",
+            filename=f"tiers/{selected_format}.parquet"
+        ))
 
     format_df = format_df[format_df['Team 1'].apply(lambda x: pokemon in x) | format_df['Team 2'].apply(lambda x: pokemon in x)]
     format_df['id'] = format_df['id'].apply(lambda x: f"[{x}](https://replay.pokemonshowdown.com/{x})")

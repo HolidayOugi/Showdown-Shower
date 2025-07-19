@@ -9,3 +9,5 @@ seaborn
 fastparquet
 tqdm
 numpy
+huggingface_hub
+hf-xet

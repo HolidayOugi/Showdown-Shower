@@ -4,6 +4,8 @@ import plotly.express as px
 import os
 from PIL import Image
 import plotly.io as pio
+from huggingface_hub import hf_hub_download
+
 
 if 'barmode' not in st.session_state:
     st.session_state.barmode = "Total"
@@ -21,7 +23,7 @@ st.title("📊 Battles")
 
 
 
-with open('./output/tiers/formats.txt', 'r') as f:
+with open('./input/formats.txt', 'r') as f:
     formats = [line.strip() for line in f if line.strip()]
 
 gens = sorted(
@@ -41,56 +43,139 @@ def load_graphs(selected_format):
             if os.path.exists(path):
 
                 fig = pio.read_json(path)
+                st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},  key=f"{selected_format}_fig1")
 
-            st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},  key=f"{selected_format}_fig1")
+            else:
+                try:
+                    fig = pio.read_json(hf_hub_download(
+                        repo_id="HolidayOugi/showdown-shower-resources",
+                        repo_type="dataset",
+                        filename=f"graphs/battle/{selected_format}/fig1.json"
+                    ))
+                    st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},
+                                    key=f"{selected_format}_fig1")
+                except Exception as e:
+                    pass
 
             path = f"./graphs/battle/{selected_format}/fig2.json"
 
             if os.path.exists(path):
-                fig = pio.read_json(path)
 
-            st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},  key=f"{selected_format}_fig2")
+                fig = pio.read_json(path)
+                st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},
+                                key=f"{selected_format}_fig2")
+
+            else:
+                try:
+                    fig = pio.read_json(hf_hub_download(
+                        repo_id="HolidayOugi/showdown-shower-resources",
+                        repo_type="dataset",
+                        filename=f"graphs/battle/{selected_format}/fig2.json"
+                    ))
+                    st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},
+                                    key=f"{selected_format}_fig2")
+                except Exception as e:
+                    pass
 
         with subcol2:
 
             path = f"./graphs/battle/{selected_format}/fig3.json"
 
             if os.path.exists(path):
-                fig = pio.read_json(path)
 
-            st.plotly_chart(fig, use_container_width=True,  key=f"{selected_format}_fig3")
+                fig = pio.read_json(path)
+                st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},
+                                key=f"{selected_format}_fig3")
+
+            else:
+                try:
+                    fig = pio.read_json(hf_hub_download(
+                        repo_id="HolidayOugi/showdown-shower-resources",
+                        repo_type="dataset",
+                        filename=f"graphs/battle/{selected_format}/fig3.json"
+                    ))
+                    st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},
+                                    key=f"{selected_format}_fig3")
+                except Exception as e:
+                    pass
 
             path = f"./graphs/battle/{selected_format}/fig4.json"
 
             if os.path.exists(path):
-                fig = pio.read_json(path)
 
-            st.plotly_chart(fig, use_container_width=True,  key=f"{selected_format}_fig4")
+                fig = pio.read_json(path)
+                st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},
+                                key=f"{selected_format}_fig4")
+
+            else:
+                try:
+                    fig = pio.read_json(hf_hub_download(
+                        repo_id="HolidayOugi/showdown-shower-resources",
+                        repo_type="dataset",
+                        filename=f"graphs/battle/{selected_format}/fig4.json"
+                    ))
+                    st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},
+                                    key=f"{selected_format}_fig4")
+                except Exception as e:
+                    pass
 
 @st.cache_data
 def load_pokemon(selected_format):
 
         st.markdown(f"### Most popular types in {selected_format}")
 
-        fig = pio.read_json(f"./graphs/battle/{selected_format}/fig_types.json")
+        path = f"./graphs/battle/{selected_format}/fig_types.json"
 
-        st.plotly_chart(fig, use_container_width=True, config={
-            'displayModeBar': False,
-            'displaylogo': False,
-            'scrollZoom': False,
-            'doubleClick': False,
-            'editable': False,
-            'staticPlot': False,
-            'responsive': True,
-            'modeBarButtonsToRemove': [
-                'zoom2d', 'pan2d', 'select2d', 'lasso2d',
-                'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d'
-            ]
-        })
+        if os.path.exists(path):
+            fig = pio.read_json(path)
+            st.plotly_chart(fig, use_container_width=True, config={
+                'displayModeBar': False,
+                'displaylogo': False,
+                'scrollZoom': False,
+                'doubleClick': False,
+                'editable': False,
+                'staticPlot': False,
+                'responsive': True,
+                'modeBarButtonsToRemove': [
+                    'zoom2d', 'pan2d', 'select2d', 'lasso2d',
+                    'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d'
+                ]
+            })
+        else:
+            try:
+                fig = pio.read_json(hf_hub_download(
+                    repo_id="HolidayOugi/showdown-shower-resources",
+                    repo_type="dataset",
+                    filename=f"graphs/battle/{selected_format}/fig_types.json"
+                ))
+                st.plotly_chart(fig, use_container_width=True, config={
+                    'displayModeBar': False,
+                    'displaylogo': False,
+                    'scrollZoom': False,
+                    'doubleClick': False,
+                    'editable': False,
+                    'staticPlot': False,
+                    'responsive': True,
+                    'modeBarButtonsToRemove': [
+                        'zoom2d', 'pan2d', 'select2d', 'lasso2d',
+                        'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d'
+                    ]
+                })
+            except Exception as e:
+                pass
+
 
         st.markdown(f"### Top 6 Most Used Pokémon in {selected_format}")
 
-        usage_df = pd.read_parquet('./output/pokemon.parquet')
+
+        if not os.path.exists('./output/pokemon.parquet'):
+            usage_df =  pd.read_parquet(hf_hub_download(
+            repo_id="HolidayOugi/showdown-shower-resources",
+            repo_type="dataset",
+            filename="pokemon.parquet"
+        ))
+        else:
+            usage_df = pd.read_parquet('./output/pokemon.parquet')
         usage_df = usage_df[usage_df['format'] == selected_format]
         usage_df = usage_df.sort_values(by='usage', ascending=False)
         usage_df = usage_df.head(6)
@@ -154,18 +239,65 @@ def load_heatmap(selected_mode, selected_format):
 
         with subcol1:
 
-            fig = pio.read_json(f"./graphs/battle/{selected_format}/fig_hour.json")
-            st.plotly_chart(fig, use_container_width=True)
+            path = f"./graphs/battle/{selected_format}/fig_hour.json"
+
+            if os.path.exists(path):
+
+                fig = pio.read_json(path)
+                st.plotly_chart(fig, use_container_width=True,
+                                key=f"{selected_format}_fig_hour")
+
+            else:
+                try:
+                    fig = pio.read_json(hf_hub_download(
+                        repo_id="HolidayOugi/showdown-shower-resources",
+                        repo_type="dataset",
+                        filename=f"graphs/battle/{selected_format}/fig_hour.json"
+                    ))
+                    st.plotly_chart(fig, use_container_width=True,
+                                    key=f"{selected_format}_fig_hour")
+                except Exception as e:
+                    pass
 
         with subcol2:
 
-            fig = pio.read_json(f"./graphs/battle/{selected_format}/fig_weekday.json")
+            path = f"./graphs/battle/{selected_format}/fig_weekday.json"
 
-            st.plotly_chart(fig, use_container_width=True)
+            if os.path.exists(path):
+
+                fig = pio.read_json(path)
+                st.plotly_chart(fig, use_container_width=True,
+                                key=f"{selected_format}_fig_weekday")
+
+            else:
+                try:
+                    fig = pio.read_json(hf_hub_download(
+                        repo_id="HolidayOugi/showdown-shower-resources",
+                        repo_type="dataset",
+                        filename=f"graphs/battle/{selected_format}/fig_weekday.json"
+                    ))
+                    st.plotly_chart(fig, use_container_width=True,
+                                    key=f"{selected_format}_fig_weekday")
+                except Exception as e:
+                    pass
 
     else:
 
-        st.image(f"./graphs/battle/{selected_format}/heatmap.png", use_container_width=True)
+        path = f"./graphs/battle/{selected_format}/heatmap.png"
+
+        if os.path.exists(path):
+            st.image(f"./graphs/battle/{selected_format}/heatmap.png", use_container_width=True)
+
+        else:
+            try:
+                image_path = hf_hub_download(
+                    repo_id="HolidayOugi/showdown-shower-resources",
+                    repo_type="dataset",
+                    filename=f"graphs/battle/{selected_format}/heatmap.png"
+                )
+                st.image(image_path, use_container_width=True)
+            except Exception as e:
+                pass
 
 
 col1, col2 = st.columns([3, 10])
@@ -174,7 +306,15 @@ with col1:
 
     selected_gen = st.selectbox('Choose a Gen', sorted(gens))
 
-    match_df = pd.read_parquet(f'./output/matches/{selected_gen}_matches.parquet')
+    if not os.path.exists(f'./output/matches/{selected_gen}_matches.parquet'):
+        match_df = pd.read_parquet(hf_hub_download(
+            repo_id="HolidayOugi/showdown-shower-resources",
+            repo_type="dataset",
+            filename=f"matches/{selected_gen}_matches.parquet"
+        ))
+
+    else:
+        match_df = pd.read_parquet(f'./output/matches/{selected_gen}_matches.parquet')
 
     match_df['year_month'] = match_df['year_month'].dt.to_timestamp()
     match_df['quarter'] = match_df['year_month'].dt.to_period('Q').astype(str)

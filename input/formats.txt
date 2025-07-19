@@ -1,3 +1,4 @@
+[Gen 1] LC
 [Gen 1] NU
 [Gen 1] OU
 [Gen 1] PU
@@ -5,12 +6,15 @@
 [Gen 1] UBERS
 [Gen 1] UU
 [Gen 1] ZU
+[Gen 2] LC
 [Gen 2] NU
 [Gen 2] OU
 [Gen 2] PU
 [Gen 2] UBERS
 [Gen 2] UU
 [Gen 2] ZU
+[Gen 3] LC
+[Gen 3] MONOTYPE
 [Gen 3] NU
 [Gen 3] OU
 [Gen 3] PU
@@ -20,6 +24,8 @@
 [Gen 3] UUBL
 [Gen 3] ZU
 [Gen 4] ANYTHINGGOES
+[Gen 4] LC
+[Gen 4] MONOTYPE
 [Gen 4] NU
 [Gen 4] OU
 [Gen 4] PU
@@ -27,6 +33,8 @@
 [Gen 4] UU
 [Gen 4] ZU
 [Gen 5] ANYTHINGGOES
+[Gen 5] LC
+[Gen 5] MONOTYPE
 [Gen 5] NU
 [Gen 5] OU
 [Gen 5] PU
@@ -35,6 +43,8 @@
 [Gen 5] UU
 [Gen 5] ZU
 [Gen 6] ANYTHINGGOES
+[Gen 6] LC
+[Gen 6] MONOTYPE
 [Gen 6] NU
 [Gen 6] OU
 [Gen 6] PU
@@ -43,6 +53,8 @@
 [Gen 6] UU
 [Gen 6] ZU
 [Gen 7] ANYTHINGGOES
+[Gen 7] LC
+[Gen 7] MONOTYPE
 [Gen 7] NU
 [Gen 7] OU
 [Gen 7] PU
@@ -51,6 +63,8 @@
 [Gen 7] UU
 [Gen 7] ZU
 [Gen 8] ANYTHINGGOES
+[Gen 8] LC
+[Gen 8] MONOTYPE
 [Gen 8] NU
 [Gen 8] OU
 [Gen 8] PU
@@ -59,6 +73,8 @@
 [Gen 8] UU
 [Gen 8] ZU
 [Gen 9] ANYTHINGGOES
+[Gen 9] LC
+[Gen 9] MONOTYPE
 [Gen 9] NU
 [Gen 9] OU
 [Gen 9] PU

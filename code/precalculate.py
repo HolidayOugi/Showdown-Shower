@@ -13,15 +13,18 @@ from tqdm import tqdm
 
 warnings.simplefilter('ignore')
 
-def precalculate(input_folder, output_folder):
+def precalculate(input_folder, output_folder, format_list=None):
 
 
     sns.set(rc={'ytick.labelcolor': 'white', 'xtick.labelcolor': 'white'})
     sns.set(rc={'axes.facecolor': '#0000FF', 'figure.facecolor': (0, 0, 0, 0)})
 
     def battle():
-        with open('../output/tiers/formats.txt', 'r') as f:
-            formats = [line.strip() for line in f if line.strip()]
+        if format_list is None:
+            with open('../input/formats.txt', 'r') as f:
+                formats = [line.strip() for line in f if line.strip()]
+        else:
+            formats = format_list
 
         for format in tqdm(formats, desc=f"Calculating battle graphs"):
             print(format)
@@ -293,8 +296,11 @@ def precalculate(input_folder, output_folder):
 
     def players():
 
-        with open('../output/tiers/formats.txt', 'r') as f:
-            formats = [line.strip() for line in f if line.strip()]
+        if format_list is None:
+            with open('../input/formats.txt', 'r') as f:
+                formats = [line.strip() for line in f if line.strip()]
+        else:
+            formats = format_list
 
         for format in tqdm(formats, desc=f"Calculating player graphs"):
             print(format)
