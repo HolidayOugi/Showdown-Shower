@@ -224,7 +224,7 @@ def load_player_graphs(row, selected_player, selected_format):
 
     rating_list = row['rating_list']
 
-    if rating_list is not None and not pd.isna(rating_list) and rating_list.size > 0:
+    if rating_list is not None and rating_list.size > 0:
         if isinstance(rating_list, np.ndarray) and rating_list.ndim == 0:
             rating_list = np.atleast_1d(rating_list)
         if isinstance(rating_list, (list, np.ndarray)):
