@@ -33,4 +33,4 @@ for base_path, files in file_groups.items():
 load_pokemon("../input/parquet", "../output")
 load_players("../output/tiers", "../output/players")
 load_matches("../output/tiers", "../output/matches")
-precalculate("../output", "../graphs")
+precalculate("../output", "../output/graphs")

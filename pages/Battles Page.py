@@ -38,7 +38,7 @@ def load_graphs(selected_format):
 
         with subcol1:
 
-            path = f"./graphs/battle/{selected_format}/fig1.json"
+            path = f"./output/graphs/battle/{selected_format}/fig1.json"
 
             if os.path.exists(path):
 
@@ -57,7 +57,7 @@ def load_graphs(selected_format):
                 except Exception as e:
                     pass
 
-            path = f"./graphs/battle/{selected_format}/fig2.json"
+            path = f"./output/graphs/battle/{selected_format}/fig2.json"
 
             if os.path.exists(path):
 
@@ -79,7 +79,7 @@ def load_graphs(selected_format):
 
         with subcol2:
 
-            path = f"./graphs/battle/{selected_format}/fig3.json"
+            path = f"./output/graphs/battle/{selected_format}/fig3.json"
 
             if os.path.exists(path):
 
@@ -99,7 +99,7 @@ def load_graphs(selected_format):
                 except Exception as e:
                     pass
 
-            path = f"./graphs/battle/{selected_format}/fig4.json"
+            path = f"./output/graphs/battle/{selected_format}/fig4.json"
 
             if os.path.exists(path):
 
@@ -124,7 +124,7 @@ def load_pokemon(selected_format):
 
         st.markdown(f"### Most popular types in {selected_format}")
 
-        path = f"./graphs/battle/{selected_format}/fig_types.json"
+        path = f"./output/graphs/battle/{selected_format}/fig_types.json"
 
         if os.path.exists(path):
             fig = pio.read_json(path)
@@ -239,7 +239,7 @@ def load_heatmap(selected_mode, selected_format):
 
         with subcol1:
 
-            path = f"./graphs/battle/{selected_format}/fig_hour.json"
+            path = f"./output/graphs/battle/{selected_format}/fig_hour.json"
 
             if os.path.exists(path):
 
@@ -261,7 +261,7 @@ def load_heatmap(selected_mode, selected_format):
 
         with subcol2:
 
-            path = f"./graphs/battle/{selected_format}/fig_weekday.json"
+            path = f"./output/graphs/battle/{selected_format}/fig_weekday.json"
 
             if os.path.exists(path):
 
@@ -283,19 +283,19 @@ def load_heatmap(selected_mode, selected_format):
 
     else:
 
-        path = f"./graphs/battle/{selected_format}/heatmap.png"
+        path = f"./output/graphs/battle/{selected_format}/heatmap.png"
 
         if os.path.exists(path):
-            st.image(f"./graphs/battle/{selected_format}/heatmap.png", use_container_width=True)
+            st.image(path, use_container_width=True)
 
         else:
             try:
-                image_path = hf_hub_download(
+                path = hf_hub_download(
                     repo_id="HolidayOugi/showdown-shower-resources",
                     repo_type="dataset",
                     filename=f"graphs/battle/{selected_format}/heatmap.png"
                 )
-                st.image(image_path, use_container_width=True)
+                st.image(path, use_container_width=True)
             except Exception as e:
                 pass
 

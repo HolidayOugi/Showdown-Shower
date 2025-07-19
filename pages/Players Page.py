@@ -6,7 +6,6 @@ import seaborn as sns
 import plotly.express as px
 import plotly.graph_objects as go
 import os
-import glob
 import plotly.io as pio
 import numpy as np
 from huggingface_hub import hf_hub_download
@@ -103,7 +102,7 @@ def load_graphs(selected_format):
     col1, col2 = st.columns(2)
 
     with col1:
-        path = f"./graphs/players/{selected_format}/fig1.json"
+        path = f"./output/graphs/players/{selected_format}/fig1.json"
 
         if not os.path.exists(path):
 
@@ -118,7 +117,7 @@ def load_graphs(selected_format):
 
         st.plotly_chart(fig, use_container_width=True)
 
-        path = f"./graphs/players/{selected_format}/fig2.json"
+        path = f"./output/graphs/players/{selected_format}/fig2.json"
 
         if not os.path.exists(path):
 
@@ -135,7 +134,7 @@ def load_graphs(selected_format):
 
     with col2:
 
-        path = f"./graphs/players/{selected_format}/fig3.json"
+        path = f"./output/graphs/players/{selected_format}/fig3.json"
 
         if not os.path.exists(path):
 
@@ -149,7 +148,7 @@ def load_graphs(selected_format):
 
         st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True})
 
-        path = f"./graphs/players/{selected_format}/fig4.json"
+        path = f"./output/graphs/players/{selected_format}/fig4.json"
 
         if not os.path.exists(path):
 

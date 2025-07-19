@@ -234,7 +234,7 @@ format_list = [os.path.splitext(f)[0] for f in os.listdir(f"{OUTPUT_DIR}/tiers")
 
 load_players(f"{EXISTING_TIER_DIR}/tiers", f"{EXISTING_TIER_DIR}/players", format_list)
 load_matches(f"{EXISTING_TIER_DIR}/tiers", f"{EXISTING_TIER_DIR}/matches")
-precalculate(EXISTING_TIER_DIR, "../graphs", format_list)
+precalculate(EXISTING_TIER_DIR, "../output/graphs", format_list)
 
 if os.path.exists(OUTPUT_DIR):
     shutil.rmtree(OUTPUT_DIR)
