@@ -74,7 +74,7 @@ def load_player(players_df, selected_player, selected_format):
         format_df = pd.read_parquet(df_path)
 
     else:
-       filename = f"{selected_format}_players.parquet"
+       filename = f"{selected_format}.parquet"
        format_df = pd.read_parquet(hf_hub_download(
             repo_id="HolidayOugi/showdown-shower-resources",
             repo_type="dataset",
