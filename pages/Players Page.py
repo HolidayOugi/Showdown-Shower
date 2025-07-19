@@ -348,9 +348,24 @@ def load_pokemon(row, selected_format):
                     gen_path = 'HOME'
                 pdex = row_p['Pdex'].iloc[0]
                 image_path = f"./assets/{gen_path}/{pdex}.png"
-                if not os.path.exists(image_path) and '-' in pdex:
-                    pdex = pdex.split('-')[0]
-                    image_path = f"./assets/{gen_path}/{pdex}.png"
+                if not os.path.exists(image_path):
+                    if not '-' in pdex:
+                        image_path = hf_hub_download(
+                            repo_id="HolidayOugi/showdown-shower-resources",
+                            repo_type="dataset",
+                            filename=f"assets/{gen_path}/{pdex}.png"
+                        )
+                    else:
+                        pdex = pdex.split('-')[0]
+                        new_image_path = f"./assets/{gen_path}/{pdex}.png"
+                        if not os.path.exists(new_image_path):
+                            image_path = hf_hub_download(
+                                repo_id="HolidayOugi/showdown-shower-resources",
+                                repo_type="dataset",
+                                filename=f"assets/{gen_path}/{pdex}.png"
+                            )
+                        else:
+                            image_path = new_image_path
                 image = Image.open(image_path)
                 image = image.resize((128, 128))
                 st.image(image, width=128)
@@ -364,19 +379,47 @@ def load_pokemon(row, selected_format):
                         old_row = old_types[old_types['pokemon'] == name]
                         type1 = old_row['Type 1'].iloc[0]
                         type2 = old_row['Type 2'].iloc[0]
-                    image1 = Image.open(f"./assets/icons/old/{type1.lower()}.png")
+                    type1_path = f"./assets/icons/old/{type1.lower()}.png"
+                    if not os.path.exists(type1_path):
+                        type1_path = hf_hub_download(
+                            repo_id="HolidayOugi/showdown-shower-resources",
+                            repo_type="dataset",
+                            filename=f"assets/icons/old/{type1.lower()}.png"
+                        )
+                    image1 = Image.open(type1_path)
                     image1 = image1.resize((192, 64))
                     st.image(image1, width=64)
                     if not pd.isna(type2) and type2 != "":
-                        image2 = Image.open(f"./assets/icons/old/{type2.lower()}.png")
+                        type2_path = f"./assets/icons/old/{type2.lower()}.png"
+                        if not os.path.exists(type2_path):
+                            type2_path = hf_hub_download(
+                                repo_id="HolidayOugi/showdown-shower-resources",
+                                repo_type="dataset",
+                                filename=f"assets/icons/old/{type2.lower()}.png"
+                            )
+                        image2 = Image.open(type2_path)
                         image2 = image2.resize((192, 64))
                         st.image(image2, width=64)
                 else:
-                    image1 = Image.open(f"./assets/icons/new/{type1.lower()}.png")
+                    type1_path = f"./assets/icons/new/{type1.lower()}.png"
+                    if not os.path.exists(type1_path):
+                        type1_path = hf_hub_download(
+                            repo_id="HolidayOugi/showdown-shower-resources",
+                            repo_type="dataset",
+                            filename=f"assets/icons/new/{type1.lower()}.png"
+                        )
+                    image1 = Image.open(type1_path)
                     image1 = image1.resize((500, 120))
                     st.image(image1, width=120)
                     if not pd.isna(type2) and type2 != "":
-                        image2 = Image.open(f"./assets/icons/new/{type2.lower()}.png")
+                        type2_path = f"./assets/icons/new/{type2.lower()}.png"
+                        if not os.path.exists(type2_path):
+                            type2_path = hf_hub_download(
+                                repo_id="HolidayOugi/showdown-shower-resources",
+                                repo_type="dataset",
+                                filename=f"assets/icons/new/{type2.lower()}.png"
+                            )
+                        image2 = Image.open(type2_path)
                         image2 = image2.resize((500, 120))
                         st.image(image2, width=120)
                 st.markdown(f'Usage: {'%.2f' % (row_p['percent'].iloc[0])}%')
