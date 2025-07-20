@@ -39,9 +39,16 @@ for filename in os.listdir(NEW_DATA_DIR):
         try:
             df_new = pd.read_parquet(new_file_path)
 
+            latest_part = []
+
             if part_files:
-                df_existing = pd.concat([pd.read_parquet(f) for f in part_files], ignore_index=True)
-                print(f"Loaded {len(part_files)} chunk(s) with {len(df_existing):,} rows.")
+                part_files.sort(
+                    key=lambda p: int(re.search(r"_part(\d+)\.parquet$", p).group(1))
+                )
+                latest_part = part_files[-1]
+                df_existing = pd.read_parquet(latest_part)
+                print(f"Loaded the latest chunk: {os.path.basename(latest_part)} "
+                      f"with {len(df_existing):,} rows.")
             else:
                 df_existing = pd.read_parquet(single_file_path)
                 print(f"Loaded single file: {name_base}.parquet, rows: {len(df_existing):,}")
@@ -74,23 +81,33 @@ for filename in os.listdir(NEW_DATA_DIR):
                 num_chunks = (len(df_merged) + chunk_size - 1) // chunk_size
 
                 old_chunks = glob.glob(f"{base_path}_part*.parquet")
-                for f in old_chunks:
-                    os.remove(f)
-                    print(f"  → Removed old chunk: {os.path.basename(f)}")
+                if old_chunks:
+                    old_chunks.sort(key=lambda p: int(re.search(r"_part(\d+)\.parquet$", p).group(1)))
+                    last_file = old_chunks[-1]
+                    last_part_num = int(re.search(r"_part(\d+)\.parquet$", last_file).group(1))
+                    os.remove(last_file)
+                    print(f"  → Removed old chunk: {os.path.basename(last_file)}")
+                else:
+                    last_part_num = 1
+                start_index = last_part_num
 
                 for i in range(num_chunks):
                     chunk = df_merged.iloc[i * chunk_size : (i + 1) * chunk_size]
-                    chunk_file = f"{base_path}_part{i+1}.parquet"
+                    chunk_file = f"{base_path}_part{start_index + i}.parquet"
                     chunk.to_parquet(chunk_file, index=False, engine='pyarrow', row_group_size=1000)
-                    print(f"  → Saved chunk {i+1} to {os.path.basename(chunk_file)}")
+                    print(f"  → Saved chunk {start_index + i} to {os.path.basename(chunk_file)}")
 
                 single_file = f"{base_path}.parquet"
                 if os.path.exists(single_file):
                     os.remove(single_file)
                     print(f"  → Removed old single file: {os.path.basename(single_file)}")
             else:
-                df_merged.to_parquet(f"{base_path}.parquet", index=False, engine='pyarrow', row_group_size=1000)
-                print(f"Joined {filename} → {name_base}.parquet")
+                if part_files:
+                    df_merged.to_parquet(latest_part, index=False, engine='pyarrow', row_group_size=1000)
+                    print(f"Joined {filename} → {os.path.basename(latest_part)}")
+                else:
+                    df_merged.to_parquet(f"{base_path}.parquet", index=False, engine='pyarrow', row_group_size=1000)
+                    print(f"Joined {filename} → {name_base}.parquet")
         except Exception as e:
             print(e)
             continue
