@@ -4,19 +4,30 @@ import glob
 
 from tqdm import tqdm
 
-def load_matches(input_folder, output_folder):
+def load_matches(input_folder, output_folder, format_list=None):
 
-    formats = [
-        os.path.splitext(f)[0]
-        for f in os.listdir('../output/tiers')
-        if f.endswith('.parquet')
-    ]
+    if format_list is None:
+
+        formats = [
+            os.path.splitext(f)[0]
+            for f in os.listdir('../output/tiers')
+            if f.endswith('.parquet')
+        ]
+
+    else:
+        formats = format_list
 
     gens = sorted(
         set(f.split(']')[0].strip('[') for f in formats),
         key=lambda x: int(x.split()[1])
     )
 
+    if format_list is not None:
+        formats = [
+            os.path.splitext(f)[0]
+            for f in os.listdir('../output/tiers')
+            if f.endswith('.parquet') and any(gen in f for gen in gens)
+        ]
 
     for gen in gens:
         match_series = []
