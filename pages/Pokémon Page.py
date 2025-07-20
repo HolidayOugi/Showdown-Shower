@@ -364,7 +364,9 @@ def load_info(row, selected_format, types_df):
 
     with col2:
 
-        move_url = f"https://bulbapedia.bulbagarden.net/wiki/{pokemon}_(Pok%C3%A9mon)#Stats"
+        bulba_name = pokemon.split('-')[0]
+
+        move_url = f"https://bulbapedia.bulbagarden.net/wiki/{bulba_name}_(Pok%C3%A9mon)#Stats"
         bulba_path = './assets/icons/bulba.png'
         if not os.path.exists(bulba_path):
             bulba_path = hf_hub_download(
