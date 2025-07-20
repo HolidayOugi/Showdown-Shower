@@ -171,7 +171,9 @@ def load_info(row, selected_format, types_df):
         elif gen == 'Gen 9':
             gen_id = 'sv'
 
-        smogon_url = f"https://www.smogon.com/dex/{gen_id}/pokemon/{pokemon.lower()}/"
+        smogon_path = pokemon.lower().split('-')[0]
+
+        smogon_url = f"https://www.smogon.com/dex/{gen_id}/pokemon/{smogon_path}/"
 
         smogon_path = './assets/icons/smogon.png'
 
