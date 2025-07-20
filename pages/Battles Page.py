@@ -11,6 +11,11 @@ if 'barmode' not in st.session_state:
     st.session_state.barmode = "Total"
 if 'last_range' not in st.session_state:
     st.session_state.last_range = (None, None)
+if 'pokemon_shown_battles' not in st.session_state:
+    st.session_state.pokemon_shown_battles = 6
+
+def reset_pokemon_shown_battles():
+    st.session_state.pokemon_shown_battles = 6
 
 
 def format_quarter(q):
@@ -120,7 +125,7 @@ def load_graphs(selected_format):
                     pass
 
 @st.cache_data
-def load_pokemon(selected_format):
+def load_types(selected_format):
 
         st.markdown(f"### Most popular types in {selected_format}")
 
@@ -164,9 +169,7 @@ def load_pokemon(selected_format):
             except Exception as e:
                 pass
 
-
-        st.markdown(f"### Top 6 Most Used Pokémon in {selected_format}")
-
+def load_pokemon(selected_format):
 
         if not os.path.exists('./output/pokemon.parquet'):
             usage_df =  pd.read_parquet(hf_hub_download(
@@ -178,101 +181,109 @@ def load_pokemon(selected_format):
             usage_df = pd.read_parquet('./output/pokemon.parquet')
         usage_df = usage_df[usage_df['format'] == selected_format]
         usage_df = usage_df.sort_values(by='usage', ascending=False)
-        usage_df = usage_df.head(6)
+        new_usage_df = usage_df.head(st.session_state.pokemon_shown_battles)
 
-        col1, col2, col3, col4, col5, col6 = st.columns([3, 3, 3, 3, 3, 3])
-        cols = [col1, col2, col3, col4, col5, col6]
+        num_pokemon = min(len(new_usage_df), st.session_state.pokemon_shown_battles)
 
-        for i, col in enumerate(cols):
-            if i < len(usage_df):
-                with col:
-                    row = usage_df.take([i])
-                    gen = selected_format.split(']')[0][1:]
-                    gen_number = int(gen.split()[1])
-                    if gen_number < 6:
-                        gen_path = gen
-                    else:
-                        gen_path = 'HOME'
-                    pdex = row['Pdex'].iloc[0]
-                    image_path = f"./assets/{gen_path}/{pdex}.png"
-                    if not os.path.exists(image_path):
-                        if not '-' in pdex:
-                            image_path = hf_hub_download(
-                                repo_id="HolidayOugi/showdown-shower-resources",
-                                repo_type="dataset",
-                                filename=f"assets/{gen_path}/{pdex}.png"
-                            )
+        st.markdown(f"### Top {num_pokemon} Most Used Pokémon in {selected_format}")
+
+        for row_start in range(0, len(new_usage_df), 6):
+            cols = st.columns([3, 3, 3, 3, 3, 3])
+            for i, col in enumerate(cols):
+                idx = row_start + i
+                if idx < len(new_usage_df):
+                    row = new_usage_df.iloc[[idx]]
+                    with col:
+                        gen = selected_format.split(']')[0][1:]
+                        gen_number = int(gen.split()[1])
+                        if gen_number < 6:
+                            gen_path = gen
                         else:
-                            pdex = pdex.split('-')[0]
-                            new_image_path = f"./assets/{gen_path}/{pdex}.png"
-                            if not os.path.exists(new_image_path):
+                            gen_path = 'HOME'
+                        pdex = row['Pdex'].iloc[0]
+                        image_path = f"./assets/{gen_path}/{pdex}.png"
+                        if not os.path.exists(image_path):
+                            if not '-' in pdex:
                                 image_path = hf_hub_download(
                                     repo_id="HolidayOugi/showdown-shower-resources",
                                     repo_type="dataset",
                                     filename=f"assets/{gen_path}/{pdex}.png"
                                 )
                             else:
-                                image_path = new_image_path
-                    image = Image.open(image_path)
-                    image = image.resize((128, 128))
-                    st.image(image, width=128)
-                    name = row['pokemon'].iloc[0]
-                    st.markdown(name)
-                    type1 = row['Type 1'].iloc[0]
-                    type2 = row['Type 2'].iloc[0]
-                    if gen_number < 6:
-                        if type1 == 'Fairy' or type2 == 'Fairy':
-                            old_types = pd.read_csv('./input/old_types.csv')
-                            old_row = old_types[old_types['pokemon'] == name]
-                            type1 = old_row['Type 1'].iloc[0]
-                            type2 = old_row['Type 2'].iloc[0]
-                        type1_path = f"./assets/icons/old/{type1.lower()}.png"
-                        if not os.path.exists(type1_path):
-                            type1_path = hf_hub_download(
-                                repo_id="HolidayOugi/showdown-shower-resources",
-                                repo_type="dataset",
-                                filename=f"assets/icons/old/{type1.lower()}.png"
-                            )
-                        image1 = Image.open(type1_path)
-                        image1 = image1.resize((192, 64))
-                        st.image(image1, width=64)
-                        if not pd.isna(type2) and type2 != "":
-                            type2_path = f"./assets/icons/old/{type2.lower()}.png"
-                            if not os.path.exists(type2_path):
-                                type2_path = hf_hub_download(
+                                pdex = pdex.split('-')[0]
+                                new_image_path = f"./assets/{gen_path}/{pdex}.png"
+                                if not os.path.exists(new_image_path):
+                                    image_path = hf_hub_download(
+                                        repo_id="HolidayOugi/showdown-shower-resources",
+                                        repo_type="dataset",
+                                        filename=f"assets/{gen_path}/{pdex}.png"
+                                    )
+                                else:
+                                    image_path = new_image_path
+                        image = Image.open(image_path)
+                        image = image.resize((128, 128))
+                        st.image(image, width=128)
+                        name = row['pokemon'].iloc[0]
+                        st.markdown(name)
+                        type1 = row['Type 1'].iloc[0]
+                        type2 = row['Type 2'].iloc[0]
+                        if gen_number < 6:
+                            if type1 == 'Fairy' or type2 == 'Fairy':
+                                old_types = pd.read_csv('./input/old_types.csv')
+                                old_row = old_types[old_types['pokemon'] == name]
+                                type1 = old_row['Type 1'].iloc[0]
+                                type2 = old_row['Type 2'].iloc[0]
+                            type1_path = f"./assets/icons/old/{type1.lower()}.png"
+                            if not os.path.exists(type1_path):
+                                type1_path = hf_hub_download(
                                     repo_id="HolidayOugi/showdown-shower-resources",
                                     repo_type="dataset",
-                                    filename=f"assets/icons/old/{type2.lower()}.png"
+                                    filename=f"assets/icons/old/{type1.lower()}.png"
                                 )
-                            image2 = Image.open(type2_path)
-                            image2 = image2.resize((192, 64))
-                            st.image(image2, width=64)
-                    else:
-                        type1_path = f"./assets/icons/new/{type1.lower()}.png"
-                        if not os.path.exists(type1_path):
-                            type1_path = hf_hub_download(
-                                repo_id="HolidayOugi/showdown-shower-resources",
-                                repo_type="dataset",
-                                filename=f"assets/icons/new/{type1.lower()}.png"
-                            )
-                        image1 = Image.open(type1_path)
-                        image1 = image1.resize((500, 120))
-                        st.image(image1, width=120)
-                        if not pd.isna(type2) and type2 != "":
-                            type2_path = f"./assets/icons/new/{type2.lower()}.png"
-                            if not os.path.exists(type2_path):
-                                type2_path = hf_hub_download(
+                            image1 = Image.open(type1_path)
+                            image1 = image1.resize((192, 64))
+                            st.image(image1, width=64)
+                            if not pd.isna(type2) and type2 != "":
+                                type2_path = f"./assets/icons/old/{type2.lower()}.png"
+                                if not os.path.exists(type2_path):
+                                    type2_path = hf_hub_download(
+                                        repo_id="HolidayOugi/showdown-shower-resources",
+                                        repo_type="dataset",
+                                        filename=f"assets/icons/old/{type2.lower()}.png"
+                                    )
+                                image2 = Image.open(type2_path)
+                                image2 = image2.resize((192, 64))
+                                st.image(image2, width=64)
+                        else:
+                            type1_path = f"./assets/icons/new/{type1.lower()}.png"
+                            if not os.path.exists(type1_path):
+                                type1_path = hf_hub_download(
                                     repo_id="HolidayOugi/showdown-shower-resources",
                                     repo_type="dataset",
-                                    filename=f"assets/icons/new/{type2.lower()}.png"
+                                    filename=f"assets/icons/new/{type1.lower()}.png"
                                 )
-                            image2 = Image.open(type2_path)
-                            image2 = image2.resize((500, 120))
-                            st.image(image2, width=120)
-                    st.markdown(f'Usage: {'%.2f' % (row['usage'].iloc[0])}%')
-            else:
-                with col:
-                    st.empty()
+                            image1 = Image.open(type1_path)
+                            image1 = image1.resize((500, 120))
+                            st.image(image1, width=120)
+                            if not pd.isna(type2) and type2 != "":
+                                type2_path = f"./assets/icons/new/{type2.lower()}.png"
+                                if not os.path.exists(type2_path):
+                                    type2_path = hf_hub_download(
+                                        repo_id="HolidayOugi/showdown-shower-resources",
+                                        repo_type="dataset",
+                                        filename=f"assets/icons/new/{type2.lower()}.png"
+                                    )
+                                image2 = Image.open(type2_path)
+                                image2 = image2.resize((500, 120))
+                                st.image(image2, width=120)
+                        st.markdown(f'Usage: {'%.2f' % (row['usage'].iloc[0])}%')
+                else:
+                    with col:
+                        st.empty()
+        if st.session_state.pokemon_shown_battles < len(usage_df):
+            if st.button("Load more", key="load_more_button"):
+                st.session_state.pokemon_shown_battles += 6
+                st.rerun()
 
 @st.cache_data
 def load_heatmap(selected_mode, selected_format):
@@ -453,7 +464,7 @@ with col2:
 
     st.plotly_chart(fig, use_container_width=True)
 
-selected_format = st.selectbox('Choose a Format', sorted(formats))
+selected_format = st.selectbox('Choose a Format', sorted(formats), on_change=reset_pokemon_shown_battles)
 
 col1, col2 = st.columns([10, 7])
 
@@ -463,4 +474,5 @@ with col1:
     load_heatmap(selected_mode, selected_format)
 
 with col2:
+    load_types(selected_format)
     load_pokemon(selected_format)

@@ -18,6 +18,10 @@ if 'visible_moves' not in st.session_state:
 def load_more():
     st.session_state.visible_moves += 5
 
+def reset_status():
+    st.session_state.visible_moves = 5
+    st.session_state.rows_shown = 5
+
 @st.cache_data
 def load_parquet():
     if not os.path.exists('./output/pokemon.parquet'):
@@ -81,7 +85,7 @@ def load_info(row, selected_format, types_df):
         if gen_number < 6:
             if type1 == 'Fairy' or type2 == 'Fairy':
                 old_types = pd.read_csv('./input/old_types.csv')
-                old_row = old_types[old_types['pokemon'] == name]
+                old_row = old_types[old_types['pokemon'] == pokemon]
                 type1 = old_row['Type 1'].iloc[0]
                 type2 = old_row['Type 2'].iloc[0]
             type1_path = f"./assets/icons/old/{type1.lower()}.png"
@@ -608,9 +612,9 @@ with bigcol1:
 
     df = load_parquet()
 
-    pokemon = st.selectbox('Choose a Pokémon', sorted(df['pokemon'].unique()))
+    pokemon = st.selectbox('Choose a Pokémon', sorted(df['pokemon'].unique()), on_change=reset_status())
     df_filtered, formats = load_pokemon(df, pokemon)
-    selected_format = st.selectbox('Choose a Format', sorted(formats))
+    selected_format = st.selectbox('Choose a Format', sorted(formats), on_change=reset_status())
     row = df_filtered[df_filtered['format'] == selected_format].iloc[0]
     types_df = pd.read_csv('./input/types.csv')
     load_info(row, selected_format, types_df)
