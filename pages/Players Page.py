@@ -28,6 +28,46 @@ def reset_status():
     st.session_state.pokemon_shown = 6
     st.session_state.rows_shown_players = 5
 
+def get_image_path(gen_path, pdex):
+    for ext in ['png', 'gif']:
+        image_path = f"./assets/{gen_path}/{pdex}.{ext}"
+        if os.path.exists(image_path):
+            return image_path
+    if '-' in pdex:
+        base_pdex = pdex.split('-')[0]
+        for ext in ['png', 'gif']:
+            image_path = f"./assets/{gen_path}/{base_pdex}.{ext}"
+            if os.path.exists(image_path):
+                return image_path
+
+    for ext in ['png', 'gif']:
+        try:
+            image_path = hf_hub_download(
+                repo_id="HolidayOugi/showdown-shower-resources",
+                repo_type="dataset",
+                filename=f"assets/{gen_path}/{pdex}.{ext}"
+            )
+            return image_path
+        except:
+            pass
+
+    if '-' in pdex:
+        base_pdex = pdex.split('-')[0]
+        for ext in ['png', 'gif']:
+
+            try:
+                image_path = hf_hub_download(
+                    repo_id="HolidayOugi/showdown-shower-resources",
+                    repo_type="dataset",
+                    filename=f"assets/{gen_path}/{base_pdex}.{ext}"
+                )
+                return image_path
+            except:
+                pass
+
+    return None
+
+
 @st.cache_data
 def get_player_data(file_path, selected_player):
     if not os.path.exists(file_path):
@@ -358,28 +398,8 @@ def load_pokemon(row, selected_format):
                     else:
                         gen_path = 'HOME'
                     pdex = row_p['Pdex'].iloc[0]
-                    image_path = f"./assets/{gen_path}/{pdex}.png"
-                    if not os.path.exists(image_path):
-                        if not '-' in pdex:
-                            image_path = hf_hub_download(
-                                repo_id="HolidayOugi/showdown-shower-resources",
-                                repo_type="dataset",
-                                filename=f"assets/{gen_path}/{pdex}.png"
-                            )
-                        else:
-                            pdex = pdex.split('-')[0]
-                            new_image_path = f"./assets/{gen_path}/{pdex}.png"
-                            if not os.path.exists(new_image_path):
-                                image_path = hf_hub_download(
-                                    repo_id="HolidayOugi/showdown-shower-resources",
-                                    repo_type="dataset",
-                                    filename=f"assets/{gen_path}/{pdex}.png"
-                                )
-                            else:
-                                image_path = new_image_path
-                    image = Image.open(image_path)
-                    image = image.resize((128, 128))
-                    st.image(image, width=128)
+                    image_path = get_image_path(gen_path, pdex)
+                    st.image(image_path, width=300)
                     name = row_p['pokemon'].iloc[0]
                     st.markdown(name)
                     type1 = row_p['Type 1'].iloc[0]
@@ -420,8 +440,8 @@ def load_pokemon(row, selected_format):
                                 filename=f"assets/icons/new/{type1.lower()}.png"
                             )
                         image1 = Image.open(type1_path)
-                        image1 = image1.resize((500, 120))
-                        st.image(image1, width=120)
+                        image1 = image1.resize((400, 88))
+                        st.image(image1, width=88)
                         if not pd.isna(type2) and type2 != "":
                             type2_path = f"./assets/icons/new/{type2.lower()}.png"
                             if not os.path.exists(type2_path):
@@ -431,8 +451,8 @@ def load_pokemon(row, selected_format):
                                     filename=f"assets/icons/new/{type2.lower()}.png"
                                 )
                             image2 = Image.open(type2_path)
-                            image2 = image2.resize((500, 120))
-                            st.image(image2, width=120)
+                            image2 = image2.resize((400, 88))
+                            st.image(image2, width=88)
                     st.markdown(f'Usage: {'%.2f' % (row_p['percent'].iloc[0])}%')
             else:
                 with col:
