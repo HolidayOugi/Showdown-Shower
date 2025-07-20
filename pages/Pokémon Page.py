@@ -633,9 +633,9 @@ with bigcol1:
 
     df = load_parquet()
 
-    pokemon = st.selectbox('Choose a Pokémon', sorted(df['pokemon'].unique()), on_change=reset_status())
+    pokemon = st.selectbox('Choose a Pokémon', sorted(df['pokemon'].unique()), on_change=reset_status)
     df_filtered, formats = load_pokemon(df, pokemon)
-    selected_format = st.selectbox('Choose a Format', sorted(formats), on_change=reset_status())
+    selected_format = st.selectbox('Choose a Format', sorted(formats), on_change=reset_status)
     row = df_filtered[df_filtered['format'] == selected_format].iloc[0]
     types_df = pd.read_csv('./input/types.csv')
     load_info(row, selected_format, types_df)
