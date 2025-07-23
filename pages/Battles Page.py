@@ -240,7 +240,7 @@ def load_pokemon(selected_format):
                             gen_path = 'HOME'
                         pdex = row['Pdex'].iloc[0]
                         image_path = get_image_path(gen_path, pdex)
-                        st.image(image_path, width=300)
+                        st.image(image_path, width=128)
                         name = row['pokemon'].iloc[0]
                         st.markdown(name)
                         type1 = row['Type 1'].iloc[0]

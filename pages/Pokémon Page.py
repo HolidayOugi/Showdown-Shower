@@ -96,7 +96,7 @@ def load_info(row, selected_format, types_df):
     with col1:
         pdex = row['Pdex']
         image_path = get_image_path(gen_path, pdex)
-        st.image(image_path, width=300)
+        st.image(image_path, width=128)
 
     with col2:
         type1 = row['Type 1']
