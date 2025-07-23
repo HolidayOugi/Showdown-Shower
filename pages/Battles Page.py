@@ -461,12 +461,12 @@ with col2:
             )
         )
 
-        if agg_df['format'].str.contains("ANYTHINGGOES").any():
+        if agg_df['format'].str.contains("RANDOMBATTLE").any():
 
             fig.add_bar(
                 x=[None],
                 y=[None],
-                name="<span style='visibility:hidden'>Format ANYTHINGGOES</span>",
+                name="<span style='visibility:hidden'>Format RANDOMBATTLE</span>",
                 marker=dict(color="rgba(0,0,0,0)"),
                 showlegend=True
             )
