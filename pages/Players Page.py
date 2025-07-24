@@ -8,7 +8,8 @@ import plotly.graph_objects as go
 import os
 import plotly.io as pio
 import numpy as np
-from huggingface_hub import hf_hub_download
+from huggingface_hub import hf_hub_download, list_repo_files
+import json
 
 sns.set(rc={'ytick.labelcolor': 'white', 'xtick.labelcolor': 'white'})
 sns.set(rc={'axes.facecolor': '#0000FF', 'figure.facecolor': (0, 0, 0, 0)})
@@ -89,16 +90,16 @@ def get_player_data(file_path, selected_player):
 
 @st.cache_data
 def load_parquet(selected_format):
-    path = f'./output/players/{selected_format}_players.parquet'
+    path = f'./output/players/{selected_format}/{selected_format}_players_top100.parquet'
     if not os.path.exists(path):
-        filename = f"{selected_format}_players.parquet"
+        filename = f"{selected_format}_players_top100.parquet"
         players_df = pd.read_parquet(hf_hub_download(
             repo_id="HolidayOugi/showdown-shower-resources",
             repo_type="dataset",
-            filename=f"players/{filename}",
+            filename=f"players/{selected_format}/{filename}",
         ))
     else:
-        players_df = pd.read_parquet(f'./output/players/{selected_format}_players.parquet')
+        players_df = pd.read_parquet(path)
     players_df = players_df.sort_values(by='played', ascending=False)
     players_df['list_name'] = players_df['name'] + ' - ' + players_df['played'].astype(str) + " matches"
 
@@ -107,37 +108,124 @@ def load_parquet(selected_format):
 
     return players_df, players_df['list_name'].tolist()
 
-@st.cache_data
-def load_player(players_df, selected_player, selected_format):
-    if 'list_name' in players_df.columns:
+
+def binary_search(selected_format, selected_player, online):
+    if not online:
+        folder = f'./output/players/{selected_format}'
+        file_list = [
+            f for f in os.listdir(folder)
+            if "part" in f and f.endswith(".parquet") and os.path.isfile(os.path.join(folder, f))
+        ]
+        low = 0
+        high = len(file_list) - 1
+        while low <= high:
+            mid = (low + high) // 2
+            df = pd.read_parquet(f'{folder}/{file_list[mid]}')
+            first_name = df['name'].iloc[0]
+            last_name = df['name'].iloc[-1]
+
+            if first_name <= selected_player <= last_name:
+                result = df[df['name'] == selected_player]
+                if not result.empty:
+                    return df
+                else:
+                    return None
+            elif selected_player < first_name:
+                high = mid - 1
+            else:
+                low = mid + 1
+
+        return None
+
+    else:
+        try:
+            df = pd.read_parquet(hf_hub_download(
+                repo_id="HolidayOugi/showdown-shower-resources",
+                repo_type="dataset",
+                filename=f"players/{selected_format}/{selected_format}_players.parquet",
+            ))
+            return df
+        except:
+            pass
+
+        all_files = list_repo_files("HolidayOugi/showdown-shower-resources", repo_type="dataset")
+        file_list = [f for f in all_files if f.startswith(f'players/{selected_format}/') and f.endswith('.parquet') and 'part' in f]
+        low = 0
+        high = len(file_list) - 1
+        while low <= high:
+            mid = (low + high) // 2
+            try:
+                df = pd.read_parquet(hf_hub_download(
+                    repo_id="HolidayOugi/showdown-shower-resources",
+                    repo_type="dataset",
+                    filename=f"{file_list[mid]}",
+                ))
+                first_name = df['name'].iloc[0]
+                last_name = df['name'].iloc[-1]
+                if first_name <= selected_player <= last_name:
+                    result = df[df['name'] == selected_player]
+                    if not result.empty:
+                        return df
+                    else:
+                        return None
+                elif selected_player < first_name:
+                    high = mid - 1
+                else:
+                    low = mid + 1
+
+            except:
+                return None
+        return None
+
+
+def load_player(selected_player, selected_format, players_df=None):
+    if players_df is not None:
         row = players_df[players_df['list_name'] == selected_player].iloc[0]
     else:
-        row = players_df[players_df['name'] == selected_player].iloc[0]
+        folder = f'./output/players/{selected_format}'
+        if os.path.exists(folder):
+            online = False
+        else:
+            online = True
+        path = os.path.join(folder, f'{selected_format}_players.parquet')
+        if os.path.exists(path):
+            players_df = pd.read_parquet(path)
+            row = players_df[players_df['name'] == selected_player].iloc[0]
 
-    df_path = f'./output/tiers/{selected_format}.parquet'
-    if os.path.exists(df_path):
-        format_df = pd.read_parquet(df_path)
+        else:
+            players_df = binary_search(selected_format, selected_player, online)
+            if players_df is not None:
+                row = players_df[players_df['name'] == selected_player].iloc[0]
+                row["rating_list"] = str(row["rating_list"]) if isinstance(row["rating_list"], (np.ndarray, list)) else row["rating_list"]
+                row["pokemon_used"] = str(row["pokemon_used"]) if isinstance(row["pokemon_used"], dict) else row["pokemon_used"]
 
+
+
+            else:
+                return None, None
+
+    if isinstance(row['replays'], str):
+        row['replays'] = json.loads(row['replays'])
     else:
-       filename = f"{selected_format}.parquet"
-       format_df = pd.read_parquet(hf_hub_download(
-            repo_id="HolidayOugi/showdown-shower-resources",
-            repo_type="dataset",
-            filename=f"tiers/{filename}"))
-
-    format_df['id'] = format_df['id'].apply(lambda x: f"[{x}](https://replay.pokemonshowdown.com/{x})")
-    format_df = format_df.sort_values(by=['uploadtime'])
-    format_df["uploadtime"] = pd.to_datetime(format_df["uploadtime"])
-    format_df = format_df[(format_df['player1'] == row['name']) | (format_df['player2'] == row['name'])]
-    format_df['weekday'] = format_df['uploadtime'].dt.weekday
-    format_df['weekday'] = format_df['weekday'].map({
+        row['replays'] = []
+    replay_list = row['replays']
+    replay_df = pd.DataFrame(replay_list, columns=['Replay', 'Upload Date'])
+    replay_df['Replay'] = replay_df['Replay'].apply(lambda x: f"[{x}](https://replay.pokemonshowdown.com/{x})")
+    replay_df = replay_df.sort_values(by=['Upload Date'])
+    replay_df["Upload Date"] = pd.to_datetime(replay_df["Upload Date"])
+    replay_df['weekday'] = replay_df["Upload Date"].dt.weekday
+    replay_df['weekday'] = replay_df['weekday'].map({
         0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday'
     })
-    format_df['hour'] = format_df['uploadtime'].dt.hour
+    replay_df['hour'] = replay_df["Upload Date"].dt.hour
     bins = list(range(0, 25, 2))
     labels = [f"{b}-{b + 2}" for b in bins[:-1]]
-    format_df['hour_bin'] = pd.cut(format_df['hour'], bins=bins, right=False, labels=labels)
-    return row, format_df
+    replay_df['hour_bin'] = pd.cut(replay_df['hour'], bins=bins, right=False, labels=labels)
+
+    return row, replay_df
+
+
+
 
 
 
@@ -465,13 +553,11 @@ def load_pokemon(row, selected_format):
 
 @st.cache_data
 def load_replays(matches_df_raw, start_date, end_date):
-    matches_df = matches_df_raw[['id', 'uploadtime']]
+    matches_df = matches_df_raw[["Replay", "Upload Date"]]
     filtered_df = matches_df[
-        (matches_df["uploadtime"].dt.date >= start_date) &
-        (matches_df["uploadtime"].dt.date <= end_date)
+        (matches_df["Upload Date"].dt.date >= start_date) &
+        (matches_df["Upload Date"].dt.date <= end_date)
         ]
-
-    filtered_df = filtered_df.rename(columns={"id": "Replay", "uploadtime": "Upload Date"})
 
     return filtered_df
 
@@ -492,55 +578,79 @@ with sep:
 with bigcol2:
 
     st.subheader("Individual Player Stats by Format")
+
+    selected_player_search = st.text_input("Search for a player", value="", placeholder="Enter player name",
+                                    on_change=reset_status)
+
+
     players_df, player_list = load_parquet(selected_format)
-    selected_player = st.selectbox('Choose a player', player_list, on_change=reset_status)
-    row, matches_df = load_player(players_df, selected_player, selected_format)
-    load_player_graphs(row, selected_player, selected_format)
 
-    key = f"{selected_player} ({selected_format})"
+    selected_player_list = st.selectbox(f"Or choose from the list below of the Top 100 players in {selected_format}.", player_list, on_change=reset_status, placeholder="Choose player name")
 
-    selected_mode = st.selectbox('Choose a visualization mode', ['Separated', 'Combined'], key=f"{key}_mode")
+    if selected_player_search == "":
+        selected_player = selected_player_list
+        row, replay_df = load_player(selected_player, selected_format, players_df)
 
-    load_heatmap(row, matches_df, selected_mode, selected_format)
+    else:
+        selected_player = selected_player_search
+        row, replay_df = load_player(selected_player, selected_format, None)
+        if row is None:
+            st.error(f"Player '{selected_player}' not found in the selected format '{selected_format}'. Please try another player.")
+            selected_player = selected_player_list
+            row, replay_df = load_player(selected_player, selected_format, players_df)
 
-    load_pokemon(row, selected_format)
+    if row is not None:
 
-    st.subheader(f"Replays of {row['name']} in {selected_format}")
 
-    col1, col2 = st.columns(2)
-    with col2:
+        st.markdown(f"### Player: {row['name']}")
 
-        min_date = matches_df["uploadtime"].min().date()
-        max_date = matches_df["uploadtime"].max().date()
 
-        selected_dates = st.date_input(
-            "Dates",
-            value=(min_date, max_date),
-            min_value=min_date,
-            max_value=max_date,
-            label_visibility="collapsed",
-            key="individual"
-        )
+        load_player_graphs(row, selected_player, selected_format)
 
-        if len(selected_dates) == 1:
-            start_date = selected_dates[0]
-            end_date = max_date
-        elif len(selected_dates) == 0:
-            start_date = min_date
-            end_date = max_date
-        else:
-            start_date, end_date = selected_dates
+        key = f"{selected_player} ({selected_format})"
 
-    with col1:
+        selected_mode = st.selectbox('Choose a visualization mode', ['Separated', 'Combined'], key=f"{key}_mode")
 
-        replay_df = load_replays(matches_df, start_date, end_date)
+        load_heatmap(row, replay_df, selected_mode, selected_format)
 
-        st.write(
-            replay_df.head(st.session_state.rows_shown_players).to_markdown(index=False),
-            unsafe_allow_html=True
-        )
+        load_pokemon(row, selected_format)
 
-        if st.session_state.rows_shown_players < len(replay_df):
-            if st.button("Load more", key=f"{key}_load"):
-                st.session_state.rows_shown_players += 5
-                st.rerun()
+        st.subheader(f"Replays of {row['name']} in {selected_format}")
+
+        col1, col2 = st.columns(2)
+        with col2:
+
+            min_date = replay_df["Upload Date"].min().date()
+            max_date = replay_df["Upload Date"].max().date()
+
+            selected_dates = st.date_input(
+                "Dates",
+                value=(min_date, max_date),
+                min_value=min_date,
+                max_value=max_date,
+                label_visibility="collapsed",
+                key="individual"
+            )
+
+            if len(selected_dates) == 1:
+                start_date = selected_dates[0]
+                end_date = max_date
+            elif len(selected_dates) == 0:
+                start_date = min_date
+                end_date = max_date
+            else:
+                start_date, end_date = selected_dates
+
+        with col1:
+
+            replay_df = load_replays(replay_df, start_date, end_date)
+
+            st.write(
+                replay_df.head(st.session_state.rows_shown_players).to_markdown(index=False),
+                unsafe_allow_html=True
+            )
+
+            if st.session_state.rows_shown_players < len(replay_df):
+                if st.button("Load more", key=f"{key}_load"):
+                    st.session_state.rows_shown_players += 5
+                    st.rerun()

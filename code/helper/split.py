@@ -4,7 +4,7 @@ import gc
 import glob
 
 cartella = '../../input/parquet'
-size = 1_000_000
+size = 200000
 
 file_parquet = [
     f for f in glob.glob(os.path.join(cartella, '*.parquet'))

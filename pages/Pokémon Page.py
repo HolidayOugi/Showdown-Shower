@@ -5,6 +5,7 @@ from PIL import Image
 import plotly.graph_objects as go
 import base64
 import os
+import json
 from huggingface_hub import hf_hub_download
 
 def get_image_path(gen_path, pdex):
@@ -79,7 +80,8 @@ def load_parquet():
 def load_pokemon(df, pokemon):
     df_filtered = df[df['pokemon'] == pokemon]
     formats = df_filtered['format'].unique()
-    return df_filtered, formats
+    pdex = df_filtered['Pdex'].unique()[0]
+    return df_filtered, formats, pdex
 
 @st.cache_data
 def load_info(row, selected_format, types_df):
@@ -598,8 +600,8 @@ def load_moves(row, types_df, visible_moves):
             st.markdown(html_code, unsafe_allow_html=True)
 
 @st.cache_data
-def load_format_df(pokemon, selected_format):
-    df_path = f'./output/tiers/{selected_format}.parquet'
+def load_format_df(pdex, selected_format):
+    df_path = f'./output/replays/{pdex}.parquet'
     if os.path.exists(df_path):
         format_df = pd.read_parquet(df_path)
 
@@ -607,24 +609,25 @@ def load_format_df(pokemon, selected_format):
         format_df = pd.read_parquet(hf_hub_download(
             repo_id="HolidayOugi/showdown-shower-resources",
             repo_type="dataset",
-            filename=f"tiers/{selected_format}.parquet"
+            filename=f"replays/{pdex}.parquet"
         ))
 
-    format_df = format_df[format_df['Team 1'].apply(lambda x: pokemon in x) | format_df['Team 2'].apply(lambda x: pokemon in x)]
-    format_df['id'] = format_df['id'].apply(lambda x: f"[{x}](https://replay.pokemonshowdown.com/{x})")
-    format_df = format_df.sort_values(by=['uploadtime'])
-    format_df["uploadtime"] = pd.to_datetime(format_df["uploadtime"])
-    return format_df
+    format_df = format_df[format_df['format'] == selected_format]
+    format_df['replays'] = format_df['replays'].apply(lambda x: json.loads(x) if isinstance(x, str) else [])
+    replay_list = format_df.iloc[0]['replays']
+    replay_df = pd.DataFrame(replay_list, columns=['Replay', 'Upload Date'])
+    replay_df['Replay'] = replay_df['Replay'].apply(lambda x: f"[{x}](https://replay.pokemonshowdown.com/{x})")
+    replay_df = replay_df.sort_values(by=['Upload Date'])
+    replay_df["Upload Date"] = pd.to_datetime(replay_df["Upload Date"])
+    return replay_df
 
 @st.cache_data
-def load_replays(matches_df_raw, start_date, end_date):
-    matches_df = matches_df_raw[['id', 'uploadtime']]
+def load_replays(matches_df, start_date, end_date):
     filtered_df = matches_df[
-        (matches_df["uploadtime"].dt.date >= start_date) &
-        (matches_df["uploadtime"].dt.date <= end_date)
+        (matches_df["Upload Date"].dt.date >= start_date) &
+        (matches_df["Upload Date"].dt.date <= end_date)
         ]
 
-    filtered_df = filtered_df.rename(columns={"id": "Replay", "uploadtime": "Upload Date"})
 
     return filtered_df
 
@@ -636,7 +639,7 @@ with bigcol1:
     df = load_parquet()
 
     pokemon = st.selectbox('Choose a Pokémon', sorted(df['pokemon'].unique()), on_change=reset_status)
-    df_filtered, formats = load_pokemon(df, pokemon)
+    df_filtered, formats, pdex = load_pokemon(df, pokemon)
     selected_format = st.selectbox('Choose a Format', sorted(formats), on_change=reset_status)
     row = df_filtered[df_filtered['format'] == selected_format].iloc[0]
     types_df = pd.read_csv('./input/types.csv')
@@ -666,10 +669,10 @@ with bigcol3:
 
     st.subheader(f"Replays of {pokemon} in {selected_format}")
 
-    matches_df = load_format_df(pokemon, selected_format)
+    matches_df = load_format_df(pdex, selected_format)
 
-    min_date = matches_df["uploadtime"].min().date()
-    max_date = matches_df["uploadtime"].max().date()
+    min_date = matches_df["Upload Date"].min().date()
+    max_date = matches_df["Upload Date"].max().date()
 
     selected_dates = st.date_input(
         "Dates",

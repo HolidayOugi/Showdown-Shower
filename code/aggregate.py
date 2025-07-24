@@ -75,12 +75,14 @@ for filename in os.listdir(NEW_DATA_DIR):
             del df_new, df_existing
             gc.collect()
             base_path = os.path.join(PARQUET_DIR, name_base)
-            if len(df_merged) > 1_000_000:
+            escaped_base_path = glob.escape(base_path)
+            if len(df_merged) > 200000:
                 print(f"DataFrame has {len(df_merged)} rows, splitting into chunks.")
-                chunk_size = 1_000_000
+                chunk_size = 200000
                 num_chunks = (len(df_merged) + chunk_size - 1) // chunk_size
 
-                old_chunks = glob.glob(f"{base_path}_part*.parquet")
+                old_chunks = glob.glob(f"{escaped_base_path}_part*.parquet")
+                print(old_chunks)
                 if old_chunks:
                     old_chunks.sort(key=lambda p: int(re.search(r"_part(\d+)\.parquet$", p).group(1)))
                     last_file = old_chunks[-1]
@@ -166,7 +168,7 @@ for filename in os.listdir(f"{OUTPUT_DIR}/tiers"):
 
 load_pokemon(NEW_DATA_DIR, OUTPUT_DIR)
 
-def combine_datasets(EXISTING_TIER_DIR, OUTPUT_DIR, PARQUET_DIR, parquet):
+def combine_datasets(EXISTING_TIER_DIR, OUTPUT_DIR, parquet):
 
     if os.path.exists(f"{EXISTING_TIER_DIR}/{parquet}"):
         df_old = pd.read_parquet(f"{EXISTING_TIER_DIR}/{parquet}")
@@ -180,6 +182,7 @@ def combine_datasets(EXISTING_TIER_DIR, OUTPUT_DIR, PARQUET_DIR, parquet):
     df = pd.concat([df_old, df_new], ignore_index=True)
 
     df['moves'] = df['moves'].apply(lambda x: json.loads(x) if isinstance(x, str) else x)
+
 
     def aggregate_moves(moves_list):
         total = Counter()
@@ -241,8 +244,38 @@ def combine_datasets(EXISTING_TIER_DIR, OUTPUT_DIR, PARQUET_DIR, parquet):
 
     agg_df.to_parquet(f"{EXISTING_TIER_DIR}/{parquet}", index=False)
 
-combine_datasets(EXISTING_TIER_DIR, OUTPUT_DIR, PARQUET_DIR, "pokemon.parquet")
-combine_datasets(EXISTING_TIER_DIR, OUTPUT_DIR, PARQUET_DIR, "invalid_pokemon.parquet")
+def combine_replays(EXISTING_TIER_DIR, OUTPUT_DIR):
+
+    def aggregate_replays(replays_list):
+        all_replays = []
+        for lst in replays_list:
+            if isinstance(lst, list):
+                all_replays.extend([tuple(item) for item in lst])
+        return all_replays
+
+    for file in os.listdir(f'{OUTPUT_DIR}/replays'):
+        if not os.path.exists(os.path.join(f'{EXISTING_TIER_DIR}/replays/{file}')):
+            shutil.copy2(f'{OUTPUT_DIR}/replays/{file}', f'{EXISTING_TIER_DIR}/replays/{file}')
+        else:
+            if file.endswith(".parquet"):
+                df_old = pd.read_parquet(f'{EXISTING_TIER_DIR}/replays/{file}')
+                df_new = pd.read_parquet(f'{OUTPUT_DIR}/replays/{file}')
+                df_old['replays'] = df_old['replays'].apply(lambda x: json.loads(x) if isinstance(x, str) else [])
+
+                df_new['replays'] = df_new['replays'].apply(lambda x: json.loads(x) if isinstance(x, str) else [])
+                dfs = pd.concat([df_old, df_new])
+                dfs = dfs.groupby(['format'], as_index=False).agg({
+                    'replays': aggregate_replays,
+                })
+                dfs['replays'] = dfs['replays'].apply(lambda lst: json.dumps([
+                    (rid, ts.isoformat() if hasattr(ts, 'isoformat') else str(ts)) for rid, ts in lst
+                ]) if isinstance(lst, list) else '[]')
+                dfs.to_parquet(f'{EXISTING_TIER_DIR}/replays/{file}', index=False)
+
+
+combine_datasets(EXISTING_TIER_DIR, OUTPUT_DIR, "pokemon.parquet")
+combine_datasets(EXISTING_TIER_DIR, OUTPUT_DIR, "invalid_pokemon.parquet")
+combine_replays(EXISTING_TIER_DIR, OUTPUT_DIR)
 
 os.makedirs(f"{EXISTING_TIER_DIR}/players", exist_ok=True)
 os.makedirs(f"{EXISTING_TIER_DIR}/matches", exist_ok=True)

@@ -6,6 +6,7 @@
 [Gen 1] UBERS
 [Gen 1] UU
 [Gen 1] ZU
+[Gen 1] RANDOMBATTLE
 [Gen 2] LC
 [Gen 2] NU
 [Gen 2] OU
@@ -13,6 +14,7 @@
 [Gen 2] UBERS
 [Gen 2] UU
 [Gen 2] ZU
+[Gen 2] RANDOMBATTLE
 [Gen 3] LC
 [Gen 3] MONOTYPE
 [Gen 3] NU
@@ -23,6 +25,7 @@
 [Gen 3] UU
 [Gen 3] UUBL
 [Gen 3] ZU
+[Gen 3] RANDOMBATTLE
 [Gen 4] ANYTHINGGOES
 [Gen 4] LC
 [Gen 4] MONOTYPE
@@ -32,6 +35,7 @@
 [Gen 4] UBERS
 [Gen 4] UU
 [Gen 4] ZU
+[Gen 4] RANDOMBATTLE
 [Gen 5] ANYTHINGGOES
 [Gen 5] LC
 [Gen 5] MONOTYPE
@@ -42,6 +46,7 @@
 [Gen 5] UBERS
 [Gen 5] UU
 [Gen 5] ZU
+[Gen 5] RANDOMBATTLE
 [Gen 6] ANYTHINGGOES
 [Gen 6] LC
 [Gen 6] MONOTYPE
@@ -52,6 +57,7 @@
 [Gen 6] UBERS
 [Gen 6] UU
 [Gen 6] ZU
+[Gen 6] RANDOMBATTLE
 [Gen 7] ANYTHINGGOES
 [Gen 7] LC
 [Gen 7] MONOTYPE
@@ -62,6 +68,7 @@
 [Gen 7] UBERS
 [Gen 7] UU
 [Gen 7] ZU
+[Gen 7] RANDOMBATTLE
 [Gen 8] ANYTHINGGOES
 [Gen 8] LC
 [Gen 8] MONOTYPE
@@ -72,6 +79,7 @@
 [Gen 8] UBERS
 [Gen 8] UU
 [Gen 8] ZU
+[Gen 8] RANDOMBATTLE
 [Gen 9] ANYTHINGGOES
 [Gen 9] LC
 [Gen 9] MONOTYPE
@@ -82,12 +90,4 @@
 [Gen 9] UBERS
 [Gen 9] UU
 [Gen 9] ZU
-[Gen 1] RANDOMBATTLE
-[Gen 2] RANDOMBATTLE
-[Gen 3] RANDOMBATTLE
-[Gen 4] RANDOMBATTLE
-[Gen 5] RANDOMBATTLE
-[Gen 6] RANDOMBATTLE
-[Gen 7] RANDOMBATTLE
-[Gen 8] RANDOMBATTLE
 [Gen 9] RANDOMBATTLE
