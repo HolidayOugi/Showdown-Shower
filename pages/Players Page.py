@@ -10,6 +10,7 @@ import plotly.io as pio
 import numpy as np
 from huggingface_hub import hf_hub_download, list_repo_files
 import json
+from datetime import date
 
 sns.set(rc={'ytick.labelcolor': 'white', 'xtick.labelcolor': 'white'})
 sns.set(rc={'axes.facecolor': '#0000FF', 'figure.facecolor': (0, 0, 0, 0)})
@@ -622,19 +623,20 @@ with bigcol2:
 
             min_date = replay_df["Upload Date"].min().date()
             max_date = replay_df["Upload Date"].max().date()
+            today = date.today()
 
             selected_dates = st.date_input(
                 "Dates",
                 value=(min_date, max_date),
                 min_value=min_date,
-                max_value=max_date,
+                max_value=today,
                 label_visibility="collapsed",
                 key="individual"
             )
 
             if len(selected_dates) == 1:
                 start_date = selected_dates[0]
-                end_date = max_date
+                end_date = today
             elif len(selected_dates) == 0:
                 start_date = min_date
                 end_date = max_date
