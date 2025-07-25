@@ -248,7 +248,7 @@ def load_graphs(selected_format):
         with open(path, 'r', encoding='utf-8') as f:
             fig = pio.from_json(f.read())
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True})
 
         path = f"./output/graphs/players/{selected_format}/fig2.json"
 
@@ -263,7 +263,7 @@ def load_graphs(selected_format):
         with open(path, 'r', encoding='utf-8') as f:
             fig = pio.from_json(f.read())
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True})
 
     with col2:
 
