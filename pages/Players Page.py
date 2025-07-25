@@ -189,7 +189,11 @@ def load_player(selected_player, selected_format, players_df=None):
         path = os.path.join(folder, f'{selected_format}_players.parquet')
         if os.path.exists(path):
             players_df = pd.read_parquet(path)
-            row = players_df[players_df['name'] == selected_player].iloc[0]
+            players_df = players_df[players_df['name'] == selected_player]
+            if players_df.empty:
+                return None, None
+            else:
+                row = players_df[players_df['name'] == selected_player].iloc[0]
 
         else:
             players_df = binary_search(selected_format, selected_player, online)
