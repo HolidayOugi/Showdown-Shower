@@ -45,7 +45,8 @@ The structure of these `.parquet` files should match that of downloaded replays 
 
 If you are starting from scratch, place the `.parquet` files in the `input/parquet` folder and run the `initialize.py` script in the `code` folder:
    ```bash
-   python code/initialize.py
+   cd code
+   python initialize.py
    ```
 This will generate the necessary files in the `output` folder including:
 
@@ -59,7 +60,8 @@ This will generate the necessary files in the `output` folder including:
 
 To add new replays to the existing files, you can place the new `.parquet` files in the `input/new_data` folder and run the `aggregate.py` script in the `code` folder:
    ```bash
-   python code/aggregate.py
+   cd code
+   python aggregate.py
    ```
 
 This will merge the new data with the existing statistics in the `output` folder.
