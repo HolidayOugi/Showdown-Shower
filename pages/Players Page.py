@@ -10,7 +10,7 @@ import plotly.io as pio
 import numpy as np
 from huggingface_hub import hf_hub_download, list_repo_files
 import json
-from datetime import date
+from datetime import date, timedelta
 import re
 
 sns.set(rc={'ytick.labelcolor': 'white', 'xtick.labelcolor': 'white'})
@@ -661,7 +661,7 @@ with bigcol2:
 
             min_date = replay_df["Upload Date"].min().date()
             max_date = replay_df["Upload Date"].max().date()
-            today = date.today()
+            today = date.today()+ timedelta(days=2)
 
             selected_dates = st.date_input(
                 "Dates",
