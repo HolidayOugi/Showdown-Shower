@@ -104,9 +104,6 @@ def load_parquet(selected_format):
     players_df = players_df.sort_values(by='played', ascending=False)
     players_df['list_name'] = players_df['name'] + ' - ' + players_df['played'].astype(str) + " matches"
 
-    players_df["rating_list"] = players_df["rating_list"].apply(lambda x: str(x) if isinstance(x, (np.ndarray, list)) else x)
-    players_df["pokemon_used"] = players_df["pokemon_used"].apply(lambda x: str(x) if isinstance(x, dict) else x)
-
     return players_df, players_df['list_name'].tolist()
 
 
@@ -197,14 +194,15 @@ def load_player(selected_player, selected_format, players_df=None):
             players_df = binary_search(selected_format, selected_player, online)
             if players_df is not None:
                 row = players_df[players_df['name'] == selected_player].iloc[0]
-                row["rating_list"] = str(row["rating_list"]) if isinstance(row["rating_list"], (np.ndarray, list)) else row["rating_list"]
-                row["pokemon_used"] = str(row["pokemon_used"]) if isinstance(row["pokemon_used"], dict) else row["pokemon_used"]
 
 
 
             else:
                 return None, None
 
+    row["rating_list"] = str(row["rating_list"]) if isinstance(row["rating_list"], (np.ndarray, list)) else row[
+        "rating_list"]
+    row["pokemon_used"] = str(row["pokemon_used"]) if isinstance(row["pokemon_used"], dict) else row["pokemon_used"]
     if isinstance(row['replays'], str):
         row['replays'] = json.loads(row['replays'])
     else:
