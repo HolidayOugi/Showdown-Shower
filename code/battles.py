@@ -77,14 +77,21 @@ def load_battle(input_folder, output_folder):
             elif line.startswith('|faint|p2a'):
                 faint2 += 1
 
+        def remove_variants(name_set):
+            base_forms = {name.split('-')[0] for name in name_set}
+            return {name for name in name_set if '-' not in name and name in base_forms}
+
+        team1_filtered = remove_variants(team1)
+        team2_filtered = remove_variants(team2)
+
         if winner == p1:
-            if faint2 < len(team2) or (tsize2 > 0 and faint2 < tsize2):
+            if faint2 < len(team2_filtered) or (tsize2 > 0 and faint2 < tsize2):
                 forfeit = True
             else:
                 forfeit = False
 
         elif winner == p2:
-            if faint1 < len(team1) or (tsize1 > 0 and faint1 < tsize1):
+            if faint1 < len(team1_filtered) or (tsize1 > 0 and faint1 < tsize1):
                 forfeit = True
             else:
                 forfeit = False
