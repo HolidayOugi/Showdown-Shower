@@ -699,7 +699,7 @@
 716,Zing Zap,Electric,Physical,10,80,100%,VII
 717,Nature's Madness,Fairy,Special,10,—,90%,VII
 718,Multi-Attack,Normal,Physical,10,120,100%,VII
-719,"10,000,000 Volt Thunderbolt",Electric,Special,1,195,∞%,VII
+719,10,000,000 Volt Thunderbolt,Electric,Special,1,195,∞%,VII
 720,Mind Blown,Fire,Special,5,150,100%,VII
 721,Plasma Fists,Electric,Physical,15,100,100%,VII
 722,Photon Geyser,Psychic,Special,5,100,100%,VII
@@ -901,3 +901,36 @@
 918,Upper Hand,Fighting,Physical,15,65,100%,IX
 919,Malignant Chain,Poison,Special,5,100,100%,IX
 76,Solarbeam,Grass,Special,10,120,100%,I
+920,G-Max Wildfire,Fire ,,,,,VIII
+921,G-Max Befuddle,Bug ,,,,,VIII
+922,G-Max Volt Crash,Electric ,,,,,VIII
+923,G-Max Gold Rush,Normal ,,,,,VIII
+924,G-Max Chi Strike,Fighting ,,,,,VIII
+925,G-Max Terror,Ghost ,,,,,VIII
+926,G-Max Resonance,Ice ,,,,,VIII
+927,G-Max Cuddle,Normal ,,,,,VIII
+928,G-Max Replenish,Normal ,,,,,VIII
+929,G-Max Malodor,Poison ,,,,,VIII
+930,G-Max Stonesurge,Water ,,,,,VIII
+931,G-Max Wind Rage,Flying ,,,,,VIII
+932,G-Max Stun Shock,Electric ,,,,,VIII
+933,G-Max Finale,Fairy ,,,,,VIII
+934,G-Max Depletion,Dragon ,,,,,VIII
+935,G-Max Gravitas,Psychic ,,,,,VIII
+936,G-Max Volcalith,Rock ,,,,,VIII
+937,G-Max Sandblast,Ground ,,,,,VIII
+938,G-Max Snooze,Dark ,,,,,VIII
+939,G-Max Tartness,Grass ,,,,,VIII
+940,G-Max Sweetness,Grass ,,,,,VIII
+941,G-Max Smite,Fairy ,,,,,VIII
+942,G-Max Steelsurge,Steel ,,,,,VIII
+943,G-Max Meltdown,Steel ,,,,,VIII
+944,G-Max Foam Burst,Water ,,,,,VIII
+945,G-Max Centiferno,Fire ,,,,,VIII
+946,G-Max Vine Lash,Grass ,,,,,VIII
+947,G-Max Cannonade,Water ,,,,,VIII
+948,G-Max Drum Solo,Grass ,,,,,VIII
+949,G-Max Fireball,Fire ,,,,,VIII
+950,G-Max Hydrosnipe,Water ,,,,,VIII
+951,G-Max One Blow,Dark ,,,,,VIII
+952,G-Max Rapid Flow,Water ,,,,,VIII
