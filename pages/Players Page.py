@@ -248,11 +248,16 @@ def load_graphs(selected_format):
 
         if not os.path.exists(path):
 
-            st.image(hf_hub_download(
-                    repo_id="HolidayOugi/showdown-shower-resources",
-                    repo_type="dataset",
-                    filename=f"graphs/players/{selected_format}/fig1.png"
-                ))
+            try:
+
+                st.image(hf_hub_download(
+                        repo_id="HolidayOugi/showdown-shower-resources",
+                        repo_type="dataset",
+                        filename=f"graphs/players/{selected_format}/fig1.png"
+                    ))
+
+            except Exception as e:
+                pass
 
         else:
 
@@ -262,11 +267,17 @@ def load_graphs(selected_format):
 
         if not os.path.exists(path):
 
-            st.image(hf_hub_download(
-                repo_id="HolidayOugi/showdown-shower-resources",
-                repo_type="dataset",
-                filename=f"graphs/players/{selected_format}/fig2.png"
-            ))
+            try:
+
+
+                st.image(hf_hub_download(
+                    repo_id="HolidayOugi/showdown-shower-resources",
+                    repo_type="dataset",
+                    filename=f"graphs/players/{selected_format}/fig2.png"
+                ))
+
+            except Exception as e:
+                pass
 
         else:
 
@@ -278,11 +289,16 @@ def load_graphs(selected_format):
 
         if not os.path.exists(path):
 
-            st.image(hf_hub_download(
-                repo_id="HolidayOugi/showdown-shower-resources",
-                repo_type="dataset",
-                filename=f"graphs/players/{selected_format}/fig3.png"
-            ))
+            try:
+
+                st.image(hf_hub_download(
+                    repo_id="HolidayOugi/showdown-shower-resources",
+                    repo_type="dataset",
+                    filename=f"graphs/players/{selected_format}/fig3.png"
+                ))
+
+            except Exception as e:
+                pass
 
         else:
 
@@ -292,11 +308,16 @@ def load_graphs(selected_format):
 
         if not os.path.exists(path):
 
-            st.image(hf_hub_download(
-                repo_id="HolidayOugi/showdown-shower-resources",
-                repo_type="dataset",
-                filename=f"graphs/players/{selected_format}/fig4.png"
-            ))
+            try:
+
+                st.image(hf_hub_download(
+                    repo_id="HolidayOugi/showdown-shower-resources",
+                    repo_type="dataset",
+                    filename=f"graphs/players/{selected_format}/fig4.png"
+                ))
+
+            except Exception as e:
+                pass
 
         else:
 
@@ -500,6 +521,18 @@ def load_pokemon(row, selected_format):
                     type2 = row_p['Type 2'].iloc[0]
                     if gen_number < 6:
                         if type1 == 'Fairy' or type2 == 'Fairy':
+                            old_types = pd.read_csv('./input/old_types.csv')
+                            old_row = old_types[old_types['pokemon'] == name]
+                            type1 = old_row['Type 1'].iloc[0]
+                            type2 = old_row['Type 2'].iloc[0]
+
+                        if (type1 == 'Steel' or type2 == 'Steel') and gen_number == 1:
+                            old_types = pd.read_csv('./input/old_types.csv')
+                            old_row = old_types[old_types['pokemon'] == name]
+                            type1 = old_row['Type 1'].iloc[0]
+                            type2 = old_row['Type 2'].iloc[0]
+
+                        if '479-' in pdex and gen_number == 4:
                             old_types = pd.read_csv('./input/old_types.csv')
                             old_row = old_types[old_types['pokemon'] == name]
                             type1 = old_row['Type 1'].iloc[0]

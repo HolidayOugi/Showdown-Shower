@@ -108,6 +108,18 @@ def load_info(row, selected_format, types_df):
                 old_row = old_types[old_types['pokemon'] == pokemon]
                 type1 = old_row['Type 1'].iloc[0]
                 type2 = old_row['Type 2'].iloc[0]
+
+            if (type1 == 'Steel' or type2 == 'Steel') and gen_number == 1:
+                old_types = pd.read_csv('./input/old_types.csv')
+                old_row = old_types[old_types['pokemon'] == pokemon]
+                type1 = old_row['Type 1'].iloc[0]
+                type2 = old_row['Type 2'].iloc[0]
+
+            if '479-' in pdex and gen_number == 4:
+                old_types = pd.read_csv('./input/old_types.csv')
+                old_row = old_types[old_types['pokemon'] == pokemon]
+                type1 = old_row['Type 1'].iloc[0]
+                type2 = old_row['Type 2'].iloc[0]
             type1_path = f"./assets/icons/old/{type1.lower()}.png"
             if not os.path.exists(type1_path):
                 type1_path = hf_hub_download(

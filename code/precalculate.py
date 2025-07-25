@@ -7,6 +7,7 @@ from collections import Counter
 import plotly.graph_objects as go
 import os
 import glob
+from pathlib import Path
 import numpy as np
 import warnings
 from tqdm import tqdm
@@ -496,17 +497,42 @@ def precalculate(input_folder, output_folder, format_list=None):
             types_df = pd.read_csv('../input/types.csv')
             types_df['count'] = 0
 
+            gen = format.split(']')[0][1:]
+            gen_number = int(gen.split()[1])
+
             poke_types = pokemon_df.set_index('pokemon')[['Type 1', 'Type 2']].to_dict(orient='index')
+
+            filter = f'../input/gen_filter/gen{gen_number}.txt'
+            with open(filter, 'r', encoding='utf-8') as f:
+                valid_pokemon = set(name.strip().lower() for name in f if name.strip())
 
             type_counter = Counter()
 
             for team in format_df['full_team']:
                 types_seen = set()
                 for member in team:
-                    if member not in poke_types:
+                    if member not in poke_types or member.lower() not in valid_pokemon:
                         continue
                     type1 = poke_types[member]['Type 1']
                     type2 = poke_types[member]['Type 2']
+
+                    if (type1 == 'Fairy' or type2 == 'Fairy') and gen_number < 6:
+                        old_types = pd.read_csv('../input/old_types.csv')
+                        old_row = old_types[old_types['pokemon'] == member]
+                        type1 = old_row['Type 1'].iloc[0]
+                        type2 = old_row['Type 2'].iloc[0]
+
+                    if (type1 == 'Steel' or type2 == 'Steel') and gen_number == 1:
+                        old_types = pd.read_csv('../input/old_types.csv')
+                        old_row = old_types[old_types['pokemon'] == member]
+                        type1 = old_row['Type 1'].iloc[0]
+                        type2 = old_row['Type 2'].iloc[0]
+
+                    if 'Rotom-' in member and gen_number == 4:
+                        old_types = pd.read_csv('../input/old_types.csv')
+                        old_row = old_types[old_types['pokemon'] == member]
+                        type1 = old_row['Type 1'].iloc[0]
+                        type2 = old_row['Type 2'].iloc[0]
 
                     if type1 and type1 not in types_seen:
                         type_counter[type1] += 1
@@ -554,137 +580,161 @@ def precalculate(input_folder, output_folder, format_list=None):
 
         for format in tqdm(formats, desc=f"Calculating player graphs"):
             print(format)
-            players_path = f'{input_folder}/players/{format}_players.parquet'
+            players_path = Path(f'{input_folder}/players/{format}/{format}_players.parquet')
+
+
+
             path = f'{output_folder}/players/{format}'
             os.makedirs(path, exist_ok=True)
 
             if os.path.exists(players_path):
                 players_df = pd.read_parquet(players_path)
             else:
-                continue
+                folder = players_path.parent
+                base_name = players_path.stem
+                escaped_base = glob.escape(str(folder / base_name))
+                pattern = f"{escaped_base}_part*.parquet"
+
+                matching_files = glob.glob(pattern)
+
+                if not matching_files:
+                    continue
+
+                df_list = [pd.read_parquet(f) for f in sorted(matching_files)]
+                players_df = pd.concat(df_list, ignore_index=True)
 
 
-            players_df['rating_delta'] = players_df['highest_rating'] - players_df['lowest_rating']
-            players_df['pokemon_used'] = players_df['pokemon_used'].apply(eval)
+            if not players_df['highest_rating'].isnull().all():
+                players_df['rating_delta'] = players_df['highest_rating'] - players_df['lowest_rating']
+                players_df_rating = players_df[
+                    players_df['rating_delta'].notna() &
+                    np.isfinite(players_df['rating_delta'])
+                    ]
+            else:
+                players_df_rating = pd.DataFrame()
             players_df_filtered = players_df[players_df['played'] >= 10]
 
-            players_df['first_played'] = pd.to_datetime(players_df['first_played'])
-            players_df['last_played'] = pd.to_datetime(players_df['last_played'])
+            if not players_df_rating.empty:
+                players_df_rating['first_played'] = pd.to_datetime(players_df['first_played'])
+                players_df_rating['last_played'] = pd.to_datetime(players_df['last_played'])
 
-            players_df['time_difference'] = (players_df['last_played'] - players_df['first_played']).dt.days
-            players_df = players_df.sort_values('time_difference', ascending=False)
+                players_df_rating['time_difference'] = (players_df['last_played'] - players_df['first_played']).dt.days
+                players_df_rating = players_df_rating.sort_values('time_difference', ascending=False)
 
-            fig = px.scatter(
-                players_df,
-                x='rating_delta',
-                y='time_difference',
-                labels={
-                    'rating_delta': 'Rating Delta',
-                    'time_difference': 'Days between 1st and last match'
-                },
-                hover_name='name',
-                title=f'Time difference between 1st and last match<br>based on rating delta in {format}'
-            )
-
-            fig.update_layout(
-                paper_bgcolor='rgba(0,0,0,0)',
-                plot_bgcolor='rgba(0,0,0,0)',
-                margin=dict(l=0, r=0, t=100, b=0),
-                font=dict(
-                    color='white',
-                    size=16
-                ),
-                title=dict(
-                    text=fig.layout.title.text,
-                    y=0.95,
-                    x=0.5,
-                    xanchor='center'
-                ),
-                title_font=dict(
-                    size=20,
-                    color='white'
-                ),
-                legend_font=dict(
-                    size=14
+            if not players_df_rating.empty:
+                fig = px.scatter(
+                    players_df_rating,
+                    x='rating_delta',
+                    y='time_difference',
+                    labels={
+                        'rating_delta': 'Rating Delta',
+                        'time_difference': 'Days between 1st and last match'
+                    },
+                    hover_name='name',
+                    title=f'Time difference between 1st and last match<br>based on rating delta in {format}'
                 )
-            )
 
-            fig.update_xaxes(
-                color='white',
-                tickfont=dict(size=14),
-                showgrid=False
-            )
-
-            fig.update_yaxes(
-                color='white',
-                tickfont=dict(size=14),
-                gridcolor='rgba(255, 255, 255, 0.1)',
-                zeroline=False
-            )
-
-            pio.write_image(
-                fig,
-                f'{output_folder}/players/{format}/fig1.png',
-                format='png',
-                width=800,
-                height=600
-            )
-
-            fig = px.scatter(
-                players_df,
-                x='highest_rating',
-                y='played',
-                labels={
-                    'highest_rating': 'Max Rating',
-                    'played': 'Matches Played',
-                },
-                hover_name='name',
-                title=f'Correlation between Max Rating and<br>Matches Played in {format}'
-            )
-
-            fig.update_layout(
-                paper_bgcolor='rgba(0,0,0,0)',
-                plot_bgcolor='rgba(0,0,0,0)',
-                margin=dict(l=0, r=0, t=100, b=0),
-                font=dict(
-                    color='white',
-                    size=16
-                ),
-                title=dict(
-                    text=fig.layout.title.text,
-                    y=0.95,
-                    x=0.5,
-                    xanchor='center'
-                ),
-                title_font=dict(
-                    size=20,
-                    color='white'
-                ),
-                legend_font=dict(
-                    size=14
+                fig.update_layout(
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    margin=dict(l=0, r=0, t=100, b=0),
+                    font=dict(
+                        color='white',
+                        size=16
+                    ),
+                    title=dict(
+                        text=fig.layout.title.text,
+                        y=0.95,
+                        x=0.5,
+                        xanchor='center'
+                    ),
+                    title_font=dict(
+                        size=20,
+                        color='white'
+                    ),
+                    legend_font=dict(
+                        size=14
+                    )
                 )
-            )
 
-            fig.update_xaxes(
-                color='white',
-                tickfont=dict(size=14),
-                showgrid=False
-            )
+                fig.update_xaxes(
+                    color='white',
+                    tickfont=dict(size=14),
+                    showgrid=False
+                )
 
-            fig.update_yaxes(
-                color='white',
-                tickfont=dict(size=14),
-                gridcolor='rgba(255, 255, 255, 0.1)',
-                zeroline=False
-            )
+                fig.update_yaxes(
+                    color='white',
+                    tickfont=dict(size=14),
+                    gridcolor='rgba(255, 255, 255, 0.1)',
+                    zeroline=False
+                )
 
-            pio.write_image(
-                fig,
-                f'{output_folder}/players/{format}/fig2.png',
-                format='png',
-                width=800,
-                height=600
-            )
+                pio.write_image(
+                    fig,
+                    f'{output_folder}/players/{format}/fig1.png',
+                    format='png',
+                    width=800,
+                    height=600
+                )
+
+            if not players_df_rating.empty:
+
+                fig = px.scatter(
+                    players_df_rating,
+                    x='highest_rating',
+                    y='played',
+                    labels={
+                        'highest_rating': 'Max Rating',
+                        'played': 'Matches Played',
+                    },
+                    hover_name='name',
+                    title=f'Correlation between Max Rating and<br>Matches Played in {format}'
+                )
+
+                fig.update_layout(
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    margin=dict(l=0, r=0, t=100, b=0),
+                    font=dict(
+                        color='white',
+                        size=16
+                    ),
+                    title=dict(
+                        text=fig.layout.title.text,
+                        y=0.95,
+                        x=0.5,
+                        xanchor='center'
+                    ),
+                    title_font=dict(
+                        size=20,
+                        color='white'
+                    ),
+                    legend_font=dict(
+                        size=14
+                    )
+                )
+
+                fig.update_xaxes(
+                    color='white',
+                    tickfont=dict(size=14),
+                    showgrid=False
+                )
+
+                fig.update_yaxes(
+                    color='white',
+                    tickfont=dict(size=14),
+                    gridcolor='rgba(255, 255, 255, 0.1)',
+                    zeroline=False
+                )
+
+                pio.write_image(
+                    fig,
+                    f'{output_folder}/players/{format}/fig2.png',
+                    format='png',
+                    width=800,
+                    height=600
+                )
 
             players_df_filtered['winrate'] = (players_df_filtered['wins'] / players_df_filtered['played']) * 100
             fig = px.histogram(
@@ -745,63 +795,69 @@ def precalculate(input_folder, output_folder, format_list=None):
                 height=600
             )
 
-            fig = px.histogram(
-                players_df_filtered,
-                x='rating_delta',
-                nbins=10,
-                title=f'Rating Delta in {format}<br>'
-                      f'with 10 or more matches played',
-                labels={'rating_delta': 'Rating Delta'},
-                opacity=0.75
-            )
+            if not players_df_rating.empty:
 
-            fig.update_layout(yaxis_title='# Players')
+                players_df_rating = players_df_rating[players_df_rating['played'] >= 10]
+                if not players_df_rating.empty:
 
-            fig.update_xaxes(tickmode='linear', dtick=100)
 
-            fig.update_layout(
-                paper_bgcolor='rgba(0,0,0,0)',
-                plot_bgcolor='rgba(0,0,0,0)',
-                margin=dict(l=0, r=0, t=100, b=0),
-                font=dict(
-                    color='white',
-                    size=16
-                ),
-                title=dict(
-                    text=fig.layout.title.text,
-                    y=0.95,
-                    x=0.5,
-                    xanchor='center'
-                ),
-                title_font=dict(
-                    size=20,
-                    color='white'
-                ),
-                legend_font=dict(
-                    size=14
-                )
-            )
+                    fig = px.histogram(
+                        players_df_rating,
+                        x='rating_delta',
+                        nbins=10,
+                        title=f'Rating Delta in {format}<br>'
+                              f'with 10 or more matches played',
+                        labels={'rating_delta': 'Rating Delta'},
+                        opacity=0.75
+                    )
 
-            fig.update_xaxes(
-                color='white',
-                tickfont=dict(size=14),
-                showgrid=False
-            )
+                    fig.update_layout(yaxis_title='# Players')
 
-            fig.update_yaxes(
-                color='white',
-                tickfont=dict(size=14),
-                gridcolor='rgba(255, 255, 255, 0.1)',
-                zeroline=False
-            )
+                    fig.update_xaxes(tickmode='linear', dtick=100)
 
-            pio.write_image(
-                fig,
-                f'{output_folder}/players/{format}/fig4.png',
-                format='png',
-                width=800,
-                height=600
-            )
+                    fig.update_layout(
+                        paper_bgcolor='rgba(0,0,0,0)',
+                        plot_bgcolor='rgba(0,0,0,0)',
+                        margin=dict(l=0, r=0, t=100, b=0),
+                        font=dict(
+                            color='white',
+                            size=16
+                        ),
+                        title=dict(
+                            text=fig.layout.title.text,
+                            y=0.95,
+                            x=0.5,
+                            xanchor='center'
+                        ),
+                        title_font=dict(
+                            size=20,
+                            color='white'
+                        ),
+                        legend_font=dict(
+                            size=14
+                        )
+                    )
+
+                    fig.update_xaxes(
+                        color='white',
+                        tickfont=dict(size=14),
+                        showgrid=False
+                    )
+
+                    fig.update_yaxes(
+                        color='white',
+                        tickfont=dict(size=14),
+                        gridcolor='rgba(255, 255, 255, 0.1)',
+                        zeroline=False
+                    )
+
+                    pio.write_image(
+                        fig,
+                        f'{output_folder}/players/{format}/fig4.png',
+                        format='png',
+                        width=800,
+                        height=600
+                    )
 
 
 
