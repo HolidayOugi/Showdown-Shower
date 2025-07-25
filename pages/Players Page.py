@@ -11,6 +11,7 @@ import numpy as np
 from huggingface_hub import hf_hub_download, list_repo_files
 import json
 from datetime import date
+import re
 
 sns.set(rc={'ytick.labelcolor': 'white', 'xtick.labelcolor': 'white'})
 sns.set(rc={'axes.facecolor': '#0000FF', 'figure.facecolor': (0, 0, 0, 0)})
@@ -200,8 +201,7 @@ def load_player(selected_player, selected_format, players_df=None):
             else:
                 return None, None
 
-    row["rating_list"] = str(row["rating_list"]) if isinstance(row["rating_list"], (np.ndarray, list)) else row[
-        "rating_list"]
+    row["rating_list"] = "[" + ", ".join(map(str, row["rating_list"])) + "]" if isinstance(row["rating_list"], (np.ndarray, list)) else row["rating_list"]
     row["pokemon_used"] = str(row["pokemon_used"]) if isinstance(row["pokemon_used"], dict) else row["pokemon_used"]
     if isinstance(row['replays'], str):
         row['replays'] = json.loads(row['replays'])
@@ -352,8 +352,9 @@ def load_player_graphs(row, selected_player, selected_format):
             st.markdown(f"Max Rating: {row['highest_rating']}")
 
     if isinstance(row['rating_list'], str):
-
-        row['rating_list'] = np.fromstring(row['rating_list'].strip("[]"), sep=' ')
+        s = row['rating_list'].strip("[]")
+        numbers = re.findall(r"\d+(?:\.\d+)?", s)
+        row['rating_list'] = np.array([float(n) for n in numbers])
 
     rating_list = row['rating_list']
 
