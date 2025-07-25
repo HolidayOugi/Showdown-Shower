@@ -73,8 +73,6 @@ def load_parquet():
         ))
     else:
         df = pd.read_parquet('./output/pokemon.parquet')
-    df['moves'] = df['moves'].apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
-    df['moves'] = df['moves'].apply(lambda x: sorted(x, key=lambda x: x[1], reverse=True))
     return df
 
 @st.cache_data
@@ -482,10 +480,16 @@ def load_info(row, selected_format, types_df):
 
 @st.cache_data
 def load_moves(row, types_df, visible_moves):
+
+    def process_moves(moves):
+        if isinstance(moves, str):
+            moves = ast.literal_eval(moves)
+        return sorted(moves, key=lambda m: m[1], reverse=True)
+
+    row['moves'] = process_moves(row['moves'])
     moves_df = pd.read_csv('./input/moves.csv')
     moves_df = moves_df.map(lambda x: x.lstrip() if isinstance(x, str) else x)
     moves_df = pd.merge(moves_df, types_df, on='Type')
-
     moves_to_show = row['moves'][:visible_moves]
 
     def hex_to_rgba(hex_color, factor):

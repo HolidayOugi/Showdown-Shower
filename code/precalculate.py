@@ -65,9 +65,49 @@ def precalculate(input_folder, output_folder, format_list=None):
                 title=f'Probability of turn having a switch<br>based on rating in {format}'
             )
 
+            fig.update_layout(
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                margin=dict(l=0, r=0, t=100, b=0),
+                font=dict(
+                    color='white',
+                    size=16
+                ),
+                title=dict(
+                    text=fig.layout.title.text,
+                    y=0.95,
+                    x=0.5,
+                    xanchor='center'
+                ),
+                title_font=dict(
+                    size=20,
+                    color='white'
+                ),
+                legend_font=dict(
+                    size=14
+                )
+            )
 
+            fig.update_xaxes(
+                color='white',
+                tickfont=dict(size=14),
+                showgrid=False
+            )
 
-            pio.write_json(fig, f'{output_folder}/battle/{format}/fig1.json')
+            fig.update_yaxes(
+                color='white',
+                tickfont=dict(size=14),
+                gridcolor='rgba(255, 255, 255, 0.1)',
+                zeroline=False
+            )
+
+            pio.write_image(
+                fig,
+                f'{output_folder}/battle/{format}/fig1.png',
+                format='png',
+                width=800,
+                height=600
+            )
 
             fig = px.scatter(
                 format_df_ratings,
@@ -81,7 +121,49 @@ def precalculate(input_folder, output_folder, format_list=None):
                 title=f'Number of turns based on rating in {format}'
             )
 
-            pio.write_json(fig, f'{output_folder}/battle/{format}/fig2.json')
+            fig.update_layout(
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                margin=dict(l=0, r=0, t=100, b=0),
+                font=dict(
+                    color='white',
+                    size=16
+                ),
+                title=dict(
+                    text=fig.layout.title.text,
+                    y=0.95,
+                    x=0.5,
+                    xanchor='center'
+                ),
+                title_font=dict(
+                    size=20,
+                    color='white'
+                ),
+                legend_font=dict(
+                    size=14
+                )
+            )
+
+            fig.update_xaxes(
+                color='white',
+                tickfont=dict(size=14),
+                showgrid=False
+            )
+
+            fig.update_yaxes(
+                color='white',
+                tickfont=dict(size=14),
+                gridcolor='rgba(255, 255, 255, 0.1)',
+                zeroline=False
+            )
+
+            pio.write_image(
+                fig,
+                f'{output_folder}/battle/{format}/fig2.png',
+                format='png',
+                width=800,
+                height=600
+            )
 
             max_rating = format_df_ratings['rating'].max()
             min_rating = format_df_ratings['rating'].min()
@@ -113,7 +195,49 @@ def precalculate(input_folder, output_folder, format_list=None):
                 fig.update_traces(mode='lines+markers')
                 fig.update_layout(xaxis_showticklabels=False, yaxis_range=[0, 100])
 
-                pio.write_json(fig, f'{output_folder}/battle/{format}/fig3.json')
+                fig.update_layout(
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    margin=dict(l=0, r=0, t=100, b=0),
+                    font=dict(
+                        color='white',
+                        size=16
+                    ),
+                    title=dict(
+                        text=fig.layout.title.text,
+                        y=0.95,
+                        x=0.5,
+                        xanchor='center'
+                    ),
+                    title_font=dict(
+                        size=20,
+                        color='white'
+                    ),
+                    legend_font=dict(
+                        size=14
+                    )
+                )
+
+                fig.update_xaxes(
+                    color='white',
+                    tickfont=dict(size=14),
+                    showgrid=False
+                )
+
+                fig.update_yaxes(
+                    color='white',
+                    tickfont=dict(size=14),
+                    gridcolor='rgba(255, 255, 255, 0.1)',
+                    zeroline=False
+                )
+
+                pio.write_image(
+                    fig,
+                    f'{output_folder}/battle/{format}/fig3.png',
+                    format='png',
+                    width=800,
+                    height=600
+                )
 
                 def team_similarity(row):
                     team1 = row['Team 1']
@@ -162,7 +286,49 @@ def precalculate(input_folder, output_folder, format_list=None):
                 fig.update_traces(mode='lines+markers')
                 fig.update_layout(xaxis_showticklabels=False, yaxis_range=[0, 100])
 
-                pio.write_json(fig, f'{output_folder}/battle/{format}/fig4.json')
+                fig.update_layout(
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    margin=dict(l=0, r=0, t=100, b=0),
+                    font=dict(
+                        color='white',
+                        size=16
+                    ),
+                    title=dict(
+                        text=fig.layout.title.text,
+                        y=0.95,
+                        x=0.5,
+                        xanchor='center'
+                    ),
+                    title_font=dict(
+                        size=20,
+                        color='white'
+                    ),
+                    legend_font=dict(
+                        size=14
+                    )
+                )
+
+                fig.update_xaxes(
+                    color='white',
+                    tickfont=dict(size=14),
+                    showgrid=False
+                )
+
+                fig.update_yaxes(
+                    color='white',
+                    tickfont=dict(size=14),
+                    gridcolor='rgba(255, 255, 255, 0.1)',
+                    zeroline=False
+                )
+
+                pio.write_image(
+                    fig,
+                    f'{output_folder}/battle/{format}/fig4.png',
+                    format='png',
+                    width=800,
+                    height=600
+                )
 
             format_df["uploadtime"] = pd.to_datetime(format_df["uploadtime"])
             format_df['weekday'] = format_df['uploadtime'].dt.weekday
@@ -189,7 +355,49 @@ def precalculate(input_folder, output_folder, format_list=None):
             fig_hour.update_layout(bargap=0)
             fig_hour.update_layout(yaxis_title='# Matches')
 
-            pio.write_json(fig_hour, f'{output_folder}/battle/{format}/fig_hour.json')
+            fig_hour.update_layout(
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                margin=dict(l=0, r=0, t=100, b=0),
+                font=dict(
+                    color='white',
+                    size=16
+                ),
+                title=dict(
+                    text=fig_hour.layout.title.text,
+                    y=0.95,
+                    x=0.5,
+                    xanchor='center'
+                ),
+                title_font=dict(
+                    size=20,
+                    color='white'
+                ),
+                legend_font=dict(
+                    size=14
+                )
+            )
+
+            fig_hour.update_xaxes(
+                color='white',
+                tickfont=dict(size=14),
+                showgrid=False
+            )
+
+            fig_hour.update_yaxes(
+                color='white',
+                tickfont=dict(size=14),
+                gridcolor='rgba(255, 255, 255, 0.1)',
+                zeroline=False
+            )
+
+            pio.write_image(
+                fig_hour,
+                f'{output_folder}/battle/{format}/fig_hour.png',
+                format='png',
+                width=800,
+                height=600
+            )
 
             fig_weekday = px.histogram(
                 format_df,
@@ -203,7 +411,49 @@ def precalculate(input_folder, output_folder, format_list=None):
             fig_weekday.update_layout(bargap=0)
             fig_weekday.update_layout(yaxis_title='# Matches')
 
-            pio.write_json(fig_weekday, f'{output_folder}/battle/{format}/fig_weekday.json')
+            fig_weekday.update_layout(
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                margin=dict(l=0, r=0, t=100, b=0),
+                font=dict(
+                    color='white',
+                    size=16
+                ),
+                title=dict(
+                    text=fig_weekday.layout.title.text,
+                    y=0.95,
+                    x=0.5,
+                    xanchor='center'
+                ),
+                title_font=dict(
+                    size=20,
+                    color='white'
+                ),
+                legend_font=dict(
+                    size=14
+                )
+            )
+
+            fig_weekday.update_xaxes(
+                color='white',
+                tickfont=dict(size=14),
+                showgrid=False
+            )
+
+            fig_weekday.update_yaxes(
+                color='white',
+                tickfont=dict(size=14),
+                gridcolor='rgba(255, 255, 255, 0.1)',
+                zeroline=False
+            )
+
+            pio.write_image(
+                fig_weekday,
+                f'{output_folder}/battle/{format}/fig_weekday.png',
+                format='png',
+                width=800,
+                height=600
+            )
 
             count_df = format_df.groupby(['weekday', 'hour_bin']).size().reset_index(name='match_count')
             weekday_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -336,9 +586,49 @@ def precalculate(input_folder, output_folder, format_list=None):
                 title=f'Time difference between 1st and last match<br>based on rating delta in {format}'
             )
 
-            fig_json = pio.to_json(fig)
-            with open(f'{output_folder}/players/{format}/fig1.json', 'w', encoding='utf-8') as f:
-                f.write(fig_json)
+            fig.update_layout(
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                margin=dict(l=0, r=0, t=100, b=0),
+                font=dict(
+                    color='white',
+                    size=16
+                ),
+                title=dict(
+                    text=fig.layout.title.text,
+                    y=0.95,
+                    x=0.5,
+                    xanchor='center'
+                ),
+                title_font=dict(
+                    size=20,
+                    color='white'
+                ),
+                legend_font=dict(
+                    size=14
+                )
+            )
+
+            fig.update_xaxes(
+                color='white',
+                tickfont=dict(size=14),
+                showgrid=False
+            )
+
+            fig.update_yaxes(
+                color='white',
+                tickfont=dict(size=14),
+                gridcolor='rgba(255, 255, 255, 0.1)',
+                zeroline=False
+            )
+
+            pio.write_image(
+                fig,
+                f'{output_folder}/players/{format}/fig1.png',
+                format='png',
+                width=800,
+                height=600
+            )
 
             fig = px.scatter(
                 players_df,
@@ -352,9 +642,49 @@ def precalculate(input_folder, output_folder, format_list=None):
                 title=f'Correlation between Max Rating and<br>Matches Played in {format}'
             )
 
-            fig_json = pio.to_json(fig)
-            with open(f'{output_folder}/players/{format}/fig2.json', 'w', encoding='utf-8') as f:
-                f.write(fig_json)
+            fig.update_layout(
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                margin=dict(l=0, r=0, t=100, b=0),
+                font=dict(
+                    color='white',
+                    size=16
+                ),
+                title=dict(
+                    text=fig.layout.title.text,
+                    y=0.95,
+                    x=0.5,
+                    xanchor='center'
+                ),
+                title_font=dict(
+                    size=20,
+                    color='white'
+                ),
+                legend_font=dict(
+                    size=14
+                )
+            )
+
+            fig.update_xaxes(
+                color='white',
+                tickfont=dict(size=14),
+                showgrid=False
+            )
+
+            fig.update_yaxes(
+                color='white',
+                tickfont=dict(size=14),
+                gridcolor='rgba(255, 255, 255, 0.1)',
+                zeroline=False
+            )
+
+            pio.write_image(
+                fig,
+                f'{output_folder}/players/{format}/fig2.png',
+                format='png',
+                width=800,
+                height=600
+            )
 
             players_df_filtered['winrate'] = (players_df_filtered['wins'] / players_df_filtered['played']) * 100
             fig = px.histogram(
@@ -371,9 +701,49 @@ def precalculate(input_folder, output_folder, format_list=None):
 
             fig.update_layout(yaxis_title='# Players')
 
-            fig_json = pio.to_json(fig)
-            with open(f'{output_folder}/players/{format}/fig3.json', 'w', encoding='utf-8') as f:
-                f.write(fig_json)
+            fig.update_layout(
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                margin=dict(l=0, r=0, t=100, b=0),
+                font=dict(
+                    color='white',
+                    size=16
+                ),
+                title=dict(
+                    text=fig.layout.title.text,
+                    y=0.95,
+                    x=0.5,
+                    xanchor='center'
+                ),
+                title_font=dict(
+                    size=20,
+                    color='white'
+                ),
+                legend_font=dict(
+                    size=14
+                )
+            )
+
+            fig.update_xaxes(
+                color='white',
+                tickfont=dict(size=14),
+                showgrid=False
+            )
+
+            fig.update_yaxes(
+                color='white',
+                tickfont=dict(size=14),
+                gridcolor='rgba(255, 255, 255, 0.1)',
+                zeroline=False
+            )
+
+            pio.write_image(
+                fig,
+                f'{output_folder}/players/{format}/fig3.png',
+                format='png',
+                width=800,
+                height=600
+            )
 
             fig = px.histogram(
                 players_df_filtered,
@@ -389,9 +759,49 @@ def precalculate(input_folder, output_folder, format_list=None):
 
             fig.update_xaxes(tickmode='linear', dtick=100)
 
-            fig_json = pio.to_json(fig)
-            with open(f'{output_folder}/players/{format}/fig4.json', 'w', encoding='utf-8') as f:
-                f.write(fig_json)
+            fig.update_layout(
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                margin=dict(l=0, r=0, t=100, b=0),
+                font=dict(
+                    color='white',
+                    size=16
+                ),
+                title=dict(
+                    text=fig.layout.title.text,
+                    y=0.95,
+                    x=0.5,
+                    xanchor='center'
+                ),
+                title_font=dict(
+                    size=20,
+                    color='white'
+                ),
+                legend_font=dict(
+                    size=14
+                )
+            )
+
+            fig.update_xaxes(
+                color='white',
+                tickfont=dict(size=14),
+                showgrid=False
+            )
+
+            fig.update_yaxes(
+                color='white',
+                tickfont=dict(size=14),
+                gridcolor='rgba(255, 255, 255, 0.1)',
+                zeroline=False
+            )
+
+            pio.write_image(
+                fig,
+                f'{output_folder}/players/{format}/fig4.png',
+                format='png',
+                width=800,
+                height=600
+            )
 
 
 

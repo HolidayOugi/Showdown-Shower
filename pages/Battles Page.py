@@ -81,84 +81,68 @@ def load_graphs(selected_format):
 
         with subcol1:
 
-            path = f"./output/graphs/battle/{selected_format}/fig1.json"
+            path = f"./output/graphs/battle/{selected_format}/fig1.png"
 
             if os.path.exists(path):
-
-                fig = pio.read_json(path)
-                st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},  key=f"{selected_format}_fig1")
+                st.image(path)
 
             else:
                 try:
-                    fig = pio.read_json(hf_hub_download(
+                    st.image(hf_hub_download(
                         repo_id="HolidayOugi/showdown-shower-resources",
                         repo_type="dataset",
-                        filename=f"graphs/battle/{selected_format}/fig1.json"
+                        filename=f"graphs/battle/{selected_format}/fig1.png"
                     ))
-                    st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},
-                                    key=f"{selected_format}_fig1")
                 except Exception as e:
                     pass
 
-            path = f"./output/graphs/battle/{selected_format}/fig2.json"
+            path = f"./output/graphs/battle/{selected_format}/fig2.png"
 
             if os.path.exists(path):
 
-                fig = pio.read_json(path)
-                st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},
-                                key=f"{selected_format}_fig2")
+                st.image(path)
 
             else:
                 try:
-                    fig = pio.read_json(hf_hub_download(
+                    st.image(hf_hub_download(
                         repo_id="HolidayOugi/showdown-shower-resources",
                         repo_type="dataset",
-                        filename=f"graphs/battle/{selected_format}/fig2.json"
+                        filename=f"graphs/battle/{selected_format}/fig2.png"
                     ))
-                    st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},
-                                    key=f"{selected_format}_fig2")
                 except Exception as e:
                     pass
 
         with subcol2:
 
-            path = f"./output/graphs/battle/{selected_format}/fig3.json"
+            path = f"./output/graphs/battle/{selected_format}/fig3.png"
 
             if os.path.exists(path):
 
-                fig = pio.read_json(path)
-                st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},
-                                key=f"{selected_format}_fig3")
+                st.image(path)
 
             else:
                 try:
-                    fig = pio.read_json(hf_hub_download(
+                    st.image(hf_hub_download(
                         repo_id="HolidayOugi/showdown-shower-resources",
                         repo_type="dataset",
-                        filename=f"graphs/battle/{selected_format}/fig3.json"
+                        filename=f"graphs/battle/{selected_format}/fig3.png"
                     ))
-                    st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},
-                                    key=f"{selected_format}_fig3")
                 except Exception as e:
                     pass
 
-            path = f"./output/graphs/battle/{selected_format}/fig4.json"
+            path = f"./output/graphs/battle/{selected_format}/fig4.png"
 
             if os.path.exists(path):
 
-                fig = pio.read_json(path)
-                st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},
-                                key=f"{selected_format}_fig4")
+                st.image(path)
 
             else:
                 try:
-                    fig = pio.read_json(hf_hub_download(
+                    st.image(hf_hub_download(
                         repo_id="HolidayOugi/showdown-shower-resources",
                         repo_type="dataset",
-                        filename=f"graphs/battle/{selected_format}/fig4.json"
+                        filename=f"graphs/battle/{selected_format}/fig4.png"
                     ))
-                    st.plotly_chart(fig, use_container_width=True, config={"staticPlot": True},
-                                    key=f"{selected_format}_fig4")
                 except Exception as e:
                     pass
 
@@ -311,45 +295,35 @@ def load_heatmap(selected_mode, selected_format):
 
         with subcol1:
 
-            path = f"./output/graphs/battle/{selected_format}/fig_hour.json"
+            path = f"./output/graphs/battle/{selected_format}/fig_hour.png"
 
             if os.path.exists(path):
-
-                fig = pio.read_json(path)
-                st.plotly_chart(fig, use_container_width=True,
-                                key=f"{selected_format}_fig_hour")
+                st.image(path)
 
             else:
                 try:
-                    fig = pio.read_json(hf_hub_download(
+                    st.image(hf_hub_download(
                         repo_id="HolidayOugi/showdown-shower-resources",
                         repo_type="dataset",
-                        filename=f"graphs/battle/{selected_format}/fig_hour.json"
+                        filename=f"graphs/battle/{selected_format}/fig_hour.png"
                     ))
-                    st.plotly_chart(fig, use_container_width=True,
-                                    key=f"{selected_format}_fig_hour")
                 except Exception as e:
                     pass
 
         with subcol2:
 
-            path = f"./output/graphs/battle/{selected_format}/fig_weekday.json"
+            path = f"./output/graphs/battle/{selected_format}/fig_weekday.png"
 
             if os.path.exists(path):
-
-                fig = pio.read_json(path)
-                st.plotly_chart(fig, use_container_width=True,
-                                key=f"{selected_format}_fig_weekday")
+                st.image(path)
 
             else:
                 try:
-                    fig = pio.read_json(hf_hub_download(
+                    st.image(hf_hub_download(
                         repo_id="HolidayOugi/showdown-shower-resources",
                         repo_type="dataset",
-                        filename=f"graphs/battle/{selected_format}/fig_weekday.json"
+                        filename=f"graphs/battle/{selected_format}/fig_weekday.png"
                     ))
-                    st.plotly_chart(fig, use_container_width=True,
-                                    key=f"{selected_format}_fig_weekday")
                 except Exception as e:
                     pass
 

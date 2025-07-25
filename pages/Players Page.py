@@ -244,66 +244,63 @@ def load_graphs(selected_format):
     col1, col2 = st.columns(2)
 
     with col1:
-        path = f"./output/graphs/players/{selected_format}/fig1.json"
+        path = f"./output/graphs/players/{selected_format}/fig1.png"
 
         if not os.path.exists(path):
 
-            path = hf_hub_download(
+            st.image(hf_hub_download(
                     repo_id="HolidayOugi/showdown-shower-resources",
                     repo_type="dataset",
-                    filename=f"graphs/players/{selected_format}/fig1.json"
-                )
+                    filename=f"graphs/players/{selected_format}/fig1.png"
+                ))
 
-        with open(path, 'r', encoding='utf-8') as f:
-            fig = pio.from_json(f.read())
+        else:
 
-        st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True})
+            st.image(path)
 
-        path = f"./output/graphs/players/{selected_format}/fig2.json"
+        path = f"./output/graphs/players/{selected_format}/fig2.png"
 
         if not os.path.exists(path):
 
-            path = hf_hub_download(
-                    repo_id="HolidayOugi/showdown-shower-resources",
-                    repo_type="dataset",
-                    filename=f"graphs/players/{selected_format}/fig2.json"
-                )
+            st.image(hf_hub_download(
+                repo_id="HolidayOugi/showdown-shower-resources",
+                repo_type="dataset",
+                filename=f"graphs/players/{selected_format}/fig2.png"
+            ))
 
-        with open(path, 'r', encoding='utf-8') as f:
-            fig = pio.from_json(f.read())
+        else:
 
-        st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True})
+            st.image(path)
 
     with col2:
 
-        path = f"./output/graphs/players/{selected_format}/fig3.json"
+        path = f"./output/graphs/players/{selected_format}/fig3.png"
 
         if not os.path.exists(path):
 
-            path = hf_hub_download(
-                    repo_id="HolidayOugi/showdown-shower-resources",
-                    repo_type="dataset",
-                    filename=f"graphs/players/{selected_format}/fig3.json"
-                )
-        with open(path, 'r', encoding='utf-8') as f:
-            fig = pio.from_json(f.read())
+            st.image(hf_hub_download(
+                repo_id="HolidayOugi/showdown-shower-resources",
+                repo_type="dataset",
+                filename=f"graphs/players/{selected_format}/fig3.png"
+            ))
 
-        st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True})
+        else:
 
-        path = f"./output/graphs/players/{selected_format}/fig4.json"
+            st.image(path)
+
+        path = f"./output/graphs/players/{selected_format}/fig4.png"
 
         if not os.path.exists(path):
 
-            path = hf_hub_download(
-                    repo_id="HolidayOugi/showdown-shower-resources",
-                    repo_type="dataset",
-                    filename=f"graphs/players/{selected_format}/fig4.json"
-                )
+            st.image(hf_hub_download(
+                repo_id="HolidayOugi/showdown-shower-resources",
+                repo_type="dataset",
+                filename=f"graphs/players/{selected_format}/fig4.png"
+            ))
 
-        with open(path, 'r', encoding='utf-8') as f:
-            fig = pio.from_json(f.read())
+        else:
 
-        st.plotly_chart(fig, use_container_width=True, config={'staticPlot': True})
+            st.image(path)
 
 @st.cache_data
 def load_player_graphs(row, selected_player, selected_format):
