@@ -12,6 +12,7 @@ import shutil
 import re
 import numpy as np
 import gc
+from tqdm import tqdm
 
 
 NEW_DATA_DIR = "../input/new_data"
@@ -253,7 +254,7 @@ def combine_replays(EXISTING_TIER_DIR, OUTPUT_DIR):
                 all_replays.extend([tuple(item) for item in lst])
         return all_replays
 
-    for file in os.listdir(f'{OUTPUT_DIR}/replays'):
+    for file in tqdm(os.listdir(f'{OUTPUT_DIR}/replays'), desc="Combining replays"):
         if not os.path.exists(os.path.join(f'{EXISTING_TIER_DIR}/replays/{file}')):
             shutil.copy2(f'{OUTPUT_DIR}/replays/{file}', f'{EXISTING_TIER_DIR}/replays/{file}')
         else:
