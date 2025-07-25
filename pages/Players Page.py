@@ -143,7 +143,12 @@ def binary_search(selected_format, selected_player, online):
                 repo_type="dataset",
                 filename=f"players/{selected_format}/{selected_format}_players.parquet",
             ))
-            return df
+
+            result = df[df['name'] == selected_player]
+            if not result.empty:
+                return df
+            else:
+                return None
         except:
             pass
 
