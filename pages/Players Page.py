@@ -373,7 +373,7 @@ def load_player_graphs(row, selected_player, selected_format):
         df_rating['Smoothed Rating'] = df_rating['Rating'].rolling(window=20, min_periods=1).mean()
 
         fig = px.line(df_rating, x='Match', y='Smoothed Rating',
-                      title=f"Rating history for {selected_player} in {selected_format}",
+                      title=f"Rating history for {row['name']} in {selected_format}",
                       markers=False)
 
         st.plotly_chart(fig, use_container_width=True, key=f"{key}_rating")
@@ -396,7 +396,7 @@ def load_heatmap(row, format_df, selected_mode, selected_format):
                 nbins=len(format_df['hour_bin'].unique()),
                 category_orders={'hour_bin': ordered_hours},
                 labels={'hour_bin': 'Hours'},
-                title=f'Frequency of matches during certain hours (GMT) in {selected_format}'
+                title=f'Frequency of matches during certain hours (GMT)<br>in {selected_format}'
             )
             fig_hour.update_xaxes(type='category')
             fig_hour.update_layout(bargap=0)
@@ -410,7 +410,7 @@ def load_heatmap(row, format_df, selected_mode, selected_format):
                 nbins=7,
                 category_orders={'weekday': weekday_order},
                 labels={'weekday': 'Weekday', 'matches': '# Matches'},
-                title=f'Frequency of matches during certain days (GMT) in {selected_format}'
+                title=f'Frequency of matches during certain days (GMT)<br>in {selected_format}'
             )
             fig_weekday.update_xaxes(type='category')
             fig_weekday.update_layout(bargap=0)
