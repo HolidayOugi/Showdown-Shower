@@ -56,7 +56,7 @@ This will generate the necessary files in the `output` folder including:
 - `graphs/`: Graphs per tier, displayed in the app  
 - `replays/`: Replay files per Pokémon and format  
 - `pokemon.parquet`: Overall Pokémon statistics by format  
-- `invalid_pokemon.parquet`: List of invalid Pokémon based on the filters in `input/gen_filter/`
+- `invalid_pokemon.parquet`: List of invalid Pokémon based on the filters in `input/gen_filter`
 
 To add new replays to the existing files, you can place the new `.parquet` files in the `input/new_data` folder and run the `aggregate.py` script in the `code` folder:
    ```bash
