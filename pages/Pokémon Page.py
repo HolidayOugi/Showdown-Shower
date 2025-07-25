@@ -7,7 +7,7 @@ import base64
 import os
 import json
 from huggingface_hub import hf_hub_download
-from datetime import date
+from datetime import date, timedelta
 
 def get_image_path(gen_path, pdex):
     for ext in ['png', 'gif']:
@@ -674,7 +674,7 @@ with bigcol3:
 
     min_date = matches_df["Upload Date"].min().date()
     max_date = matches_df["Upload Date"].max().date()
-    today = date.today()
+    today = date.today()+ timedelta(days=2)
 
     selected_dates = st.date_input(
         "Dates",
