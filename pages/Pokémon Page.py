@@ -9,6 +9,8 @@ import json
 from huggingface_hub import hf_hub_download
 from datetime import date, timedelta
 
+latest_format = "[Gen 9] OU"
+
 def get_image_path(gen_path, pdex):
     for ext in ['png', 'gif']:
         image_path = f"./assets/{gen_path}/{pdex}.{ext}"
@@ -657,7 +659,14 @@ with bigcol1:
 
     pokemon = st.selectbox('Choose a Pokémon', sorted(df['pokemon'].unique()), on_change=reset_status)
     df_filtered, formats, pdex = load_pokemon(df, pokemon)
-    selected_format = st.selectbox('Choose a Format', sorted(formats), on_change=reset_status)
+    formats = sorted(formats)
+
+    if latest_format in formats:
+        default_index = formats.index(latest_format)
+    else:
+        default_index = 0
+
+    selected_format = st.selectbox('Choose a Format', formats, index=default_index, on_change=reset_status)
     row = df_filtered[df_filtered['format'] == selected_format].iloc[0]
     types_df = pd.read_csv('./input/types.csv')
     load_info(row, selected_format, types_df)

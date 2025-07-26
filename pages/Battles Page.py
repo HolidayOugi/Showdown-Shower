@@ -14,6 +14,8 @@ if 'last_range' not in st.session_state:
 if 'pokemon_shown_battles' not in st.session_state:
     st.session_state.pokemon_shown_battles = 6
 
+latest_format = "[Gen 9] OU"
+
 def reset_pokemon_shown_battles():
     st.session_state.pokemon_shown_battles = 6
 
@@ -468,7 +470,15 @@ with col2:
 
     st.plotly_chart(fig, use_container_width=True)
 
-selected_format = st.selectbox('Choose a Format', sorted(formats), on_change=reset_pokemon_shown_battles)
+
+formats = sorted(formats)
+
+if latest_format in formats:
+    default_index = formats.index(latest_format)
+else:
+    default_index = 0
+
+selected_format = st.selectbox('Choose a Format', formats, index=default_index, on_change=reset_pokemon_shown_battles)
 
 col1, col2 = st.columns([10, 7])
 

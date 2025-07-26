@@ -6,7 +6,6 @@ import seaborn as sns
 import plotly.express as px
 import plotly.graph_objects as go
 import os
-import plotly.io as pio
 import numpy as np
 from huggingface_hub import hf_hub_download, list_repo_files
 import json
@@ -23,6 +22,8 @@ if 'rows_shown_players' not in st.session_state:
 
 if 'pokemon_shown' not in st.session_state:
     st.session_state.pokemon_shown = 6
+
+latest_format = "[Gen 9] OU"
 
 with open('./input/formats.txt', 'r') as f:
     formats = [line.strip() for line in f if line.strip()]
@@ -603,7 +604,14 @@ def load_replays(matches_df_raw, start_date, end_date):
 
 parquet_dir = './output/players'
 
-selected_format = st.selectbox('Choose a Format', sorted(formats), on_change=reset_status)
+formats = sorted(formats)
+
+if latest_format in formats:
+    default_index = formats.index(latest_format)
+else:
+    default_index = 0
+
+selected_format = st.selectbox('Choose a Format', formats, index=default_index, on_change=reset_status)
 
 bigcol1, sep, bigcol2 = st.columns([10, 1, 10])
 
