@@ -83,7 +83,6 @@ for filename in os.listdir(NEW_DATA_DIR):
                 num_chunks = (len(df_merged) + chunk_size - 1) // chunk_size
 
                 old_chunks = glob.glob(f"{escaped_base_path}_part*.parquet")
-                print(old_chunks)
                 if old_chunks:
                     old_chunks.sort(key=lambda p: int(re.search(r"_part(\d+)\.parquet$", p).group(1)))
                     last_file = old_chunks[-1]
