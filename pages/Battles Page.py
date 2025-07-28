@@ -449,7 +449,16 @@ with col2:
             )
         )
 
-        if agg_df['format'].str.contains("RANDOMBATTLE").any():
+        if agg_df['format'].str.contains("RANDOM DOUBLES BATTLE").any():
+
+            fig.add_bar(
+                x=[None],
+                y=[None],
+                name="<span style='visibility:hidden'>Format RANDOM DOUBLES BATTLE</span>",
+                marker=dict(color="rgba(0,0,0,0)"),
+                showlegend=True
+            )
+        elif agg_df['format'].str.contains("RANDOMBATTLE").any():
 
             fig.add_bar(
                 x=[None],
