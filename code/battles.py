@@ -1,8 +1,8 @@
 import pandas as pd
-import re
 import os
 from tqdm import tqdm
 import numpy as np
+from rapidfuzz.fuzz import ratio
 
 def load_battle(input_folder, output_folder):
 
@@ -23,15 +23,24 @@ def load_battle(input_folder, output_folder):
         switch2 = -1
         max_turn = 0
 
+
         for line in lines:
-            if line.startswith('|tie'):
+            if line.startswith('|tie') and not line.startswith('|tier'):
                 winner = 'Tie'
 
-            elif line.startswith('|player|p1|'):
-                p1 = line.split('|')[3]
+            elif line.startswith('N') and len(lines) < 2:
+                winner = 'DROP THIS ROW'
+                return winner, forfeit, p1, p2, list(team1), list(team2), max_turn, switch1, switch2
 
-            elif line.startswith('|player|p2|'):
-                p2 = line.split('|')[3]
+            elif line.startswith('|player|p1|') and winner is None:
+                name = line.split('|')[3]
+                if len(name) >= 1:
+                    p1 = name
+
+            elif line.startswith('|player|p2|') and winner is None:
+                name = line.split('|')[3]
+                if len(name) >= 1:
+                    p2 = name
 
             elif line.startswith('|teamsize|p1|'):
                 tsize1 = int(line.split('|')[3])
@@ -77,6 +86,9 @@ def load_battle(input_folder, output_folder):
             elif line.startswith('|faint|p2a'):
                 faint2 += 1
 
+            elif 'forfeit' in line:
+                forfeit = True
+
         def remove_variants(name_set):
             base_forms = {name.split('-')[0] for name in name_set}
             return {name for name in name_set if '-' not in name and name in base_forms}
@@ -84,22 +96,38 @@ def load_battle(input_folder, output_folder):
         team1_filtered = remove_variants(team1)
         team2_filtered = remove_variants(team2)
 
-        if winner == p1:
-            if faint2 < len(team2_filtered) or (tsize2 > 0 and faint2 < tsize2):
-                forfeit = True
+        if winner != p1 and winner != p2 and winner != 'Tie' and winner is not None:
+
+            score1 = ratio(winner, p1)
+            score2 = ratio(winner, p2)
+
+            if score1 >= score2:
+                winner = p1
+            else:
+                winner = p2
+
+        if winner is None:
+            winner = 'Unknown'
+
+
+        if forfeit is None:
+
+            if winner == p1:
+                if faint2 < len(team2_filtered) or (tsize2 > 0 and faint2 < tsize2):
+                    forfeit = True
+                else:
+                    forfeit = False
+
+            elif winner == p2:
+                if faint1 < len(team1_filtered) or (tsize1 > 0 and faint1 < tsize1):
+                    forfeit = True
+                else:
+                    forfeit = False
+
             else:
                 forfeit = False
 
-        elif winner == p2:
-            if faint1 < len(team1_filtered) or (tsize1 > 0 and faint1 < tsize1):
-                forfeit = True
-            else:
-                forfeit = False
-
-        else:
-            forfeit = False
-
-        return winner, forfeit, list(team1), list(team2), max_turn, switch1, switch2
+        return winner, forfeit, p1, p2, list(team1), list(team2), max_turn, switch1, switch2
 
     INPUT_FOLDER = input_folder
     OUTPUT_FOLDER = output_folder
@@ -117,31 +145,15 @@ def load_battle(input_folder, output_folder):
 
                 df['uploadtime'] = pd.to_datetime(df['uploadtime'], unit='s')
 
-                def normalize_players(value):
-                    if isinstance(value, (list, np.ndarray)):
-                        return [str(p).strip().strip('\'"').strip() for p in value]
-
-                    if isinstance(value, str):
-                        value = value.strip().strip('[]').strip()
-                        if not value:
-                            return []
-                        parts = re.split(r'\s*,\s*', value)
-                        return [p.strip('\'" ').strip() for p in parts]
-
-                    return []
-
-                df['players'] = df['players'].apply(normalize_players)
-                df['player1'] = df['players'].apply(lambda x: x[0] if len(x) > 0 else None)
-                df['player2'] = df['players'].apply(lambda x: x[1] if len(x) > 1 else None)
-
                 parsed = df['log'].progress_map(parse_log)
                 df_new = pd.DataFrame(parsed.tolist(),
-                                      columns=['Winner', 'Forfeit', 'Team 1', 'Team 2', 'Turns', '# Switches 1',
+                                      columns=['Winner', 'Forfeit', 'player1', 'player2', 'Team 1', 'Team 2', 'Turns', '# Switches 1',
                                                '# Switches 2'])
 
                 df = df.drop(columns=['log', 'players', 'formatid', 'private', 'password'], errors='ignore')
                 df['format'] = os.path.splitext(filename)[0].rsplit('_part', 1)[0]
                 df = pd.concat([df, df_new], axis=1)
+                df = df[df['Winner'] != 'DROP THIS ROW']
                 df.to_parquet(output_path, index=False)
 
             except Exception as e:

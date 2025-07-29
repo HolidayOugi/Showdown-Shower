@@ -12,3 +12,4 @@ numpy
 huggingface_hub
 hf-xet
 kaleido
+rapidfuzz

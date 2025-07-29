@@ -5,6 +5,9 @@ import numpy as np
 import os
 from tqdm import tqdm
 import json
+from rapidfuzz.fuzz import ratio
+
+
 def load_pokemon(input_folder, output_folder):
 
     def parse_log(log):
@@ -13,6 +16,8 @@ def load_pokemon(input_folder, output_folder):
         winner = None
         team1 = set()
         team2 = set()
+        p1 = None
+        p2 = None
         moves_used = defaultdict(set)
         nickname_map = {}
 
@@ -20,6 +25,9 @@ def load_pokemon(input_folder, output_folder):
 
             if line.startswith('|win|'):
                 winner = line.split('|')[2]
+
+            elif line.startswith('|tie') and not line.startswith('|tier'):
+                winner = 'Tie'
 
             elif line.startswith('|poke|p1|'):
                 species = line.split('|')[3].split(',')[0].strip()
@@ -54,44 +62,52 @@ def load_pokemon(input_folder, output_folder):
                     species = nickname_map.get(nickname, nickname)
                     moves_used[species].add(move)
 
+            elif line.startswith('|player|p1|') and winner is None:
+                name = line.split('|')[3]
+                if len(name) >= 1:
+                    p1 = name
 
-        return winner, team1, team2, moves_used
+
+            elif line.startswith('|player|p2|') and winner is None:
+                name = line.split('|')[3]
+                if len(name) >= 1:
+                    p2 = name
+
+        if winner != p1 and winner != p2 and winner != 'Tie' and winner is not None:
+
+            score1 = ratio(winner, p1)
+            score2 = ratio(winner, p2)
+
+            if score1 >= score2:
+                winner = p1
+            else:
+                winner = p2
+
+        if winner is None:
+            winner = 'Unknown'
+
+
+        return winner, p1, p2, team1, team2, moves_used
 
 
     def pokemon_dataframe(df_logs):
         rows = []
 
-        def normalize_players(value):
-            if isinstance(value, (list, np.ndarray)):
-                return [str(p).strip().strip('\'"').strip() for p in value]
-
-            if isinstance(value, str):
-                value = value.strip().strip('[]').strip()
-                if not value:
-                    return []
-                parts = re.split(r'\s*,\s*', value)
-                return [p.strip('\'" ').strip() for p in parts]
-
-            return []
-
-        df_logs['players'] = df_logs['players'].apply(normalize_players)
-        df_logs['player1'] = df_logs['players'].apply(lambda x: x[0] if len(x) > 0 else None)
-        df_logs['player2'] = df_logs['players'].apply(lambda x: x[1] if len(x) > 1 else None)
         df_logs = df_logs.drop(columns=['players', 'formatid'])
 
         for _, row in tqdm(df_logs.iterrows(), total=len(df_logs), desc="Parsing logs"):
             log = row['log']
-            winner, team1, team2, moves_used = parse_log(log)
+            winner, player1, player2, team1, team2, moves_used = parse_log(log)
             all_pokemon = team1.union(team2)
             for mon in all_pokemon:
                 rows.append({
                     'pokemon': mon,
                     'format': row['format'],
                     'played': 1,
-                    'won': int(winner == row['player1'] and mon in team1) or int(
-                        winner == row['player2'] and mon in team2),
-                    'lost': int(winner == row['player2'] and mon in team1) or int(
-                        winner == row['player1'] and mon in team2),
+                    'won': int(winner == player1 and mon in team1) or int(
+                        winner == player2 and mon in team2),
+                    'lost': int(winner == player2 and mon in team1) or int(
+                        winner == player1 and mon in team2),
                     'moves': Counter(moves_used.get(mon, [])),
                     'replays': (row['id'], row['uploadtime'])
                 })
