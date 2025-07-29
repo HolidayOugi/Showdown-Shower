@@ -86,8 +86,12 @@ def load_battle(input_folder, output_folder):
             elif line.startswith('|faint|p2a'):
                 faint2 += 1
 
-            elif 'forfeit' in line and not line.startswith('|c|') and not line.startswith('|chat|'):
+            elif 'forfeited' in line and not line.startswith('|c|') and not line.startswith('|chat|'):
                 forfeit = True
+                if p1 is not None and p1 in line:
+                    winner = p2
+                elif p2 is not None and p2 in line:
+                    winner = p1
 
         def remove_variants(name_set):
             base_forms = {name.split('-')[0] for name in name_set}
