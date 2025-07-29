@@ -86,7 +86,7 @@ def load_battle(input_folder, output_folder):
             elif line.startswith('|faint|p2a'):
                 faint2 += 1
 
-            elif 'forfeit' in line and not line.startswith('|c|'):
+            elif 'forfeit' in line and not line.startswith('|c|') and not line.startswith('|chat|'):
                 forfeit = True
 
         def remove_variants(name_set):
