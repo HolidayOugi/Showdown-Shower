@@ -96,6 +96,9 @@ def load_battle(input_folder, output_folder):
         team1_filtered = remove_variants(team1)
         team2_filtered = remove_variants(team2)
 
+        if winner == 'Tie':
+            forfeit = False
+
         if winner != p1 and winner != p2 and winner != 'Tie' and winner is not None:
 
             score1 = ratio(winner, p1)
