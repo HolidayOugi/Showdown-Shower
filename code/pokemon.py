@@ -6,6 +6,23 @@ import os
 from tqdm import tqdm
 import json
 from rapidfuzz.fuzz import ratio
+import shutil
+
+
+
+def aggregate_replays(replays_list):
+    all_replays = []
+    for lst in replays_list:
+        if isinstance(lst, list):
+            all_replays.extend([tuple(item) for item in lst])
+    return all_replays
+
+
+def aggregate_moves(moves_list):
+    total = Counter()
+    for moves in moves_list:
+        total.update(dict(moves))
+    return list(total.items())
 
 
 def load_pokemon(input_folder, output_folder):
@@ -72,6 +89,13 @@ def load_pokemon(input_folder, output_folder):
                 name = line.split('|')[3]
                 if len(name) >= 1:
                     p2 = name
+
+
+            elif 'forfeited' in line and not line.startswith('|c|') and not line.startswith('|chat|'):
+                if p1 is not None and p1 in line:
+                    winner = p2
+                elif p2 is not None and p2 in line:
+                    winner = p1
 
         if winner != p1 and winner != p2 and winner != 'Tie' and winner is not None:
 
@@ -206,23 +230,11 @@ def load_pokemon(input_folder, output_folder):
         df = df.drop(columns=['replays'])
         return df
 
-    def aggregate_replays(replays_list):
-        all_replays = []
-        for lst in replays_list:
-            if isinstance(lst, list):
-                all_replays.extend([tuple(item) for item in lst])
-        return all_replays
-
-    def aggregate_moves(moves_list):
-        total = Counter()
-        for moves in moves_list:
-            total.update(dict(moves))
-        return list(total.items())
-
 
     input_dir = input_folder
     dfs = pd.DataFrame()
     file_list = os.listdir(input_dir)
+    os.makedirs(f"{output_folder}/pokemon", exist_ok=True)
 
     for file in file_list:
 
@@ -236,39 +248,75 @@ def load_pokemon(input_folder, output_folder):
             df['format'] = format_name
             df['uploadtime'] = pd.to_datetime(df['uploadtime'], unit='s')
             df_pokemon = pokemon_dataframe(df)
-            if dfs.empty:
-                dfs = df_pokemon
+            df_pokemon['moves'] = df_pokemon['moves'].apply(lambda x: json.loads(x) if isinstance(x, str) else x)
+            df_pokemon['replays'] = df_pokemon['replays'].apply(lambda x: json.loads(x) if isinstance(x, str) else [])
+            df_pokemon = df_pokemon.groupby(['pokemon', 'format'], as_index=False).agg({
+                'played': 'sum',
+                'won': 'sum',
+                'lost': 'sum',
+                'win_rate': 'mean',
+                'moves': aggregate_moves,
+                'replays': aggregate_replays,
+                'Pdex': 'first',
+                'Type 1': 'first',
+                'Type 2': 'first',
+                'Total': 'first',
+                'HP': 'first',
+                'Attack': 'first',
+                'Defense': 'first',
+                'Sp. Atk': 'first',
+                'Sp. Def': 'first',
+                'Speed': 'first'
+            })
+            output_path = os.path.join(output_folder, "pokemon", f"{format_name}.parquet")
+            if os.path.exists(output_path):
+                df_old = pd.read_parquet(output_path)
+                df_old['moves'] = df_old['moves'].apply(lambda x: json.loads(x) if isinstance(x, str) else x)
+                df_old['replays'] = df_old['replays'].apply(lambda x: json.loads(x) if isinstance(x, str) else [])
+
+                df_combined = pd.concat([df_old, df_pokemon], ignore_index=True)
+                df_combined = df_combined.groupby(['pokemon', 'format'], as_index=False).agg({
+                    'played': 'sum',
+                    'won': 'sum',
+                    'lost': 'sum',
+                    'win_rate': 'mean',
+                    'moves': aggregate_moves,
+                    'replays': aggregate_replays,
+                    'Pdex': 'first',
+                    'Type 1': 'first',
+                    'Type 2': 'first',
+                    'Total': 'first',
+                    'HP': 'first',
+                    'Attack': 'first',
+                    'Defense': 'first',
+                    'Sp. Atk': 'first',
+                    'Sp. Def': 'first',
+                    'Speed': 'first'
+                })
             else:
-                dfs = pd.concat([dfs, df_pokemon], ignore_index=True)
+                df_combined = df_pokemon
 
-    dfs['moves'] = dfs['moves'].apply(lambda x: json.loads(x) if isinstance(x, str) else x)
-    dfs['replays'] = dfs['replays'].apply(lambda x: json.loads(x) if isinstance(x, str) else [])
-    dfs = dfs.groupby(['pokemon', 'format'], as_index=False).agg({
-        'played': 'sum',
-        'won': 'sum',
-        'lost': 'sum',
-        'win_rate': 'mean',
-        'moves': aggregate_moves,
-        'replays': aggregate_replays,
-        'Pdex': 'first',
-        'Type 1': 'first',
-        'Type 2': 'first',
-        'Total': 'first',
-        'HP': 'first',
-        'Attack': 'first',
-        'Defense': 'first',
-        'Sp. Atk': 'first',
-        'Sp. Def': 'first',
-        'Speed': 'first'
-    })
+            df_combined['moves'] = df_combined['moves'].apply(
+                lambda x: json.dumps(sorted(x)) if isinstance(x, list) else json.dumps([]))
+            df_combined['replays'] = df_combined['replays'].apply(lambda lst: json.dumps([
+                (rid, ts.isoformat() if hasattr(ts, 'isoformat') else str(ts)) for rid, ts in lst
+            ]) if isinstance(lst, list) else '[]')
 
+            df_combined.to_parquet(output_path, index=False)
+
+    file_parquet = [
+        os.path.join(f"{output_folder}/pokemon", f)
+        for f in os.listdir(f"{output_folder}/pokemon")
+        if f.endswith(".parquet") and os.path.isfile(os.path.join(f"{output_folder}/pokemon", f))
+    ]
+
+    dfs = pd.concat([pd.read_parquet(file) for file in file_parquet], ignore_index=True)
+    dfs = dfs.sort_values(by=['pokemon', 'format']).reset_index(drop=True)
     dfs['win_rate'] = (dfs['won'] / (dfs['won'] + dfs['lost'])) * 100
-    dfs['moves'] = dfs['moves'].apply(lambda x: json.dumps(x))
-    dfs['replays'] = dfs['replays'].apply(lambda lst: json.dumps([
-        (rid, ts.isoformat() if hasattr(ts, 'isoformat') else str(ts)) for rid, ts in lst
-    ]) if isinstance(lst, list) else '[]')
     dfs = calculate_usage(dfs)
     dfs = calculate_replay(dfs)
     pokemon_df, invalid_pokemon = filter_pokemon(dfs)
     pokemon_df.to_parquet(f'{output_folder}/pokemon.parquet', index=False)
     invalid_pokemon.to_parquet(f'{output_folder}/invalid_pokemon.parquet', index=False)
+    if os.path.exists(f'{output_folder}/pokemon') and os.path.isdir(f'{output_folder}/pokemon'):
+        shutil.rmtree(f'{output_folder}/pokemon')
