@@ -137,6 +137,8 @@ def load_pokemon(input_folder, output_folder):
                 })
 
         df_help = pd.DataFrame(rows)
+        if df_help.empty:
+            return None
         df_help['pokemon'] = df_help['pokemon'].str.replace("’", "'", regex=False)
 
         def merge_counters(series):
@@ -232,7 +234,6 @@ def load_pokemon(input_folder, output_folder):
 
 
     input_dir = input_folder
-    dfs = pd.DataFrame()
     file_list = os.listdir(input_dir)
     os.makedirs(f"{output_folder}/pokemon", exist_ok=True)
 
@@ -248,6 +249,8 @@ def load_pokemon(input_folder, output_folder):
             df['format'] = format_name
             df['uploadtime'] = pd.to_datetime(df['uploadtime'], unit='s')
             df_pokemon = pokemon_dataframe(df)
+            if df_pokemon is None:
+                continue
             df_pokemon['moves'] = df_pokemon['moves'].apply(lambda x: json.loads(x) if isinstance(x, str) else x)
             df_pokemon['replays'] = df_pokemon['replays'].apply(lambda x: json.loads(x) if isinstance(x, str) else [])
             df_pokemon = df_pokemon.groupby(['pokemon', 'format'], as_index=False).agg({
