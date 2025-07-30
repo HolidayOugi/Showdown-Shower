@@ -93,7 +93,7 @@ def load_players(input_folder, output_folder, format_list=None):
             num_chunks = (len(stats) + chunk_size - 1) // chunk_size
             for i in range(num_chunks):
                 chunk = stats.iloc[i * chunk_size: (i + 1) * chunk_size]
-                chunk_file = f"{base_path}_part{1 + i}.parquet"
+                chunk_file = f"{base_path}_part{1 + i:02}.parquet"
                 chunk.to_parquet(chunk_file, index=False, engine='pyarrow', row_group_size=1000)
 
             single_file = f"{base_path}.parquet"
