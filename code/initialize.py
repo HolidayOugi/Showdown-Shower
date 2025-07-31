@@ -30,6 +30,14 @@ for base_path, files in file_groups.items():
     del df_list, df_merged
     gc.collect()
 
+file_parquet =  glob.glob(os.path.join("../output/tiers", '*.parquet'))
+os.makedirs("../output/tiers/top", exist_ok=True)
+for f in file_parquet:
+    df = pd.read_parquet(f)
+    path = os.path.join("../output/tiers/top", os.path.basename(f))
+    top_df = df.sort_values(by="views", ascending=False).head(1000)
+    top_df.to_parquet(path, index=False, engine='pyarrow', row_group_size=1000)
+
 load_pokemon("../input/parquet", "../output")
 load_players("../output/tiers", "../output/players")
 load_matches("../output/tiers", "../output/matches")

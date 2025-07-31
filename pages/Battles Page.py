@@ -13,11 +13,14 @@ if 'last_range' not in st.session_state:
     st.session_state.last_range = (None, None)
 if 'pokemon_shown_battles' not in st.session_state:
     st.session_state.pokemon_shown_battles = 6
+if 'rows_shown_battle' not in st.session_state:
+    st.session_state.rows_shown_battle = 5
 
 latest_format = "[Gen 9] OU"
 
 def reset_pokemon_shown_battles():
     st.session_state.pokemon_shown_battles = 6
+    st.session_state.rows_shown_battle = 5
 
 
 def format_quarter(q):
@@ -359,6 +362,22 @@ def load_heatmap(selected_mode, selected_format):
             except Exception as e:
                 pass
 
+@st.cache_data
+def load_replay(selected_format):
+    path = f"./output/tiers/top/{selected_format}.parquet"
+    if os.path.exists(path):
+        replay_df = pd.read_parquet(path)
+    else:
+        replay_df = pd.read_parquet(hf_hub_download(
+            repo_id="HolidayOugi/showdown-shower-resources",
+            repo_type="dataset",
+            filename=f"tiers/top/{selected_format}.parquet"
+        ))
+    replay_df = replay_df.sort_values(by='views', ascending=False)
+    replay_df = replay_df[['id', 'uploadtime', 'views']]
+    replay_df['id'] = replay_df['id'].apply(lambda x: f"[{x}](https://replay.pokemonshowdown.com/{x})")
+    replay_df = replay_df.rename(columns={'id': 'Replay', 'uploadtime': 'Upload Date', 'views': 'Views'})
+    return replay_df
 
 col1, col2 = st.columns([3, 10])
 
@@ -488,6 +507,7 @@ else:
     default_index = 0
 
 selected_format = st.selectbox('Choose a Format', formats, index=default_index, on_change=reset_pokemon_shown_battles)
+key = f"({selected_format})"
 
 col1, col2 = st.columns([10, 7])
 
@@ -499,3 +519,15 @@ with col1:
 with col2:
     load_types(selected_format)
     load_pokemon(selected_format)
+    replay_df = load_replay(selected_format)
+    st.markdown(f"### Most watched Replays in {selected_format}")
+
+    st.write(
+        replay_df.head(st.session_state.rows_shown_battle).to_markdown(index=False),
+        unsafe_allow_html=True
+    )
+
+    if st.session_state.rows_shown_battle < len(replay_df):
+        if st.button("Load more", key=f"{key}_load"):
+            st.session_state.rows_shown_battle += 5
+            st.rerun()

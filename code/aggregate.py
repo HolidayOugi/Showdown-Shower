@@ -160,6 +160,9 @@ for filename in os.listdir(f"{OUTPUT_DIR}/tiers"):
             combined_df = combined_df.drop_duplicates(subset="id")
 
         combined_df.to_parquet(existing_file_path, index=False)
+        os.makedirs(f"{EXISTING_TIER_DIR}/tiers/top", exist_ok=True)
+        top_df = combined_df.sort_values(by="views", ascending=False).head(1000)
+        top_df.to_parquet(f"{EXISTING_TIER_DIR}/tiers/top/{filename}", index=False, engine='pyarrow', row_group_size=1000)
         print(f"Saved: {existing_file_path}")
 
     except Exception as e:
