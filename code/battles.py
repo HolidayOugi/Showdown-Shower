@@ -6,7 +6,7 @@ from rapidfuzz.fuzz import ratio
 
 def load_battle(input_folder, output_folder):
 
-    def parse_log(log_text):
+    def parse_log(log_text, format_name):
         lines = log_text.splitlines()
 
         winner = None
@@ -119,13 +119,13 @@ def load_battle(input_folder, output_folder):
 
         if forfeit is None:
 
-            if winner == p1:
+            if winner == p1 and "VGC" not in format_name and "BATTLE SPOT" not in format_name and "BATTLE STADIUM" not in format_name:
                 if faint2 < len(team2_filtered) or (tsize2 > 0 and faint2 < tsize2):
                     forfeit = True
                 else:
                     forfeit = False
 
-            elif winner == p2:
+            elif winner == p2 and "VGC" not in format_name and "BATTLE SPOT" not in format_name and "BATTLE STADIUM" not in format_name:
                 if faint1 < len(team1_filtered) or (tsize1 > 0 and faint1 < tsize1):
                     forfeit = True
                 else:
@@ -147,18 +147,19 @@ def load_battle(input_folder, output_folder):
 
             try:
                 df = pd.read_parquet(input_path)
+                format_name = os.path.splitext(filename)[0].rsplit('_part', 1)[0]
 
                 print(f"Elaborating {filename}")
 
                 df['uploadtime'] = pd.to_datetime(df['uploadtime'], unit='s')
 
-                parsed = df['log'].progress_map(parse_log)
+                parsed = df['log'].progress_map(lambda log: parse_log(log, format_name))
                 df_new = pd.DataFrame(parsed.tolist(),
                                       columns=['Winner', 'Forfeit', 'player1', 'player2', 'Team 1', 'Team 2', 'Turns', '# Switches 1',
                                                '# Switches 2'])
 
                 df = df.drop(columns=['log', 'players', 'formatid', 'private', 'password'], errors='ignore')
-                df['format'] = os.path.splitext(filename)[0].rsplit('_part', 1)[0]
+                df['format'] = format_name
                 df = pd.concat([df, df_new], axis=1)
                 df = df[df['Winner'] != 'DROP THIS ROW']
                 df.to_parquet(output_path, index=False)
