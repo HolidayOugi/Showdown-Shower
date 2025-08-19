@@ -119,13 +119,13 @@ def load_battle(input_folder, output_folder):
 
         if forfeit is None:
 
-            if winner == p1 and "VGC" not in format_name and "BATTLE SPOT" not in format_name and "BATTLE STADIUM" not in format_name:
+            if winner == p1 and "VGC" not in format_name and "BATTLE SPOT" not in format_name and "BATTLE STADIUM" not in format_name and "NINTENDO" not in format_name:
                 if faint2 < len(team2_filtered) or (tsize2 > 0 and faint2 < tsize2):
                     forfeit = True
                 else:
                     forfeit = False
 
-            elif winner == p2 and "VGC" not in format_name and "BATTLE SPOT" not in format_name and "BATTLE STADIUM" not in format_name:
+            elif winner == p2 and "VGC" not in format_name and "BATTLE SPOT" not in format_name and "BATTLE STADIUM" not in format_name and "NINTENDO" not in format_name:
                 if faint1 < len(team1_filtered) or (tsize1 > 0 and faint1 < tsize1):
                     forfeit = True
                 else:
