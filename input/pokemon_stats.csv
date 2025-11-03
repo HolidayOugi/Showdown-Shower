@@ -47,6 +47,7 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 34,Nidoking,Poison,Ground,505,81,102,77,85,75,85
 35,Clefairy,Fairy,,323,70,45,48,60,65,35
 36,Clefable,Fairy,,483,95,70,73,95,90,60
+36-mega,Clefable-Mega,Fairy,Flying,583,95,80,93,135,110,70
 37,Vulpix,Fire,,299,38,41,40,50,65,65
 37-alola,Vulpix-Alola,Ice,,299,38,41,40,50,65,65
 38,Ninetales,Fire,,505,73,76,75,81,100,100
@@ -92,6 +93,7 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 69,Bellsprout,Grass,Poison,300,50,75,35,70,30,40
 70,Weepinbell,Grass,Poison,390,65,90,50,85,45,55
 71,Victreebel,Grass,Poison,490,80,105,65,100,70,70
+71-mega,Victreebel-Mega,Grass,Poison,590,80,125,85,135,95,70
 72,Tentacool,Water,Poison,335,40,40,35,50,100,70
 73,Tentacruel,Water,Poison,515,80,70,65,80,120,100
 74,Geodude,Rock,Ground,300,40,80,100,30,30,20
@@ -160,6 +162,7 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 119,Seaking,Water,,450,80,92,65,65,80,68
 120,Staryu,Water,,340,30,45,55,70,55,85
 121,Starmie,Water,Psychic,520,60,75,85,100,85,115
+121-mega,Starmie-Mega,Water,Psychic,660,60,140,105,130,105,120
 122,Mr. Mime,Psychic,Fairy,460,40,45,65,100,120,90
 122-galar,Mr. Mime-Galar,Ice,Psychic,460,50,65,65,90,90,100
 123,Scyther,Bug,Flying,500,70,110,80,55,80,105
@@ -199,6 +202,7 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 147,Dratini,Dragon,,300,41,64,45,50,50,50
 148,Dragonair,Dragon,,420,61,84,65,70,70,70
 149,Dragonite,Dragon,Flying,600,91,134,95,100,100,80
+149-mega,Dragonite-Mega,Dragon,Flying,700,91,124,115,145,125,100
 150,Mewtwo,Psychic,,680,106,110,90,154,90,130
 150-megax,Mewtwo-Mega-X,Psychic,Fighting,780,106,190,100,154,100,130
 150-megay,Mewtwo-Mega-Y,Psychic,,780,106,150,70,194,120,140
@@ -206,6 +210,7 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 152,Chikorita,Grass,,318,45,49,65,49,65,45
 153,Bayleef,Grass,,405,60,62,80,63,80,60
 154,Meganium,Grass,,525,80,82,100,83,100,80
+154-mega,Meganium-Mega,Grass,Fairy,625,80,92,115,143,115,80
 155,Cyndaquil,Fire,,309,39,52,43,60,50,65
 156,Quilava,Fire,,405,58,64,58,80,65,80
 157,Typhlosion,Fire,,534,78,84,78,109,85,100
@@ -213,6 +218,7 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 158,Totodile,Water,,314,50,65,64,44,48,43
 159,Croconaw,Water,,405,65,80,80,59,63,58
 160,Feraligatr,Water,,530,85,105,100,79,83,78
+160-mega,Feraligatr-Mega,Water,Dragon,630,85,160,125,89,93,78
 161,Sentret,Normal,,215,35,46,34,35,45,20
 162,Furret,Normal,,415,85,76,64,45,55,90
 163,Hoothoot,Normal,Flying,262,60,30,30,36,56,50
@@ -289,6 +295,7 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 225,Delibird,Ice,Flying,330,45,55,45,65,45,75
 226,Mantine,Water,Flying,485,85,40,70,80,140,70
 227,Skarmory,Steel,Flying,465,65,80,140,40,70,70
+227-mega,Skarmory-Mega,Steel,Flying,565,65,140,110,40,100,110
 228,Houndour,Dark,Fire,330,45,60,30,80,50,65
 229,Houndoom,Dark,Fire,500,75,90,50,110,80,95
 229-mega,Houndoom-Mega,Dark,Fire,600,75,90,90,140,90,115
@@ -581,6 +588,7 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 476,Probopass,Rock,Steel,525,60,55,145,75,150,40
 477,Dusknoir,Ghost,,525,45,100,135,65,135,45
 478,Froslass,Ice,Ghost,480,70,80,70,80,70,110
+478-mega,Froslass-Mega,Ice,Ghost,580,70,80,70,140,100,120
 479,Rotom,Electric,Ghost,440,50,50,77,95,77,91
 479-heat,Rotom-Heat,Electric,Fire,520,50,65,107,105,107,86
 479-wash,Rotom-Wash,Electric,Water,520,50,65,107,105,107,86
@@ -612,6 +620,7 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 498,Tepig,Fire,,308,65,63,45,45,45,45
 499,Pignite,Fire,Fighting,418,90,93,55,70,55,55
 500,Emboar,Fire,Fighting,528,110,123,65,100,65,65
+500-mega,Emboar-Mega,Fire,Fighting,628,110,148,75,110,110,75
 501,Oshawott,Water,,308,55,55,45,63,45,45
 502,Dewott,Water,,413,75,75,60,83,60,60
 503,Samurott,Water,,528,95,100,85,108,70,70
@@ -643,6 +652,7 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 528,Swoobat,Psychic,Flying,425,67,57,55,77,55,114
 529,Drilbur,Ground,,328,60,85,40,30,45,68
 530,Excadrill,Ground,Steel,508,110,135,60,50,65,88
+530-mega,Excadrill-Mega,Ground,Steel,608,110,165,100,65,65,103
 531,Audino,Normal,,445,103,60,86,60,86,50
 531-mega,Audino-Mega,Normal,Fairy,545,103,60,126,80,126,50
 532,Timburr,Fighting,,305,75,80,55,25,35,35
@@ -659,6 +669,7 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 543,Venipede,Bug,Poison,260,30,45,59,30,39,57
 544,Whirlipede,Bug,Poison,360,40,55,99,40,79,47
 545,Scolipede,Bug,Poison,485,60,100,89,55,69,112
+545-mega,Scolipede-Mega,Bug,Poison,585,60,140,149,75,99,62
 546,Cottonee,Grass,Fairy,280,40,27,60,37,50,66
 547,Whimsicott,Grass,Fairy,480,60,67,85,77,75,116
 548,Petilil,Grass,,280,45,35,50,70,50,30
@@ -681,6 +692,7 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 558,Crustle,Bug,Rock,485,70,105,125,65,75,45
 559,Scraggy,Dark,Fighting,348,50,75,70,35,70,48
 560,Scrafty,Dark,Fighting,488,65,90,115,45,115,58
+560-mega,Scrafty-Mega,Dark,Fighting,588,65,130,135,55,135,68
 561,Sigilyph,Psychic,Flying,490,72,58,80,103,80,97
 562,Yamask,Ghost,,303,38,30,85,55,65,30
 562-galar,Yamask-Galar,Ground,Ghost,303,38,55,85,30,65,30
@@ -728,11 +740,13 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 602,Tynamo,Electric,,275,35,55,40,45,40,60
 603,Eelektrik,Electric,,405,65,85,70,75,70,40
 604,Eelektross,Electric,,515,85,115,80,105,80,50
+604-mega,Eelektross-Mega,Electric,,615,85,145,80,135,90,80
 605,Elgyem,Psychic,,335,55,55,55,85,55,30
 606,Beheeyem,Psychic,,485,75,75,75,125,95,40
 607,Litwick,Ghost,Fire,275,50,30,55,65,55,20
 608,Lampent,Ghost,Fire,370,60,40,60,95,60,55
 609,Chandelure,Ghost,Fire,520,60,55,90,145,90,80
+609-mega,Chandelure-Mega,Ghost,Fire,620,60,75,110,175,110,90
 610,Axew,Dragon,,320,46,87,60,30,40,57
 611,Fraxure,Dragon,,410,66,117,70,40,50,67
 612,Haxorus,Dragon,,540,76,147,90,60,70,97
@@ -785,12 +799,15 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 650,Chespin,Grass,,313,56,61,65,48,45,38
 651,Quilladin,Grass,,405,61,78,95,56,58,57
 652,Chesnaught,Grass,Fighting,530,88,107,122,74,75,64
+652-mega,Chesnaught-Mega,Grass,Fighting,630,88,137,172,74,115,44
 653,Fennekin,Fire,,307,40,45,40,62,60,60
 654,Braixen,Fire,,409,59,59,58,90,70,73
 655,Delphox,Fire,Psychic,534,75,69,72,114,100,104
+655-mega,Delphox-Mega,Fire,Psychic,634,75,69,72,159,125,134
 656,Froakie,Water,,314,41,56,40,62,44,71
 657,Frogadier,Water,,405,54,63,52,83,56,97
 658,Greninja,Water,Dark,530,72,95,67,103,71,122
+658-mega,Greninja-Mega,Water,Dark,630,72,125,77,133,81,142
 658-ash,Greninja-Ash,Water,Dark,640,72,145,67,153,71,132
 659,Bunnelby,Normal,,237,38,36,38,32,36,57
 660,Diggersby,Normal,Ground,423,85,56,77,50,77,78
@@ -802,8 +819,10 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 666,Vivillon,Bug,Flying,411,80,52,50,90,50,89
 667,Litleo,Fire,Normal,369,62,50,58,73,54,72
 668,Pyroar,Fire,Normal,507,86,68,72,109,66,106
+668-mega,Pyroar-Mega,Fire,Normal,607,86,88,92,129,86,126
 669,FlabéBé,Fairy,,303,44,38,39,61,79,42
 670,Floette,Fairy,,371,54,45,47,75,98,52
+670-mega,Floette-Mega,Fairy,,651,74,85,87,155,148,102
 671,Florges,Fairy,,552,78,65,68,112,154,75
 672,Skiddo,Grass,,350,66,65,48,62,57,52
 673,Gogoat,Grass,,531,123,100,62,97,81,68
@@ -823,10 +842,13 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 685,Slurpuff,Fairy,,480,82,80,86,85,75,72
 686,Inkay,Dark,Psychic,288,53,54,53,37,46,45
 687,Malamar,Dark,Psychic,482,86,92,88,68,75,73
+687-mega,Malamar-Mega,Dark,Psychic,582,86,102,88,98,120,88
 688,Binacle,Rock,Water,306,42,52,67,39,56,50
 689,Barbaracle,Rock,Water,500,72,105,115,54,86,68
+689-mega,Barbaracle-Mega,Rock,Fighting,600,72,140,130,64,106,88
 690,Skrelp,Poison,Water,320,50,60,60,60,60,30
 691,Dragalge,Poison,Dragon,494,65,75,90,97,123,44
+691-mega,Dragalge-Mega,Poison,Dragon,594,65,85,105,132,163,44
 692,Clauncher,Water,,330,50,53,62,58,63,44
 693,Clawitzer,Water,,500,71,73,88,120,89,59
 694,Helioptile,Electric,Normal,289,44,38,33,61,43,70
@@ -837,6 +859,7 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 699,Aurorus,Rock,Ice,521,123,77,72,99,92,58
 700,Sylveon,Fairy,,525,95,65,65,110,130,60
 701,Hawlucha,Fighting,Flying,500,78,92,75,74,63,118
+701-mega,Hawlucha-Mega,Fighting,Flying,600,78,137,100,74,93,118
 702,Dedenne,Electric,Fairy,431,67,58,57,81,67,101
 703,Carbink,Rock,Fairy,500,50,50,150,50,150,50
 704,Goomy,Dragon,,300,45,50,35,55,75,40
@@ -863,6 +886,7 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 716,Xerneas,Fairy,,680,126,131,95,131,98,99
 717,Yveltal,Dark,Flying,680,126,131,95,131,98,99
 718,Zygarde,Dragon,Ground,600,108,100,121,81,95,95
+718-mega,Zygarde-Mega,Dragon,Ground,778,216,70,91,216,85,100
 718-10,Zygarde-10%,Dragon,Ground,486,54,100,71,61,85,115
 718-complete,Zygarde-Complete,Dragon,Ground,708,216,100,121,91,95,85
 719,Diancie,Rock,Fairy,600,50,100,150,100,150,50
@@ -938,6 +962,7 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 778,Mimikyu,Ghost,Fairy,476,55,90,80,50,105,96
 779,Bruxish,Water,Psychic,475,68,105,70,70,70,92
 780,Drampa,Normal,Dragon,485,78,60,85,135,91,36
+780-mega,Drampa-Mega,Normal,Dragon,585,78,85,110,160,116,36
 781,Dhelmise,Ghost,Grass,517,70,131,100,86,90,40
 782,Jangmo-O,Dragon,,300,45,55,65,45,45,45
 783,Hakamo-O,Dragon,Fighting,420,55,75,90,65,70,65
@@ -1032,6 +1057,7 @@ Pdex,pokemon,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed
 868,Milcery,Fairy,,270,45,40,40,50,61,34
 869,Alcremie,Fairy,,495,65,60,75,110,121,64
 870,Falinks,Fighting,,470,65,100,100,70,60,75
+870-mega,Falinks-Mega,Fighting,,570,65,135,135,70,65,100
 871,Pincurchin,Electric,,435,48,101,95,91,85,15
 872,Snom,Ice,Bug,185,30,25,35,45,30,20
 873,Frosmoth,Ice,Bug,475,70,65,60,125,90,65
